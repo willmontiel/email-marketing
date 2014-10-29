@@ -9,8 +9,24 @@
 	{# Select2 master#}
 	{{ stylesheet_link('vendors/select2-master/select2.css') }}
 	{{ javascript_include('vendors/select2-master/select2.js')}}
+
+	{# Select2 master#}
+	{{ stylesheet_link('js/rules-selector/css/rules-selector.css') }}
+	{{ javascript_include('js/rules-selector/rules-manager.js') }}
+	{{ javascript_include('js/rules-selector/rule.js')}}
+	{{ javascript_include('js/rules-selector/index-rule.js')}}
+	{{ javascript_include('js/rules-selector/operator-rule.js')}}
+	{{ javascript_include('js/rules-selector/condition-rule.js')}}
+	{{ javascript_include('js/rules-selector/points-rule.js')}}
+	{{ javascript_include('js/rules-selector/buttons-rule.js')}}
+	
 	<script type="text/javascript">
+		rulesManager = new RulesManager();
 		$(function () {
+			rulesManager.setContainer('#rules');
+			rulesManager.setData();
+			rulesManager.initialize();
+			
 			$(".bootstrap-switch").bootstrapSwitch({
 				onColor: 'success',
 				offColor: 'danger',
@@ -21,15 +37,6 @@
 				allowClear: true,
 				placeholder: "Seleccione la(s) cuenta(s)"
 			});
-			{#
-			if ($('#all').prop('checked')) {
-				$("#selectAccount").hide();
-			}
-			
-			if ($('#any').prop('checked')) {
-				$("#selectAccount").show();
-			}
-			#}
 			
 			$("input[name=target]").change(function () {	 
 				var value = $(this).val();
@@ -44,18 +51,56 @@
 				}
 			});
 		});
+		
+		function saveManagment() {
+			var name = $('#name').val();
+			rulesManager.serializeRules();
+			var rules = rulesManager.getSerializerObject();
+			var target = $('input[name=target]:checked').val();
+			var accounts = $('#accounts').val();
+			var status = $('#status').prop('checked');
+			
+			$.ajax({
+				url: "{{url('smartmanagment/new')}}",
+				type: "POST",			
+				data: {
+					name: name,
+					rules: rules,
+					target: target,
+					accounts: accounts,
+					status: status
+				},
+				error: function(msg){
+					var obj = $.parseJSON(msg.responseText);
+					$.gritter.add({class_name: 'gritter_error', title: '<i class="icon-warning-sign"></i> Error', text: obj.error, sticky: false, time: 30000});
+				},
+				success: function(msg){
+					$(location).attr('href', "{{url('smartmanagment')}}"); 
+				}
+			});
+		}
 	</script>
 	
-	{# Select2 master#}
-	{{ stylesheet_link('js/rules-selector/css/rules-selector.css') }}
-	{{ javascript_include('js/rules-selector/rules-container.js') }}
-	{{ javascript_include('js/rules-selector/rule.js')}}
-	
 	<script type="text/javascript">
-		$(function () {
-			var rulesContainer = new RulesContainer('#rules');		
-			rulesContainer.initialize(null);
-		});
+		{#
+		var array = [];
+		var obj = [
+			{type: 'index-rule', value: 'spam'},
+			{type: 'operator-rule', value: '>'},
+			{type: 'condition-rule', value: 4},
+			{type: 'points-rule', points: 'true', value: -10}
+		];
+		
+		var obj2 = [
+			{type: 'index-rule', value: 'bounced'},
+			{type: 'operator-rule', value: '>'},
+			{type: 'condition-rule', value: 10},
+			{type: 'points-rule', points: 'false', value: 0}
+		];
+		
+		array.push(obj);
+		array.push(obj2);
+		#}
 	</script>
 {% endblock %}
 {% block content %}
@@ -78,15 +123,14 @@
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 			<div class="panel" style="box-shadow: 2px 2px 5px 0px #afafaf;">
-				<form class="form-horizontal" action="" method="post" role="form">
-
+				<div class="form-horizontal">
 					<div class="panel-body" style="margin-top: 20px;">
 						<div class="form-group">
 							<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">
 								*Nombre de la gestión automática
 							</label>
 							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
-								<input class="form-control" autofocus="autofocus" placeholder="Nombre de la gestión automática" type="text" name="name" required="required">
+								<input class="form-control" autofocus="autofocus" placeholder="Nombre de la gestión automática" type="text" name="name" id="name" required="required">
 							</div>
 						</div>
 
@@ -118,7 +162,7 @@
 								<div class="space"></div>
 									
 								<div id="accounts-list" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0; display: none;">
-									<select class="select2"  multiple name="accounts[]" id="accounts" style="width:100%">
+									<select class="select2" multiple name="accounts[]" id="accounts" style="width:100%">
 										{% for account in accounts%}
 											<option value="{{account.idAccount}}">{{account.companyName}}</option>
 										{% endfor %}
@@ -134,7 +178,7 @@
 								*Estado
 							</label>
 							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
-								<input type="checkbox" class="bootstrap-switch" id="bootstrap-switch" name="status" />
+								<input type="checkbox" class="bootstrap-switch" id="status" name="status" />
 							</div>
 						</div>
 					</div>
@@ -144,12 +188,11 @@
 						<div class="form-group">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
 								<a href="{{url('smartmanagment')}}" class="btn btn-sm btn-default btn-sm">Cancelar</a>
-								<input class="btn btn-sm btn-guardar" value="Guardar" type="submit">	
+								<button class="btn btn-sm btn-guardar" onClick="saveManagment();">Guardar</button>
 							</div>
 						</div>
 					</div>
-					
-				</form>
+				</div>
 			</div>
 		</div>
 	</div>
