@@ -23,15 +23,21 @@
 	<script type="text/javascript">
 		rulesManager = new RulesManager();
 		$(function () {
+			var obj = [
+				{% for rule in rules %}
+					{{rule}},
+				{% endfor %}
+			];
+			
 			rulesManager.setContainer('#rules');
-			rulesManager.setData();
+			rulesManager.setData(obj);
 			rulesManager.initialize();
 			
 			$(".bootstrap-switch").bootstrapSwitch({
 				onColor: 'success',
 				offColor: 'danger',
 				size: 'mini',
-				state: true
+				state: {% if smart.status == 1%}true{% else %}false{% endif %}
 			});
 			
 			$(".select2").select2({
@@ -62,7 +68,7 @@
 			var status = $('#status').prop('checked');
 			
 			$.ajax({
-				url: "{{url('smartmanagment/new')}}",
+				url: "{{url('smartmanagment/edit')}}/{{smart.idSmartmanagment}}",
 				type: "POST",			
 				data: {
 					name: name,
@@ -75,32 +81,10 @@
 					$.gritter.add({class_name: 'gritter-error', title: '<i class="glyphicon glyphicon-warning-sign"></i> Error', text: msg.statusText, sticky: false, time: 7000});
 				},
 				success: function(msg){
-					$(location).attr('href', "{{url('smartmanagment/content')}}/" + msg.message); 
+					$(location).attr('href', "{{url('smartmanagment')}}"); 
 				}
 			});
 		}
-	</script>
-	
-	<script type="text/javascript">
-		{#
-		var array = [];
-		var obj = [
-			{type: 'index-rule', value: 'spam'},
-			{type: 'operator-rule', value: '>'},
-			{type: 'condition-rule', value: 4},
-			{type: 'points-rule', points: 'true', value: -10}
-		];
-		
-		var obj2 = [
-			{type: 'index-rule', value: 'bounced'},
-			{type: 'operator-rule', value: '>'},
-			{type: 'condition-rule', value: 10},
-			{type: 'points-rule', points: 'false', value: 0}
-		];
-		
-		array.push(obj);
-		array.push(obj2);
-		#}
 	</script>
 {% endblock %}
 {% block content %}
@@ -130,7 +114,7 @@
 								*Nombre de la gestión automática
 							</label>
 							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
-								<input class="form-control" autofocus="autofocus" placeholder="Nombre de la gestión automática" type="text" name="name" id="name" required="required">
+								<input class="form-control" autofocus="autofocus" placeholder="Nombre de la gestión automática" type="text" name="name" id="name" value="{{smart.name}}" required="required">
 							</div>
 						</div>
 
@@ -150,27 +134,40 @@
 							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0;">
 									<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4" style="padding-left: 0;">
-										<input type="radio" id="all-accounts" name="target" value="all-accounts">
+										<input type="radio" id="all-accounts" name="target" value="all-accounts" {% if accountsSelected.type == 'all-accounts' %}checked="checked"{% endif %}>
 										<label for="all-accounts">Todas las cuentas</label>
 									</div>
 									<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-										<input type="radio" id="certain-accounts" name="target" value="certain-accounts">
+										<input type="radio" id="certain-accounts" name="target" value="certain-accounts" {% if accountsSelected.type == 'certain-accounts' %}checked="checked"{% endif %}>
 										<label for="certain-accounts">Determinadas cuentas:</label>
 									</div>
 								</div>
 								
 								<div class="space"></div>
 									
-								<div id="accounts-list" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0; display: none;">
+								<div id="accounts-list" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0; display: {% if accountsSelected.type == 'certain-accounts' %}block{% else %}none{% endif %};">
 									<select class="select2" multiple name="accounts[]" id="accounts" style="width:100%">
 										{% for account in accounts%}
-											<option value="{{account.idAccount}}">{{account.companyName}}</option>
+											<option value="{{account.idAccount}}" {% if accountsSelected.target is not null %}{% for t in accountsSelected.target %} {% if account.idAccount == t%} selected="selected" {% endif %} {% endfor %} {% endif %}>
+												{{account.companyName}}
+											</option>
 										{% endfor %}
 									</select>
 								</div>
 							</div>
 						</div>
-								
+							
+						<div class="space"></div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">
+								*Contenido
+							</label>
+							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+								<a href="{{url('smartmanagment/content')}}/{{smart.idSmartmanagment}}">Editar contenido</a>
+							</div>
+						</div>	
+							
 						<div class="space"></div>
 
 						<div class="form-group">
@@ -178,7 +175,7 @@
 								*Estado
 							</label>
 							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
-								<input type="checkbox" checked class="bootstrap-switch" id="status" name="status" />
+								<input type="checkbox" {% if smart.status == 1%}checked{% endif %} class="bootstrap-switch" id="status" name="status" />
 							</div>
 						</div>
 					</div>

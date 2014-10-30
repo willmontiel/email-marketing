@@ -74,10 +74,9 @@
 {% block content %}
 <body class="editor-bg-color">
 	<div class="row">
-		<div class="span12">
+		<div class="span12 pull-center">
 			<div class="edit-area-container">
-				<div id="edit-area" class="module-cont clearfix">
-				</div>
+				<div id="edit-area" class="module-cont clearfix" style="margin-left: 10%;"></div>
 			</div>
 		</div>
 		<div id="newtemplatename" class="modal hide fade">
