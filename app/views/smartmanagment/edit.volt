@@ -164,7 +164,18 @@
 								*Contenido
 							</label>
 							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
-								<a href="{{url('smartmanagment/content')}}/{{smart.idSmartmanagment}}">Editar contenido</a>
+								<div class="preview-mail img-wrap" style="margin-left: 0 !important;">
+									<a href="{{url('smartmanagment/content')}}/{{smart.idSmartmanagment}}">
+										<div class="not-available">
+										{% if smart.preview == 'null' %}
+											<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
+											<label>Previsualización no disponible</label>
+										{% else %}
+											<img src="data: image/png;base64, {{smart.preview}}" />
+										{% endif %}	
+										</div>
+									</a>
+								</div>
 							</div>
 						</div>	
 							

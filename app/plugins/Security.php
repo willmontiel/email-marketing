@@ -450,6 +450,9 @@ class Security extends Plugin
 				'smartmanagment::edit' => array('smartmanagment' => array('update')),
 				'smartmanagment::delete' => array('smartmanagment' => array('delete')),
 				'smartmanagment::content' => array('smartmanagment' => array('create')),
+				'smartmanagment::previewcontent' => array('smartmanagment' => array('create')),
+				'smartmanagment::createpreview' => array('smartmanagment' => array('create')),
+				'smartmanagment::previewdata' => array('smartmanagment' => array('create')),
 				
 			);
 		}

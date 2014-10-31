@@ -170,5 +170,50 @@ class SmartmanagmentController extends ControllerBase
 		}
 		
 		$this->view->setVar('smart', $smart);
-	}			
+	}
+	
+	public function previewcontentAction($idSmart)
+	{
+		$content = $this->request->getPost("editor");
+		$this->session->remove('smart-preview');
+		$url = $this->url->get('smartmanagment/createpreview');		
+		$editorObj = new HtmlObj(true, $url, $idSmart);
+		$editorObj->assignContent(json_decode($content));
+		$this->session->set('smart-preview', $editorObj->render());
+		
+		return $this->setJsonResponse(array('status' => 'Success'), 201, 'Success');
+	}
+	
+	public function previewdataAction()
+	{
+		$htmlObj = $this->session->get('smart-preview');
+		$this->session->remove('smart-preview');
+
+		$this->view->disable();
+		return $this->response->setContent($htmlObj);
+	}
+	
+	public function createpreviewAction($idSmart)
+	{
+		$content = $this->request->getPost("img");
+		$imgObj = new ImageObject();
+		$imgObj->createFromBase64($content);
+		$imgObj->resizeImage(200, 250);
+		$newImg = $imgObj->getImageBase64();
+		
+		$this->logger->log("Preview: {$newImg}");
+		
+		$smart = Smartmanagment::findFirst(array(
+			'conditions' => 'idSmartmanagment = ?1',
+			'bind' => array(1 => $idSmart)
+		));
+		
+		$smart->preview = $newImg;
+		
+		if (!$smart->save()) {
+			foreach ($smart->getMessages() as $msg) {
+				$this->logger->log("Error while saving image base64: " . $msg);
+			}
+		}
+	}
 }

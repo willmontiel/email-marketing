@@ -15,15 +15,15 @@
 		function verHTML() {
 			var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
 			$.ajax({
-				url: "{{url('smartmanagment/content')}}/" + {{smart.idSmartmanagment}},
+				url: "{{url('smartmanagment/previewcontent')}}/" + {{smart.idSmartmanagment}},
 				type: "POST",			
-				data: { editor: editor},
+				data: {editor: editor},
 				error: function(msg){
 					$.gritter.add({class_name: 'error', title: '<i class="glyphicon glyphicon-warning-sign"></i> Atención', text: msg, sticky: false, time: 7000});
 				},
 				success: function() {
 					$("#modal-body-preview").empty();
-					$('#modal-body-preview').append($('<iframe frameborder="0" width="100%" height="100%" src="{{url('mail/previewdata')}}"/>'));
+					$('#modal-body-preview').append($('<iframe frameborder="0" width="100%" height="100%" src="{{url('smartmanagment/previewdata')}}"/>'));
 
 				}
 			});
@@ -94,4 +94,19 @@
 			<iframe id="iframeEditor" src="{{url('mail/editor_frame')}}" width="100%" frameborder="0" onload="iframeResize();" seamless></iframe>
 		</div>
 	</div>		
+	
+	<div id="preview-modal" class="modal fade">
+		<div class="modal-dialog modal-prevew-width">
+			<div class="modal-content modal-prevew-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h1 class="modal-title">Previsualización</h1>
+				</div>
+				<div class="modal-body modal-prevew-body" id="modal-body-preview"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
