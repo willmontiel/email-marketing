@@ -110,6 +110,8 @@ class SmartManagmentWrapper extends BaseWrapper
 	
 	protected function validateData()
 	{
-		
+		$interpreter = new \EmailMarketing\General\Misc\RuleInterpreter();
+		$interpreter->setObject($this->data->rules);
+		$interpreter->validateObject();
 	}
 }

@@ -8,14 +8,12 @@ function IndexRule(config) {
 	this.value = 'opens';
 }
 
-IndexRule.prototype.setRule = function(rule) {
-	this.rule = rule;
-};
+IndexRule.prototype = new SectionRule;
 
 IndexRule.prototype.create = function() {
 	this.serialize();
 	
-	this.html = $('<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">\n\
+	this.html = $('<div class="res-space col-xs-12 col-sm-4 col-md-4 col-lg-4">\n\
 						<select class="select2" name="index-rule-select" id="index-rule-select" style="width:100%">\n\
 							<option value="opens" ' + this.opens + '>Aperturas</option>\n\
 							<option value="bounced" ' + this.bounced + '>Rebotes</option>\n\

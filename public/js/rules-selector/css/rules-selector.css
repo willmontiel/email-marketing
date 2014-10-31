@@ -41,3 +41,28 @@
 .remove-rule:hover {
 	background-color: #d43f3a;
 }
+
+.space-row {
+	margin-bottom: 15px;
+	/*margin-top: 15px;*/
+}
+
+.panel-body2 {
+	padding: 0 15px 0px 15px;
+	background-color: #f5f5f5;
+}
+
+.hr-rules {
+	margin-top: 0px;
+	margin-bottom: 20px;
+	border: 0;
+	border-top: 1px solid #ddd;
+}
+
+.res-space {
+	margin-top: 3px;
+}
+
+.pointer {
+	cursor: pointer;
+}

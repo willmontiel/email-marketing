@@ -6,16 +6,14 @@ function PointsRule(config) {
 	this.value = '';
 }
 
-PointsRule.prototype.setRule = function(rule) {
-	this.rule = rule;
-};
+PointsRule.prototype = new SectionRule;
 
 PointsRule.prototype.create = function() {
 	this.serialize();
 	
-	this.html = $('<div class="points col-xs-12 col-sm-12 col-md-2 col-lg-2">\n\
+	this.html = $('<div class="res-space points col-xs-12 col-sm-12 col-md-2 col-lg-2">\n\
 					   <div class="" style="display: inline; width: 60%;">\n\
-						   <input type="checkbox" name="points-rule-checkbox" id="points-rule-checkbox" ' + this.pointsstatus + '/> Puntos\n\
+						   <input type="checkbox" name="points-rule-checkbox" class="pointer" id="points-rule-checkbox" ' + this.pointsstatus + '/> <label>Puntos</label>\n\
 					   </div>\n\
 					   <div class="" style="display: inline-flex; width: 40%;">\n\
 						   <input type="text" id="points-rule-input" name="points-rule-input" style="display: ' + this.displayInput + ';" value="' + this.value + '"/>\n\

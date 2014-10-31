@@ -8,14 +8,12 @@ function OperatorRule(config) {
 	this.value = '<';
 }
 
-OperatorRule.prototype.setRule = function(rule) {
-	this.rule = rule;
-};
+OperatorRule.prototype = new SectionRule;
 
 OperatorRule.prototype.create = function() {
 	this.serialize();
 	
-	this.html = $('<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">\n\
+	this.html = $('<div class="res-space col-xs-12 col-sm-12 col-md-2 col-lg-2">\n\
 						<select class="select2" id="operator-rule-select" name="operator-rule-select" style="width:100%">\n\
 							<option value="<" ' + this.less + '><</option>\n\
 							<option value=">" ' + this.greater + '>></option>\n\

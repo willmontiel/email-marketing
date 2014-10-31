@@ -9,7 +9,7 @@ RulesManager.prototype.setData = function(rules) {
 
 RulesManager.prototype.setContainer = function(container) {
 	this.element = $(container);
-	var base = $('<div class="panel panel-default"><div class="panel-body" style="background-color: #f5f5f5;" id="rules-content"></div></div>');
+	var base = $('<div class="panel panel-default"><div class="panel-body panel-body2" id="rules-content"></div></div>');
 	this.element.append(base);
 };
 
@@ -55,10 +55,15 @@ RulesManager.prototype.resetContainer = function() {
 RulesManager.prototype.serializeRules = function() {
 	this.serializeObj = [];
 	
-	for (var i = 0; i < this.ruleslist.length; i++) {
-		var obj = this.ruleslist[i].getSerializerObject();
-		this.serializeObj.push(obj);
-	}
+//	try {
+		for (var i = 0; i < this.ruleslist.length; i++) {
+			var obj = this.ruleslist[i].getSerializerObject();
+			this.serializeObj.push(obj);
+		}
+//	}
+//	catch (e) {
+//		console.log(e);
+//	}
 };
 
 RulesManager.prototype.getSerializerObject = function() {

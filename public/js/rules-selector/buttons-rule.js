@@ -4,13 +4,11 @@ function ButtonsRule(config) {
 	this.remove = '';
 }
 
-ButtonsRule.prototype.setRule = function(rule) {
-	this.rule = rule;
-};
+ButtonsRule.prototype = new SectionRule;
 
 ButtonsRule.prototype.create = function() {
 	this.serialize();
-	this.html = $('<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 action-buttons">\n\
+	this.html = $('<div class="res-space col-xs-12 col-sm-12 col-md-1 col-lg-1 action-buttons">\n\
 						' + this.remove + '\n\
 						' + this.add + '\n\
 					</div>');

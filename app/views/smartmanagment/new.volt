@@ -14,6 +14,7 @@
 	{{ stylesheet_link('js/rules-selector/css/rules-selector.css') }}
 	{{ javascript_include('js/rules-selector/rules-manager.js') }}
 	{{ javascript_include('js/rules-selector/rule.js')}}
+	{{ javascript_include('js/rules-selector/section.js')}}
 	{{ javascript_include('js/rules-selector/index-rule.js')}}
 	{{ javascript_include('js/rules-selector/operator-rule.js')}}
 	{{ javascript_include('js/rules-selector/condition-rule.js')}}
@@ -34,11 +35,6 @@
 				state: true
 			});
 			
-			$(".select2").select2({
-				allowClear: true,
-				placeholder: "Seleccione la(s) cuenta(s)"
-			});
-			
 			$("input[name=target]").change(function () {	 
 				var value = $(this).val();
 				
@@ -54,30 +50,36 @@
 		});
 		
 		function saveManagment() {
-			var name = $('#name').val();
-			rulesManager.serializeRules();
-			var rules = rulesManager.getSerializerObject();
-			var target = $('input[name=target]:checked').val();
-			var accounts = $('#accounts').val();
-			var status = $('#status').prop('checked');
-			
-			$.ajax({
-				url: "{{url('smartmanagment/new')}}",
-				type: "POST",			
-				data: {
-					name: name,
-					rules: rules,
-					target: target,
-					accounts: accounts,
-					status: status
-				},
-				error: function(msg){
-					$.gritter.add({class_name: 'gritter-error', title: '<i class="glyphicon glyphicon-warning-sign"></i> Error', text: msg.statusText, sticky: false, time: 7000});
-				},
-				success: function(msg){
-					$(location).attr('href', "{{url('smartmanagment/content')}}/" + msg.message); 
-				}
-			});
+			try {
+				var name = $('#name').val();
+				rulesManager.serializeRules();
+				var rules = rulesManager.getSerializerObject();
+				var target = $('input[name=target]:checked').val();
+				var accounts = $('#accounts').val();
+				var status = $('#status').prop('checked');
+
+				$.ajax({
+					url: "{{url('smartmanagment/new')}}",
+					type: "POST",			
+					data: {
+						name: name,
+						rules: rules,
+						target: target,
+						accounts: accounts,
+						status: status
+					},
+					error: function(msg){
+						$.gritter.add({class_name: 'gritter-error', title: '<i class="glyphicon glyphicon-warning-sign"></i> Error', text: msg.statusText, sticky: false, time: 6000});
+					},
+					success: function(msg){
+						$(location).attr('href', "{{url('smartmanagment/content')}}/" + msg.message); 
+					}
+				});
+			}
+			catch(e) {
+				console.log(e);
+				$.gritter.add({class_name: 'gritter-error', title: '<i class="glyphicon glyphicon-warning-sign"></i> Error', text: '' + e, sticky: false, time: 7000});
+			}
 		}
 	</script>
 	

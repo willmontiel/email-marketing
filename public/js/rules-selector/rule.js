@@ -9,7 +9,8 @@ Rule.prototype.setManager = function(container) {
 };
 
 Rule.prototype.createRule = function() {
-	this.html = $('<div class="row base"><hr></div>');
+//	this.html = $('<div class="row base space-row" style="display: none;"><hr class="hr-rules"></div>');
+	this.html = $('<div class="row base space-row"><hr class="hr-rules"></div>');
 	
 	this.serialize();
 	var self = this;
@@ -23,6 +24,8 @@ Rule.prototype.createRule = function() {
 		e.preventDefault();
 		self.container.removeRule(self);
 	});
+	
+	this.html.find('.base').show();
 	
 	this.container.element.find('#rules-content').append(this.html);
 };
