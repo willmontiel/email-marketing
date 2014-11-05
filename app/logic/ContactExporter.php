@@ -223,6 +223,7 @@ class ContactExporter extends BaseWrapper
 	{
 		if (!empty($this->customfieldsData->customfieldsColumns)) {
 			$this->cfSQL = "ALTER TABLE {$this->tablename} ADD ({$this->customfieldsData->customfieldsColumns})";
+			$this->logger->log("SQL: {$this->cfSQL}");
 			$this->db->execute($this->cfSQL);
 		}
 	}
