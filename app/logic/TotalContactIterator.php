@@ -364,8 +364,8 @@ class TotalContactIterator implements Iterator
 //		$cadena = ereg_replace( "([ ]+)", "", $cadena );
 		$cadena = preg_replace("([ ]+)", "", $cadena);
 		
-		$cadena = strtr($cadena,'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ@',
-		                        'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY ');
+		$cadena = strtr($cadena,'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ@[]{}',
+		                        'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY     ');
 			
 		return $cadena;
 	}
