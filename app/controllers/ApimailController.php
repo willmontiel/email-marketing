@@ -36,7 +36,7 @@ class ApimailController extends ControllerBase
 			
 			$content = $mailapiwrapper->getContent($contentsT->content);
 			$MailWrapper->createHtmlMailContent($content);
-			$response = $this->response_new_mail($mail);
+			$response = $mailapiwrapper->response_new_mail($mail);
 			
 			$db->commit();
 			$this->traceSuccess("Create mail, idMail: {$mail->idMail}");
@@ -55,21 +55,5 @@ class ApimailController extends ControllerBase
 			$db->rollback();
 			return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error contacte al administrador', 'status' => 'fail'));
 		}
-	}
-	
-	protected function response_new_mail($mail)
-	{
-		$obj = array(
-						"mail" => array(
-											"idMail" => $mail->idMail,
-											"status" => $mail->status,
-											"name" => $mail->name,
-											"subject" => $mail->subject,
-											"sender" => $mail->fromEmail . "/" . $mail->fromName,
-											"replyTo" => $mail->replyTo
-										),
-						"status" => "ok"
-					);
-		return $obj;
 	}
 }

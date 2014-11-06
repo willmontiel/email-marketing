@@ -105,4 +105,20 @@ class MailApiWrapper extends BaseWrapper
 			}
 		}
 	}
+	
+	public function response_new_mail($mail)
+	{
+		$obj = array(
+						"mail" => array(
+											"idMail" => $mail->idMail,
+											"status" => $mail->status,
+											"name" => $mail->name,
+											"subject" => $mail->subject,
+											"sender" => $mail->fromEmail . "/" . $mail->fromName,
+											"replyTo" => $mail->replyTo
+										),
+						"status" => "ok"
+					);
+		return $obj;
+	}
 }
