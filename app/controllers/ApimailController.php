@@ -36,6 +36,8 @@ class ApimailController extends ControllerBase
 			
 			$content = $mailapiwrapper->getContent($contentsT->content);
 			$MailWrapper->createHtmlMailContent($content);
+			$mailapiwrapper->send_mail_to_process($mail);
+			
 			$response = $mailapiwrapper->response_new_mail($mail);
 			
 			$db->commit();

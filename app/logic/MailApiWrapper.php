@@ -13,30 +13,34 @@ class MailApiWrapper extends BaseWrapper
 		try{
 			switch ($target->type) {
 				case 'dbases':
-					$query = $this->modelsManager->createQuery("SELECT name FROM Dbase WHERE idDbase IN (" . implode(',',$target->ids) . ")");
+					$query = $this->modelsManager->createQuery("SELECT name FROM Dbase WHERE idDbase IN (" . implode(',',$target->ids) . ") AND idAccount = " . $this->account->idAccount);
 					$result = $query->execute();
 					break;
 
 				case 'contactlists':
-					$query = $this->modelsManager->createQuery("SELECT name FROM Contactlist WHERE idContactlist IN (" . implode(',',$target->ids) . ")");
+					$query = $this->modelsManager->createQuery("SELECT Contactlist.name FROM Contactlist JOIN Dbase ON (Contactlist.idDbase = Dbase.idDbase) WHERE Contactlist.idContactlist IN (" . implode(',',$target->ids) . ") AND Dbase.idAccount = " . $this->account->idAccount);
 					$result = $query->execute();
 					break;
 
 				case 'segments':
-					$query = $this->modelsManager->createQuery("SELECT name FROM Segment WHERE idSegment IN (" . implode(',',$target->ids) . ")");
+					$query = $this->modelsManager->createQuery("SELECT Segment.name FROM Segment JOIN Dbase ON (Segment.idDbase = Dbase.idDbase) WHERE Segment.idSegment IN (" . implode(',',$target->ids) . ") AND Dbase.idAccount = " . $this->account->idAccount);
 					$result = $query->execute();
 					break;
 				default :
 					throw new InvalidArgumentException('Type of target undefined');
 					break;
-			}		
+			}
+			
+			if(count($result) <= 0) {
+				throw new InvalidArgumentException('Target undefined');
+			}
 
 			$names = array();
 
 			foreach ($result as $r) {
 				$names[] = $r->name; 
 			}
-
+			
 			$obj = array(
 						array(
 							"type" => "top-panel",
@@ -45,7 +49,7 @@ class MailApiWrapper extends BaseWrapper
 						),
 						array(
 							"type" => "list-panel",
-							"serialization" => array("items" => array( $target->ids ), "names" => $names, "conditions" => "all")
+							"serialization" => array("items" => $target->ids, "names" => $names, "conditions" => "all")
 						)
 					);
 
