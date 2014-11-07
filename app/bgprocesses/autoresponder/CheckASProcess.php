@@ -79,7 +79,7 @@ class CheckASProcess
 					$account = Account::findFirstByIdAccount($autoresponder->idAccount);
 					$pending_responder = $this->convert_autoresponder_to_mail($autoresponder, $account);
 					if($pending_responder) {
-						$pending_mails[]= $responder;
+						$pending_mails[]= $pending_responder;
 					}
 				}
 				catch(Exception $e) {
@@ -89,9 +89,10 @@ class CheckASProcess
 					}
 				}
 				if(!empty($pending_mails)) {
-					foreach ($pending_mails as $mail) {
+					foreach ($pending_mails as $pmail) {
 						try {
-							$this->send_autoresponders($mail);
+							$this->send_autoresponders($pmail);
+							$this->send_success_mail_to_support($pmail);
 						}
 						catch (Exception $e) {
 							$this->logger->log("Exception: Error sending auto responder, {$e} on the try number {$try_number}");
@@ -208,7 +209,7 @@ class CheckASProcess
 	public function send_success_mail_to_support($mail)
 	{
 		if($mail->idAccount == 55) {
-			$users = array('ivan.barona@sigmamovil.com', 'juan.morales@sigmamovil.com', 'ana.torres@sigmamovil.com');
+			$users = array('ivan.barona@sigmamovil.com', 'juan.morales@sigmamovil.com');
 			$message = new AdministrativeMessages();
 			foreach ($users as $user) {
 				$message->createTemporarySuccessMessage($user);
