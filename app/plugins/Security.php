@@ -240,7 +240,9 @@ class Security extends Plugin
 				
 				//Apimail
 				'apimail::newmail' => array('mail' => array('read', 'create', 'send')),
-				
+				'apimail::mailcontactstatistics' => array('statistic' => array('read')),
+				'apimail::maillinkstatistics' => array('statistic' => array('read')),
+								
 				//Apistatistics Estadisticas
 				'apistatistics::dbase' => array('statistic' => array('read')),
 				'apistatistics::contactlistopens' => array('statistic' => array('read')),

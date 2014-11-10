@@ -110,6 +110,32 @@ class MailApiWrapper extends BaseWrapper
 		}
 	}
 	
+	public function findMailPerContact(Mail $mail, Contact $contact)
+	{
+		$mxc = Mxc::findFirst(array(
+			"conditions" => "idMail = ?1 and idContact = ?2",
+			"bind" => array(1 => $mail->idMail, 2 => $contact->idContact)
+		));
+		
+		if(!$mxc) {
+			throw new InvalidArgumentException('no statistics');
+		}
+		
+		$response = array(
+							"idContact" => $mxc->idContact,
+							"idMail" => $mxc->idMail,
+		);
+		
+		$response["opening"] = ($mxc->opening > 0) ? date('d-m-Y H:i a', $mxc->opening) : 0;
+		$response["clicks"] = $mxc->clicks;
+		$response["bounced"] = ($mxc->bounced > 0) ? date('d-m-Y H:i a', $mxc->bounced) : 0;
+		$response["spam"] = ($mxc->spam > 0) ? date('d-m-Y H:i a', $mxc->spam) : 0;
+		$response["unsubscribe"] = ($mxc->unsubscribe > 0) ? date('d-m-Y H:i a', $mxc->unsubscribe) : 0;
+		
+		return $response;
+	}
+
+
 	public function response_new_mail($mail)
 	{
 		$obj = array(
