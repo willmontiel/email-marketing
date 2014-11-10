@@ -21,4 +21,13 @@ class RuleInterpreter
 	{
 		
 	}	
+	
+	public function searchMails() 
+	{
+		$mails = \Mail::find();
+		
+		if (count($mails) > 0) {
+			
+		}
+	}
 }

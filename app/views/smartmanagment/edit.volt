@@ -20,6 +20,7 @@
 	{{ javascript_include('js/rules-selector/condition-rule.js')}}
 	{{ javascript_include('js/rules-selector/points-rule.js')}}
 	{{ javascript_include('js/rules-selector/buttons-rule.js')}}
+	{{ javascript_include('js/rules-selector/logic-operator.js')}}
 	
 	<script type="text/javascript">
 		rulesManager = new RulesManager();
@@ -168,7 +169,7 @@
 								<div class="preview-mail img-wrap" style="margin-left: 0 !important;">
 									<a href="{{url('smartmanagment/content')}}/{{smart.idSmartmanagment}}">
 										<div class="not-available">
-										{% if smart.preview == 'null' %}
+										{% if smart.preview == 'null' OR smart.preview == null%}
 											<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
 											<label>Previsualización no disponible</label>
 										{% else %}

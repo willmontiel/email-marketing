@@ -40,9 +40,9 @@
 				<a href="{{ url('process') }}" class="btn-actn">Procesos de Envío y de Importación</a>
 			</div>
 		</div>
-
 	</div>
-	<div class="container-fluid">
+	
+	<div class="container-fluid space">
 		<div class="col-xs-6 col-md-3">
 			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('scheduledmail/manage') }}"  class="shortcuts"><span class="sm-button-large-program-envios"></span></a>
@@ -73,6 +73,17 @@
 			</div>
 			<div class="w-190 center">
 				<a href="{{ url('footer') }}" class="btn-actn">Footers</a>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container-fluid space">
+		<div class="col-xs-6 col-md-3">
+			<div class="big-btn-nav sm-btn-blue">
+				<a href="{{ url('smartmanagment') }}"  class="shortcuts"><span class="sm-button-large-socialnet"></span></a>
+			</div>
+			<div class="w-190 center">
+				<a href="{{ url('smartmanagment') }}" class="btn-actn">Gestión inteligente</a>
 			</div>
 		</div>
 	</div>

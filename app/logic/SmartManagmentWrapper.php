@@ -44,8 +44,8 @@ class SmartManagmentWrapper extends BaseWrapper
 		$lo = 'and';
 		
 		foreach ($this->data->rules as $rules) {
-			if (isset($rules->type) && $rules->type == 'logic-operator') {
-				$lo = $rules->value;
+			if (isset($rules['type']) && $rules['type'] == 'logic-operator') {
+				$lo = $rules['value'];
 				break;
 			}
 		}

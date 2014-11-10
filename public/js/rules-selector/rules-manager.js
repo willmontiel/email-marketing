@@ -23,7 +23,7 @@ RulesManager.prototype.initialize = function() {
 	}
 	else {
 		for (var i = 0; i < this.rules.length; i++) {
-			if (this.rules[i].type !== undefined && this.rules[i].type !== '' && this.rules[i].type === 'logic-operator') {
+			if (this.rules[i].type != undefined && this.rules[i].type != '' && this.rules[i].type === 'logic-operator') {
 				this.addLogicOperator(this.rules[i]);
 			}
 			else {

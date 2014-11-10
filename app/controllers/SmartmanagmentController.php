@@ -4,7 +4,21 @@ class SmartmanagmentController extends ControllerBase
 {
 	public function indexAction()
 	{
+		$currentPage = $this->request->getQuery('page', null, 1); // GET
+
+		$builder = $this->modelsManager->createBuilder()
+			->from('Smartmanagment')
+			->orderBy('idSmartmanagment');
+
+		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
+			"builder" => $builder,
+			"limit"=> PaginationDecorator::DEFAULT_LIMIT,
+			"page" => $currentPage
+		));
 		
+		$page = $paginator->getPaginate();
+		
+		$this->view->setVar("page", $page);
 	}
 	
 	public function newAction()
@@ -217,5 +231,67 @@ class SmartmanagmentController extends ControllerBase
 				$this->logger->log("Error while saving image base64: " . $msg);
 			}
 		}
+	}
+	
+	public function deleteAction($id)
+	{
+		$smart = Smartmanagment::findFirst(array(
+			'conditions' => 'idSmartmanagment = ?1',
+			'bind' => array(1 => $id)
+		));
+		
+		if (!$smart) {
+			$this->flashSession->error("La gestión inteligente que desea eliminar no se encuentra, por favor valide la información");
+			return $this->response->redirect('smartmanagment');
+		}
+		
+		try {
+			$rules = Rule::findByIdSmartmanagment($smart->idSmartmanagment);
+			
+			if (count($rules) > 0) {
+				foreach ($rules as $rule) {
+					if (!$rule->delete()) {
+						foreach ($rule->getMessages() as $msg) {
+							$this->logger->log("Error while deleting rule {$rule->idRule}... {$msg}");
+						}
+					}
+				}
+			}
+			
+			if (!$smart->delete()) {
+				foreach ($smart->getMessages() as $msg) {
+					$this->logger->log("Error while deleting smart... {$msg}");
+					$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
+					return $this->response->redirect('smartmanagment');
+				}
+			}
+			
+			$this->flashSession->warning("Se ha eliminado la gestión inteligente exitosamente");
+			return $this->response->redirect('smartmanagment');
+		}
+		catch (Exception $e) {
+			$this->logger->log("Exception... {$e}");
+			$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
+			return $this->response->redirect('smartmanagment');
+		}
+	}
+	
+	public function previewAction($id)
+	{
+		$smart = Smartmanagment::findFirst(array(
+			'conditions' => 'idSmartmanagment = ?1',
+			'bind' => array(1 => $id)
+		));
+		
+		if (!$smart) {
+			return $this->setJsonResponse(array('status' => 'error'), 401, 'Error');
+		}
+		
+		$editorObj = new HtmlObj();
+//		$editorObj->setAccount($account);
+		$editorObj->assignContent(json_decode($smart->content));
+		$response = $editorObj->render();
+		
+		return $this->setJsonResponse(array('preview' => $response));
 	}
 }

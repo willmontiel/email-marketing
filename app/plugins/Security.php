@@ -453,6 +453,7 @@ class Security extends Plugin
 				'smartmanagment::previewcontent' => array('smartmanagment' => array('create')),
 				'smartmanagment::createpreview' => array('smartmanagment' => array('create')),
 				'smartmanagment::previewdata' => array('smartmanagment' => array('create')),
+				'smartmanagment::preview' => array('smartmanagment' => array('read')),
 				
 			);
 		}

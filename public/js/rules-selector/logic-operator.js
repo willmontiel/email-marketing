@@ -11,11 +11,11 @@ LogicOperator.prototype.setManager = function(manager) {
 
 LogicOperator.prototype.create = function() {
 	if (this.config != undefined && this.config != null) {
-		if (this.config.value = 'and') {
+		if (this.config.value === 'and') {
 			this.and = 'selected';
 			this.or = '';
 		}
-		else if (this.config.value = 'or') {
+		else if (this.config.value === 'or') {
 			this.and = '';
 			this.or = 'selected';
 		}
