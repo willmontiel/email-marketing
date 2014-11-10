@@ -40,6 +40,8 @@ class SmartmanagmentController extends ControllerBase
 				$data->target = json_encode($dest);
 				$data->status = $status;
 				
+				$this->logger->log(print_r($data, true));
+				
 				$smart = new SmartManagmentWrapper();
 				$smart->setData($data);
 				$smart->saveSmart();

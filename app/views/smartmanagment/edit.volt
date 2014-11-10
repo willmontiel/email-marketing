@@ -14,6 +14,7 @@
 	{{ stylesheet_link('js/rules-selector/css/rules-selector.css') }}
 	{{ javascript_include('js/rules-selector/rules-manager.js') }}
 	{{ javascript_include('js/rules-selector/rule.js')}}
+	{{ javascript_include('js/rules-selector/section.js')}}
 	{{ javascript_include('js/rules-selector/index-rule.js')}}
 	{{ javascript_include('js/rules-selector/operator-rule.js')}}
 	{{ javascript_include('js/rules-selector/condition-rule.js')}}

@@ -90,6 +90,13 @@ Rule.prototype.createPoints = function (config) {
 	this.criteriaRule.push(po);
 };
 
+Rule.prototype.createLogicOperator = function (config) {
+	var lo = new LogicOperatorRule(config);
+	lo.setRule(this);
+	lo.create();
+	this.criteriaRule.push(lo);
+};
+
 Rule.prototype.createButtons = function () {
 	var config = {add:true, remove:true};
 	var bu = new ButtonsRule(config);

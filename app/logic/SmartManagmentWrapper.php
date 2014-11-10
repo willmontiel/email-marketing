@@ -41,6 +41,16 @@ class SmartManagmentWrapper extends BaseWrapper
 		$this->smart = new Smartmanagment();
 		$this->smart->name = $this->data->name;
 		$this->smart->target = $this->data->target;
+		$lo = 'and';
+		
+		foreach ($this->data->rules as $rules) {
+			if (isset($rules->type) && $rules->type == 'logic-operator') {
+				$lo = $rules->value;
+				break;
+			}
+		}
+		
+		$this->smart->logicOperator = $lo;
 		$this->smart->content = 'null';
 		$this->smart->status = ($this->data->status == 'true' ? 1 : 0);
 		$this->smart->updatedon = time();

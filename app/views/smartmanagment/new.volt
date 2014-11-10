@@ -10,7 +10,7 @@
 	{{ stylesheet_link('vendors/select2-master/select2.css') }}
 	{{ javascript_include('vendors/select2-master/select2.js')}}
 
-	{# Select2 master#}
+	{# Rules #}
 	{{ stylesheet_link('js/rules-selector/css/rules-selector.css') }}
 	{{ javascript_include('js/rules-selector/rules-manager.js') }}
 	{{ javascript_include('js/rules-selector/rule.js')}}
@@ -20,6 +20,7 @@
 	{{ javascript_include('js/rules-selector/condition-rule.js')}}
 	{{ javascript_include('js/rules-selector/points-rule.js')}}
 	{{ javascript_include('js/rules-selector/buttons-rule.js')}}
+	{{ javascript_include('js/rules-selector/logic-operator.js')}}
 	
 	<script type="text/javascript">
 		rulesManager = new RulesManager();
@@ -62,7 +63,7 @@
 					url: "{{url('smartmanagment/new')}}",
 					type: "POST",			
 					data: {
-						name: name,
+						name: name,	
 						rules: rules,
 						target: target,
 						accounts: accounts,
