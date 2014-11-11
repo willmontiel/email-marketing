@@ -27,11 +27,12 @@ class SmartmanagmentController extends ControllerBase
 			$name = $this->request->getPost('name');
 			$name = trim($name);
 			$rules = $this->request->getPost('rules');
+			$datetime = $this->request->getPost('datetime');
 			$target = $this->request->getPost('target');
 			$accounts = $this->request->getPost('accounts');
 			$status = $this->request->getPost('status');
 			
-			if (empty($name) || empty($rules) || empty($target) || empty($status)) {
+			if (empty($name) || empty($rules) || empty($target) || empty($status) || empty($datetime)) {
 				return $this->setJsonResponse(array('message' => 'Ha enviado campos vacíos, por favor valide la información'), 400, 'Datos invalidos');
 			}
 			
@@ -51,12 +52,14 @@ class SmartmanagmentController extends ControllerBase
 				$data = new stdClass();
 				$data->name = $name;
 				$data->rules = $rules;
+				$data->datetime = $datetime;
 				$data->target = json_encode($dest);
 				$data->status = $status;
 				
-				$this->logger->log(print_r($data, true));
+//				$this->logger->log(print_r($data, true));
 				
 				$smart = new SmartManagmentWrapper();
+				$smart->setAccount($this->user->account);
 				$smart->setData($data);
 				$smart->saveSmart();
 				$s = $smart->getSmart();

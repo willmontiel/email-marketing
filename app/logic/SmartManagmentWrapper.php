@@ -39,8 +39,10 @@ class SmartManagmentWrapper extends BaseWrapper
 	protected function saveSmartManagment()
 	{
 		$this->smart = new Smartmanagment();
+		$this->smart->idAccount = $this->account->idAccount;
 		$this->smart->name = $this->data->name;
 		$this->smart->target = $this->data->target;
+		$this->smart->time = $this->data->datetime;
 		$lo = 'and';
 		
 		foreach ($this->data->rules as $rules) {

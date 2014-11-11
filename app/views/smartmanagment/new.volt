@@ -48,6 +48,8 @@
 					$("#accounts-list").show();
 				}
 			});
+			
+			$('.select2').select2();
 		});
 		
 		function saveManagment() {
@@ -57,6 +59,7 @@
 				var rules = rulesManager.getSerializerObject();
 				var target = $('input[name=target]:checked').val();
 				var accounts = $('#accounts').val();
+				var datetime = $('#time').val() + ' ' + $('#date').val();
 				var status = $('#status').prop('checked');
 
 				$.ajax({
@@ -66,6 +69,7 @@
 						name: name,	
 						rules: rules,
 						target: target,
+						datetime: datetime,
 						accounts: accounts,
 						status: status
 					},
@@ -173,9 +177,59 @@
 								</div>
 							</div>
 						</div>
-								
+						
 						<div class="space"></div>
 
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">
+								*Validar
+							</label>
+							<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+								<select name="time" id="time" class="select2" style="width:100%">
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>5</option>
+									<option>6</option>
+									<option>7</option>
+									<option>8</option>
+									<option>9</option>
+									<option>10</option>
+									<option>11</option>
+									<option>12</option>
+									<option>13</option>
+									<option>14</option>
+									<option>15</option>
+									<option>16</option>
+									<option>17</option>
+									<option>18</option>
+									<option>19</option>
+									<option>20</option>
+									<option>21</option>
+									<option>22</option>
+									<option>23</option>
+									<option>24</option>
+								</select>
+							</div>
+								
+							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+								<select name="date" id="date" class="select2" style="width:100%">
+									<option value="hours">Hora(s)</option>
+									<option value="days">Día(s)</option>
+									<option value="weeks">Semana(s)</option>
+									<option value="months">Mes(es)</option>
+									{#<option>Año(s)</option>#}
+								</select>
+							</div>
+								
+							<div class="col-xs-12 col-sm-9 col-md-3 col-lg-3">
+								Despúes del envío el correo
+							</div>
+						</div>
+							
+						<div class="space"></div>
+						
 						<div class="form-group">
 							<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">
 								*Estado
