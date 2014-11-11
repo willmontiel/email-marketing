@@ -88,7 +88,7 @@ if(isset($argv[1]) && isset($argv[2])) {
 					exit(0);
 				}
 				printf('Directo' .PHP_EOL);
-				$processObj = new ExportProcess();
+				$processObj = new SmartManagmentProcess();
 				break;
 			case '-k':
 				if (!isRunning(SocketConstants::getExportRequestsEndPoint())) {
@@ -104,6 +104,38 @@ if(isset($argv[1]) && isset($argv[2])) {
 					exit(0);
 				}
 				processStatus(SocketConstants::getExportRequestsEndPoint());
+				exit(0);
+				break;
+			default :
+				printf('Comando no reconocido' .PHP_EOL);
+				exit(0);
+				break;
+		}
+	}
+	else if($argv[1] === '-sm') {
+		switch ($argv[2]) {
+			case '-r':
+				if (isRunning(SocketConstants::getSmartmanagmentRequestsEndPoint())) {
+					echo "The process is already running!\n";
+					exit(0);
+				}
+				printf('Directo' .PHP_EOL);
+				$processObj = new ExportProcess();
+				break;
+			case '-k':
+				if (!isRunning(SocketConstants::getSmartmanagmentRequestsEndPoint())) {
+					echo "There's no process to terminate\n";
+					exit(0);
+				}
+				killProcess(SocketConstants::getSmartmanagmentRequestsEndPoint());
+				exit(0);
+				break;
+			case '-s':
+				if (!isRunning(SocketConstants::getSmartmanagmentRequestsEndPoint())) {
+					echo "There's no process\n";
+					exit(0);
+				}
+				processStatus(SocketConstants::getSmartmanagmentRequestsEndPoint());
 				exit(0);
 				break;
 			default :
@@ -252,6 +284,7 @@ class ParentProcess
 			}
 			else {
 				$registry->handleEvent(new Event('Idle'));
+				$registry->handleEvent(new Event('Jobless'));
 				$registry->handleEvent(new Event('WP'));
 			}
 		}

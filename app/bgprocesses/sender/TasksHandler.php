@@ -16,7 +16,7 @@ class TasksHandler extends Handler
 	
 	public function getEvents()
 	{
-		$events = array('Idle');
+		$events = array('Idle', 'Jobless');
 		
 		return $events;
 	}
@@ -30,6 +30,13 @@ class TasksHandler extends Handler
 	{
 		switch ($event->type) {
 			case 'Idle':
+				$this->taskScheduling();
+				if($this->checkReadyTasks()) {
+					$this->SendReadyTasks();
+				}
+				break;
+				
+			case 'Jobless':
 				$this->taskScheduling();
 				if($this->checkReadyTasks()) {
 					$this->SendReadyTasks();
@@ -66,6 +73,22 @@ class TasksHandler extends Handler
 		$this->scheduledTasks = Mailschedule::find(array("limit" => 20, "order"  => "scheduleDate ASC", "confirmationStatus = 'Yes'"));
 		
 		if(count($this->scheduledTasks) > 0){
+			$this->checkScheduledTasks();
+		}
+	}
+	
+	public function taskSmartManagmentScheduling()
+	{
+		$this->smartmanagmentTasks = Mailschedule::find(array("limit" => 20, "order"  => "scheduleDate ASC", "confirmationStatus = 'Yes'"));
+		$this->smartmanagmentTasks = Smartmanagment::find();
+		
+		$ruleInterpreter = new \EmailMarketing\General\Misc\RuleInterpreter();
+		
+		if (count($this->smartmanagmentTasks) > 0) {
+			foreach ($this->smartmanagmentTasks as $smart) {
+				$ruleInterpreter->setSmart($smart);
+				$ruleInterpreter->searchMails();
+			}
 			$this->checkScheduledTasks();
 		}
 	}
