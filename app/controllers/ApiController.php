@@ -1011,6 +1011,31 @@ class ApiController extends ControllerBase
 		return $this->setJsonResponse(array('dbase' => $dbs));
 	}
 	
+	/**
+	 * 
+	 * @Post("/dbases")
+	 */
+	public function createdbaseAction()
+	{
+		$contentsraw = $this->getRequestContent();
+		$contentsT = json_decode($contentsraw);
+		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
+		
+		try {
+			$wrapper = new DbaseWrapper();
+			$wrapper->setAccount($this->user->account);
+
+			$dbase = $wrapper->newDbase($contentsT->dbase);
+		}
+		catch(\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			return $this->setJsonResponse(array('error' => $e->getMessage()) );	
+		}
+		return $this->setJsonResponse(array('dbase' => $dbase));
+	}
+	
+	
+	
 	//Inicio de listas globales de bloqueo de emails
 
 	/**

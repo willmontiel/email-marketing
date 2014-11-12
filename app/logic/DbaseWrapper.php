@@ -10,6 +10,46 @@ class DbaseWrapper extends BaseWrapper
 		return $bdjson;
 	}
 	
+	public function newDbase($content)
+	{
+		if(!isset($content->name) || trim($content->name) === '' || $content->name == NULL) {
+			throw new \Exception('Debe ingresar un nombre para la base de datos');
+		}
+		else {
+			$nameExist = Dbase::findFirst(array(
+				"conditions" => "idAccount = ?1 AND name = ?2",
+				"bind" => array(1 => $this->account->idAccount,
+								2 => $content->name)
+			));
+			if ($nameExist) {
+				throw new \Exception('El nombre de la Base de Datos ya se encuentra registrado, por favor verifique la información');
+			}
+			else {
+				$dbase = new Dbase();
+				
+				$dbase->idAccount = $this->account->idAccount;
+				$dbase->name = $content->name;
+				$dbase->description = $content->description;
+				$dbase->Cdescription = $content->Cdescription;
+				$dbase->color = $content->color;
+				$dbase->Ctotal = 0;
+				$dbase->Cactive = 0;
+				$dbase->Cinactive = 0;
+				$dbase->Cunsubscribed  = 0;
+				$dbase->Cbounced  = 0;
+				$dbase->Cspam   = 0;
+
+				if (!$dbase->save()) {
+					foreach ($dbase->getMessages() as $msg) {
+						throw new \Exception($msg);
+					}
+				}
+				
+				return $this->convertBDToJson($dbase);
+			}
+		}
+	}
+	
 	protected function convertBDToJson($dbase)
 	{
 		$object = array();

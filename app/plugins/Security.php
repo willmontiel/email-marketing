@@ -215,6 +215,7 @@ class Security extends Plugin
 				'api::listcontactsbysegment' => array('segment' => array('read')),
 				'api::getcontactbysegment' => array('segment' => array('read')),
 				'api::dbases' => array('segment' => array('read', 'update')),
+				'api::createdbase' => array('dbase' => array('read','create')),
 				'api::getcustomfieldsalias' => array('segment' => array('create')),
 				'api::createsegment' => array('segment' => array('read', 'create')),
 				'api::deletesegment' => array('segment' => array('read', 'delete')),
@@ -237,7 +238,11 @@ class Security extends Plugin
 				//Segmentapi
 				'segmentapi::searchcontacts' => array('contact' => array('read')),
 				
-				
+				//Apimail
+				'apimail::newmail' => array('mail' => array('read', 'create', 'send')),
+				'apimail::mailcontactstatistics' => array('statistic' => array('read')),
+				'apimail::maillinkstatistics' => array('statistic' => array('read')),
+								
 				//Apistatistics Estadisticas
 				'apistatistics::dbase' => array('statistic' => array('read')),
 				'apistatistics::contactlistopens' => array('statistic' => array('read')),
