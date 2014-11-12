@@ -42,10 +42,48 @@
 				state: {% if smart.status == 1%}true{% else %}false{% endif %}
 			});
 			
-			$(".select2").select2({
-				allowClear: true,
-				placeholder: "Seleccione la(s) cuenta(s)"
-			});
+			var datetime = "{{smart.time}}";
+			var dt = datetime.split(" ");
+			
+			$(".stime").select2({
+				data: [
+					{ id: 1, text: "1" },
+					{ id: 2, text: "2" },
+					{ id: 3, text: "3" },
+					{ id: 4, text: "4" },
+					{ id: 5, text: "5" },
+					{ id: 6, text: "6" },
+					{ id: 7, text: "7" },
+					{ id: 8, text: "8" },
+					{ id: 9, text: "9" },
+					{ id: 10, text: "10" },
+					{ id: 11, text: "11" },
+					{ id: 12, text: "12" },
+					{ id: 13, text: "13" },
+					{ id: 14, text: "14" },
+					{ id: 15, text: "15" },
+					{ id: 16, text: "16" },
+					{ id: 17, text: "17" },
+					{ id: 18, text: "18" },
+					{ id: 19, text: "19" },
+					{ id: 20, text: "20" },
+					{ id: 21, text: "21" },
+					{ id: 22, text: "22" },
+					{ id: 23, text: "23" },
+					{ id: 24, text: "24" }
+				]
+			}).select2("val", dt[0]);
+			
+			$(".sdate").select2({
+				data: [
+					{ id: 'hours', text: 'Hora(s)' },
+					{ id: 'days', text: 'Día(s)' },
+					{ id: 'weeks', text: 'Semana(s)' },
+					{ id: 'months', text: 'Mes(es)' },
+					{ id: 'years', text: 'Año(s)' }
+				]
+			}).select2("val", '' + dt[1]);
+			
 			
 			$("input[name=target]").change(function () {	 
 				var value = $(this).val();
@@ -180,7 +218,26 @@
 								</div>
 							</div>
 						</div>	
-							
+						
+						<div class="space"></div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">
+								*Validar
+							</label>
+							<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+								<input type="hidden" name="time" id="time" class="stime" style="width:100%;">
+							</div>
+								
+							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+								<input type="hidden" name="date" id="date" class="sdate" style="width:100%;">
+							</div>
+								
+							<div class="col-xs-12 col-sm-9 col-md-3 col-lg-3">
+								<strong>Despúes del envío el correo</strong>
+							</div>
+						</div>
+						
 						<div class="space"></div>
 
 						<div class="form-group">

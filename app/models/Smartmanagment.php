@@ -6,5 +6,6 @@ class Smartmanagment extends Modelbase
 	public function initialize()
     {
 		 $this->hasMany("idSmartmanagment", "Rule", "idSmartmanagment");
+		 $this->hasMany("idSmartmanagment", "Scorehistory", "idSmartmanagment");
 	}
 }

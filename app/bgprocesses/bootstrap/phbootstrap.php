@@ -182,9 +182,6 @@ $sockets->exportfromchild = $config->sockets->exportfromchild;
 $sockets->mailrequest = $config->sockets->mailrequest;
 $sockets->mailtochildren = $config->sockets->mailtochildren;
 $sockets->mailfromchild = $config->sockets->mailfromchild;
-$sockets->smartmanagmentrequest = $config->sockets->smartmanagmentrequest;
-$sockets->smartmanagmenttochildren = $config->sockets->smartmanagmenttochildren;
-$sockets->smartmanagmentfromchild = $config->sockets->smartmanagmentfromchild;
 $di->set('sockets', $sockets);
 
 /*

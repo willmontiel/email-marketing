@@ -23,7 +23,7 @@ class SmartManagmentWrapper extends BaseWrapper
 	
 	public function saveSmart()
 	{
-		$this->validateData();
+//		$this->validateData();
 		$this->saveSmartManagment();
 		$this->saveRules();
 	}

@@ -67,27 +67,4 @@ class SocketConstants
 	{
 		return Phalcon\DI::getDefault()->get('sockets')->exportfromchild;
 	}
-	
-	
-// ************** - Smartmanagment Sockets - **************
-	
-	public static function getSmartmanagmentPub2ChildrenEndPoint()
-	{
-		return Phalcon\DI::getDefault()->get('sockets')->smartmanagmenttochildren;
-	}
-	
-	public static function getSmartmanagmentRequestsEndPoint()
-	{
-		return Phalcon\DI::getDefault()->get('sockets')->smartmanagmentrequest;
-	}
-	
-	public static function getSmartmanagmentRequestsEndPointPeer()
-	{
-		return Phalcon\DI::getDefault()->get('sockets')->smartmanagmentrequest;
-	}
-	
-	public static function getSmartmanagmentPullFromChildEndPoint()
-	{
-		return Phalcon\DI::getDefault()->get('sockets')->smartmanagmentfromchild;
-	}
 }
