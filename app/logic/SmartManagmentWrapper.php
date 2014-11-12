@@ -30,7 +30,7 @@ class SmartManagmentWrapper extends BaseWrapper
 	
 	public function editSmart()
 	{
-		$this->validateData();
+//		$this->validateData();
 		$this->editSmartManagment();
 		$this->deleteRules();
 		$this->saveRules();
@@ -41,6 +41,7 @@ class SmartManagmentWrapper extends BaseWrapper
 		$this->smart = new Smartmanagment();
 		$this->smart->idAccount = $this->account->idAccount;
 		$this->smart->name = $this->data->name;
+		$this->smart->description = $this->data->description;
 		$this->smart->target = $this->data->target;
 		$this->smart->time = $this->data->datetime;
 		$lo = 'and';
@@ -69,7 +70,21 @@ class SmartManagmentWrapper extends BaseWrapper
 	protected function editSmartManagment()
 	{
 		$this->smart->name = $this->data->name;
+		$this->smart->description = $this->data->description;
 		$this->smart->target = $this->data->target;
+		$this->smart->time = $this->data->datetime;
+		
+		$lo = 'and';
+		
+		foreach ($this->data->rules as $rules) {
+			if (isset($rules['type']) && $rules['type'] == 'logic-operator') {
+				$lo = $rules['value'];
+				break;
+			}
+		}
+		
+		$this->smart->logicOperator = $lo;
+		
 		$this->smart->status = ($this->data->status == 'false' ? 0 : 1);
 		$this->smart->updatedon = time();
 		

@@ -55,6 +55,7 @@
 		function saveManagment() {
 			try {
 				var name = $('#name').val();
+				var description = $('#description').val();
 				rulesManager.serializeRules();
 				var rules = rulesManager.getSerializerObject();
 				var target = $('input[name=target]:checked').val();
@@ -67,6 +68,7 @@
 					type: "POST",			
 					data: {
 						name: name,	
+						description: description,
 						rules: rules,
 						target: target,
 						datetime: datetime,
@@ -141,6 +143,15 @@
 							</div>
 						</div>
 
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">
+								Descripción
+							</label>
+							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+								<textarea class="form-control" placeholder="Descripción" type="text" name="description" id="description" required="required"></textarea>
+							</div>
+						</div>	
+							
 						<div class="form-group">
 							<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">
 								*Reglas

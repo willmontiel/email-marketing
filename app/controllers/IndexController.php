@@ -18,5 +18,14 @@ class IndexController extends ControllerBase
 		
 		$this->view->setVar('confAccount', $this->user->account);
 		$this->view->currentActiveContacts = $this->user->account->countActiveContactsInAccount();
+		
+		$score = Score::findFirst(array(
+			'conditions' => 'idAccount = ?1',
+			'bind' => array(1 => $this->user->account->idAccount)
+		));
+		
+		if ($score) {
+			$this->view->setVar('score', $score);
+		}
     }
 }

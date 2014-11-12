@@ -202,8 +202,10 @@ class SmartManagment
 	
 	private function sendCommunications()
 	{
-		$mailWrapper = new MailWrapper();
-		$mailWrapper->setAccount($this->account);
-		$mailWrapper->setContent($content);
+//		$mailWrapper = new MailWrapper();
+//		$mailWrapper->setAccount($this->account);
+//		$mailWrapper->setContent($content);
+//		$mailWrapper->processDataForMail();
+//		$mailWrapper->saveMail();
 	}
 }

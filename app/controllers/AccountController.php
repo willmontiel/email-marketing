@@ -67,8 +67,10 @@ class AccountController extends ControllerBase
 		));
 		
 		$page = $paginator->getPaginate();
+		$scores = Score::find();
 		
 		$this->view->setVar("page", $page);
+		$this->view->setVar("scores", $scores);
 	}
 	
 	/*
@@ -653,4 +655,43 @@ class AccountController extends ControllerBase
 		return $this->setJsonResponse(array($response->type => $response->msg), $response->status);
 	}
 	
+	public function scorehistoryAction($id)
+	{
+		$account = Account::findFirst(array(
+			'conditions' => 'idAccount = ?1',
+			'bind' => array(1 => $id)
+		));
+		
+		if (!$account) {
+			$this->flashSession->error("Cuenta no encontrada!");
+			return $this->response->redirect('account');
+		}
+		
+		$currentPage = $this->request->getQuery('page', null, 1); // GET
+
+		$builder = $this->modelsManager->createBuilder()
+			->from('Scorehistory')
+			->where("idAccount = {$id}")
+			->orderBy('createdon');
+
+		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
+			"builder" => $builder,
+			"limit"=> PaginationDecorator::DEFAULT_LIMIT,
+			"page" => $currentPage
+		));
+		
+		$page = $paginator->getPaginate();
+		
+		$smarts = Smartmanagment::find();
+		
+		$score = Score::findFirst(array(
+			'conditions' => 'idAccount = ?1',
+			'bind' => array(1 => $id)
+		));
+		
+		$this->view->setVar("page", $page);
+		$this->view->setVar("smarts", $smarts);
+		$this->view->setVar("account", $account);
+		$this->view->setVar("score", $score);
+	}
  }  

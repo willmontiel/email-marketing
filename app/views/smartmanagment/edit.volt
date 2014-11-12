@@ -101,9 +101,11 @@
 		
 		function saveManagment() {
 			var name = $('#name').val();
+			var description = $('#description').val();
 			rulesManager.serializeRules();
 			var rules = rulesManager.getSerializerObject();
 			var target = $('input[name=target]:checked').val();
+			var datetime = $('#time').val() + ' ' + $('#date').val();
 			var accounts = $('#accounts').val();
 			var status = $('#status').prop('checked');
 			
@@ -112,6 +114,8 @@
 				type: "POST",			
 				data: {
 					name: name,
+					description: description,
+					datetime: datetime,
 					rules: rules,
 					target: target,
 					accounts: accounts,
@@ -157,7 +161,16 @@
 								<input class="form-control" autofocus="autofocus" placeholder="Nombre de la gestión automática" type="text" name="name" id="name" value="{{smart.name}}" required="required">
 							</div>
 						</div>
-
+							
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">
+								Descripción
+							</label>
+							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+								<textarea class="form-control" placeholder="Descripción" type="text" name="description" id="description" required="required">{{smart.description}}</textarea>
+							</div>
+						</div>
+							
 						<div class="form-group">
 							<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">
 								*Reglas

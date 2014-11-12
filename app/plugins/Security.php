@@ -137,6 +137,7 @@ class Security extends Plugin
 				'account::loadindicator' => array('dashboard' => array('read')),
 				//Account controller
 				'account::index' => array('account' => array('read')),
+				'account::scorehistory' => array('account' => array('read')),
 				'account::accounting' => array('account' => array('billing')),
 				'account::new' => array('account' => array('create', 'read')),
 				'account::edit' => array('account' => array ('read', 'update')),

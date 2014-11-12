@@ -26,13 +26,15 @@ class SmartmanagmentController extends ControllerBase
 		if ($this->request->isPost()) {
 			$name = $this->request->getPost('name');
 			$name = trim($name);
+			$description = $this->request->getPost('description');
+			$description = trim($description);
 			$rules = $this->request->getPost('rules');
 			$datetime = $this->request->getPost('datetime');
 			$target = $this->request->getPost('target');
 			$accounts = $this->request->getPost('accounts');
 			$status = $this->request->getPost('status');
 			
-			if (empty($name) || empty($rules) || empty($target) || empty($status) || empty($datetime)) {
+			if (empty($name) || empty($description) || empty($rules) || empty($target) || empty($status) || empty($datetime)) {
 				return $this->setJsonResponse(array('message' => 'Ha enviado campos vacíos, por favor valide la información'), 400, 'Datos invalidos');
 			}
 			
@@ -51,6 +53,7 @@ class SmartmanagmentController extends ControllerBase
 			try {
 				$data = new stdClass();
 				$data->name = $name;
+				$data->description = $description;
 				$data->rules = $rules;
 				$data->datetime = $datetime;
 				$data->target = json_encode($dest);
@@ -90,12 +93,15 @@ class SmartmanagmentController extends ControllerBase
 		if ($this->request->isPost()) {
 			$name = $this->request->getPost('name');
 			$name = trim($name);
+			$description = $this->request->getPost('description');
+			$description = trim($description);
 			$rules = $this->request->getPost('rules');
+			$datetime = $this->request->getPost('datetime');
 			$target = $this->request->getPost('target');
 			$accounts = $this->request->getPost('accounts');
 			$status = $this->request->getPost('status');
 			
-			if (empty($name) || empty($rules) || empty($target) || empty($status)) {
+			if (empty($name) || empty($description) || empty($rules) || empty($target) || empty($status)) {
 				return $this->setJsonResponse(array('error' => 'Ha enviado campos vacíos, por favor valide la información'), 400, 'Ha enviado campos vacios, por favor valide la informacion');
 			}
 			
@@ -114,17 +120,20 @@ class SmartmanagmentController extends ControllerBase
 			try {
 				$data = new stdClass();
 				$data->name = $name;
+				$data->description = $description;
+				$data->datetime = $datetime;
 				$data->rules = $rules;
 				$data->target = json_encode($dest);
 				$data->status = $status;
 				
-				$this->logger->log($data->target);
+//				$this->logger->log(print_r($data, true));
 				
 				$smartw = new SmartManagmentWrapper();
 				$smartw->setData($data);
 				$smartw->setSmart($smart);
 				$smartw->editSmart();
 				
+				$this->flashSession->notice("Se ha editado le gestión inteligente exitosamente");
 				return $this->setJsonResponse(array('message' => "Se ha editado le gestión inteligente exitosamente"), 200, 'Operación exitosa');
 			}
 			catch (Exception $e) {

@@ -54,6 +54,16 @@
 		{%endfor%}
 	</div>
 
+	{% if score.score is defined %}
+		<div class="clearfix space"></div>
+
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<span class="glyphicon glyphicon-star"></span> Puntuación {{score.score}}
+			</div>
+		</div>
+	{% endif %}
+	
 	<div class="clearfix space"></div>
 	
 	<div class="row">

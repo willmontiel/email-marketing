@@ -19,11 +19,28 @@
 	</div>
 	
 	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="header-background">
+				<div class="title">Gestión inteligente</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
 		<div class="col-md-12">
 			{{flashSession.output()}}
 		</div>
 	</div>
-
+	
+	<div class="clearfix"></div>
+	<div class="space"></div>
+	
+	<div class="row">
+		<div class="col-md-12 text-right">
+			<a href="{{url('smartmanagment/new')}}" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-plus"></span> Nueva gestión inteligente</a>
+		</div>
+	</div>
+			
 	<div class="space-small"></div>
 
 	{% if page.items|length != 0%}

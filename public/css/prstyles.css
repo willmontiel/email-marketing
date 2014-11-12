@@ -1056,3 +1056,10 @@ body {
 .btn-no-rc {
 	border-radius: 0 !important;
 }
+
+.yellow {
+	color: rgb(255, 255, 81);
+}
+.text-with-shadow {
+	text-shadow: 0px 0 0.2em #000000;
+}
