@@ -183,7 +183,7 @@ class SmartManagmentManager
 
 				if (!$score) {
 					$score = new \Score();
-					$score->idAccount = $account->idAccount;
+					$score->idAccount = $account['idAccount'];
 					$score->score = 0;
 					$score->createdon = time();
 				}
