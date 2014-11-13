@@ -713,7 +713,7 @@ class AccountController extends ControllerBase
 				$smarts[] = $smart;
 			}
 			
-			$mail = Smartmanagment::findFirstByIdMail($p->idMail);
+			$mail = Mail::findFirstByIdMail($p->idMail);
 			if (!in_array($mail, $mails)) {
 				$mails[] = $mail;
 			}
