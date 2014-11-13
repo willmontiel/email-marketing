@@ -706,8 +706,8 @@ class AccountController extends ControllerBase
 		
 		foreach ($page->items as $p) {
 			$this->logger->log("Smart: {$p->smartmanagment->name}");
-			$this->logger->log("Mail: {$p->mail->name}");
-			$this->logger->log("Mail: {$p->mail->subject}");
+			$this->logger->log("Mail: {$p->Mail->name}");
+			$this->logger->log("Mail: {$p->Mail->subject}");
 		}
 
 		$this->view->setVar("page", $page);
