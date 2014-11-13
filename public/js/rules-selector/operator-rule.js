@@ -20,8 +20,8 @@ OperatorRule.prototype.create = function() {
 							<option value=">" ' + this.greater + '>></option>\n\
 							<option value="=" ' + this.equals + '>=</option>\n\
 							<option value="!=" ' + this.notequals + '>!=</option>\n\
-							<option value=">=" ' + this.greaterequals + '>!=</option>\n\
-							<option value="<=" ' + this.lessequals + '>!=</option>\n\
+							<option value=">=" ' + this.greaterequals + '>>=</option>\n\
+							<option value="<=" ' + this.lessequals + '><=</option>\n\
 						</select>\n\
 					</div>	');
 	
