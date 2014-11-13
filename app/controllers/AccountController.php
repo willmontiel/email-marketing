@@ -717,6 +717,16 @@ class AccountController extends ControllerBase
 			if (!in_array($mail, $mails)) {
 				$mails[] = $mail;
 			}
+			
+			$p->smartName = $smart->name;
+			$p->smartDescription = $smart->description;
+			
+			$p->mailName = $mail->name;
+			$p->mailSubject = $mail->subject;
+		}
+		
+		foreach ($page->items as $p) {
+			$this->logger->log("Mail: {$p->mailName}");
 		}
 		
 		$score = Score::findFirst(array(
