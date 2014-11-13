@@ -168,12 +168,8 @@ class SmartManagmentManager
 	private function scoreAccounts()
 	{
 		foreach ($this->accounts as $account) {
-			$this->logger->log("idAccount: {$account['idAccount']}");
-			$this->logger->log("idSmart: {$this->smart->idSmartmanagment}");
-			$this->logger->log("idMail: {$account['idMail']}");
-			
 			$scorehistory = Scorehistory::findFirst(array(
-				'conditions' => 'idAccount = ?1 AND idSmartmanagment = ?2',
+				'conditions' => 'idAccount = ?1 AND idSmartmanagment = ?2 AND idMail = ?3',
 				'bind' => array(1 => $account['idAccount'],
 								2 => $this->smart->idSmartmanagment,
 								2 => $account['idMail'])
@@ -203,8 +199,9 @@ class SmartManagmentManager
 				}
 
 				$scorehistory = new \Scorehistory();
-				$scorehistory->idAccount = $account->idAccount;
+				$scorehistory->idAccount = $account['idAccount'];
 				$scorehistory->idSmartmanagment = $this->smart->idSmartmanagment;
+				$scorehistory->idMail = $account['idMail'];
 				$scorehistory->score = $this->points;
 				$scorehistory->createdon = time();
 
