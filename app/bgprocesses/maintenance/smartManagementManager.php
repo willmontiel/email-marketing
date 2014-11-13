@@ -172,7 +172,7 @@ class SmartManagmentManager
 				'conditions' => 'idAccount = ?1 AND idSmartmanagment = ?2 AND idMail = ?3',
 				'bind' => array(1 => $account['idAccount'],
 								2 => $this->smart->idSmartmanagment,
-								2 => $account['idMail'])
+								3 => $account['idMail'])
 			));
 			
 			if (!$scorehistory) {
