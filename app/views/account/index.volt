@@ -90,8 +90,7 @@
 							{{item.score.score}}
 						{% else %}
 							0
-						{% endif %}	
-						
+						{% endif %}
 						<br />
 						<a href="{{url('account/scorehistory')}}/{{item.idAccount}}">Ver historial</a>
 					</td>
