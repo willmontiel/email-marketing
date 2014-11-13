@@ -147,7 +147,7 @@ class SmartManagmentManager
 	
 	private function searchMatches()
 	{
-		$sql = "SELECT idAccount
+		$sql = "SELECT idAccount, idMail
 				FROM mail
 				WHERE status = 'Sent'
 					AND finishedon <= {$this->time}
@@ -158,6 +158,9 @@ class SmartManagmentManager
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
 		$this->accounts = $result->fetchAll();
+		
+		$this->logger->log("SQL: " . print_r($this->accounts, true));
+		throw new Exception("Hi :D");
 	}
 	
 	private function scoreAccounts()
@@ -170,44 +173,42 @@ class SmartManagmentManager
 			));
 			
 			if (!$scorehistory) {
-				if ($this->account != null) {
-					$score = \Score::findFirstByIdAccount($account->idAccount);
+				$score = \Score::findFirstByIdAccount($account->idAccount);
 
-					$db = Phalcon\DI::getDefault()->get('db');
-					$db->begin();
+				$db = Phalcon\DI::getDefault()->get('db');
+				$db->begin();
 
-					if (!$score) {
-						$score = new \Score();
-						$score->idAccount = $account->idAccount;
-						$score->score = 0;
-						$score->createdon = time();
-					}
-
-					$score->score += $this->points;
-					$score->updatedon = time();
-
-					if (!$score->save()) {
-						foreach ($score->getMessages() as $msg) {
-							$db->rollback();
-							throw new Exception("Error while scoring account... {$msg}");
-						}
-					}
-
-					$scorehistory = new \Scorehistory();
-					$scorehistory->idAccount = $account->idAccount;
-					$scorehistory->idSmartmanagment = $this->smart->idSmartmanagment;
-					$scorehistory->score = $this->points;
-					$scorehistory->createdon = time();
-
-					if (!$scorehistory->save()) {
-						foreach ($scorehistory->getMessages() as $msg) {
-							$db->rollback();
-							throw new Exception("Error while scoring account history... {$msg}");
-						}
-					}
-
-					$db->commit();
+				if (!$score) {
+					$score = new \Score();
+					$score->idAccount = $account->idAccount;
+					$score->score = 0;
+					$score->createdon = time();
 				}
+
+				$score->score += $this->points;
+				$score->updatedon = time();
+
+				if (!$score->save()) {
+					foreach ($score->getMessages() as $msg) {
+						$db->rollback();
+						throw new Exception("Error while scoring account... {$msg}");
+					}
+				}
+
+				$scorehistory = new \Scorehistory();
+				$scorehistory->idAccount = $account->idAccount;
+				$scorehistory->idSmartmanagment = $this->smart->idSmartmanagment;
+				$scorehistory->score = $this->points;
+				$scorehistory->createdon = time();
+
+				if (!$scorehistory->save()) {
+					foreach ($scorehistory->getMessages() as $msg) {
+						$db->rollback();
+						throw new Exception("Error while scoring account history... {$msg}");
+					}
+				}
+
+				$db->commit();
 			}
 		}
 	}
