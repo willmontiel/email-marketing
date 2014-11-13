@@ -47,6 +47,28 @@ class AccountController extends ControllerBase
 		return $this->setJsonResponse($object);
 	}
 	
+	public function getscoreAction()
+	{
+		$account = $this->user->account;
+		
+		$score = Score::findFirst(array(
+			'conditions' => 'idAccount = ?1',
+			'bind' => array(1 => $account->idAccount)
+		));
+		
+		$value = 0;
+		
+		if ($score) {
+			$value = $score->score;
+		}
+		
+		
+		$object = array();
+		$object['score'] = (empty($value) ? 0 : $value);
+		
+		return $this->setJsonResponse($object);
+	}
+	
 	
 	/**
 	 * 

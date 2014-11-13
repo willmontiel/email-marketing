@@ -1,6 +1,38 @@
 {% extends "templates/index_b3.volt" %}
 {% block content %}
-{{flashSession.output()}}
+	{#<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			{{flashSession.output()}}
+		</div>
+	</div>
+	#}
+
+	<div class="clearfix space-small"></div>
+			
+	<div class="row block-simple block-simple-gray">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+					<div class="block block-gray">
+						
+					</div>	
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+					<div class="score-container">
+						<div class="score-image"></div>
+						<div class="score-detail">
+							{% if score.score is defined %}{{score.score}}{%else%}0{% endif %}
+						</div>
+						<div class="score-description">
+							Puntos
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+	
+	
 	<div class="container-fluid">
 		{#<h1 class="sectiontitle">Interacciones de los últimos quince días</h1>#}
 		<h1 class="sectiontitle">Interacción de la última campaña enviada</h1>	
@@ -54,16 +86,6 @@
 		{%endfor%}
 	</div>
 
-	{% if score.score is defined %}
-		<div class="clearfix space"></div>
-
-		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				<span class="glyphicon glyphicon-star"></span> Puntuación {{score.score}}
-			</div>
-		</div>
-	{% endif %}
-	
 	<div class="clearfix space"></div>
 	
 	<div class="row">

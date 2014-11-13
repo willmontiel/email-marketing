@@ -71,7 +71,7 @@
 							<th>id</th>
 							<th>Gestión inteligente</th>
 							<th>Fecha</th>
-							<th class="yellow text-with-shadow"><span class="glyphicon glyphicon-star"></span> Puntuación</th>
+							<th class="orange-sigma star-shadow"><span class="glyphicon glyphicon-star"></span> Puntuación</th>
 						</tr>
 					</thead>
 					<tbody>

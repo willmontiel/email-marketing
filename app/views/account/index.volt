@@ -67,7 +67,7 @@
 					<th>MTA</th>
 					<th>Registrada</th>
 					<th>Actualizada</th>
-					<th class="yellow text-with-shadow"><span class="glyphicon glyphicon-star"></span> Puntuación</th>
+					<th class="orange-sigma star-shadow"><span class="glyphicon glyphicon-star"></span> Puntuación</th>
 					<th></th>
 				</tr>
 			</thead>

@@ -41,10 +41,12 @@
 		{{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.gritter.js') }}
 		{% endblock %}
 		{{ javascript_include('js/indicator_account_loader.js') }}
+		{{ javascript_include('js/score-loader.js') }}
 		{{ stylesheet_link('css/prstyles.css') }}
 		{{ stylesheet_link('css/sidebar-media-queries.css') }}
 		<script type="text/javascript">
 			loadIndicator("indicator");
+			loadScore("score");
 		</script>
         <style>
 			select {
@@ -69,6 +71,11 @@
 					</li>
 					<!-- END OLARK CHAT LINK -->
 				{% endif %}
+					<li>
+						<a href="javascript: void(0);" style="cursor: default;">
+							<div class="orange-sigma text-with-shadow" style="display: inline;"><span class="glyphicon glyphicon-star"></span> Puntuación:</div> <div class="score-in-bar" id="score"></div>
+						</a>
+					</li>
 					<li>
 						<a href="javascript: void(0);" style="cursor: default;">
 							<div id="indicator"></div>
