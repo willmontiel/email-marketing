@@ -704,30 +704,13 @@ class AccountController extends ControllerBase
 		
 		$page = $paginator->getPaginate();
 		
-//		$smarts = array();
-//		$mails = array();
-//		
-//		foreach ($page->items as $p) {
-//			$smart = Smartmanagment::findFirstByIdSmartmanagment($p->idSmartmanagment);
-//			if (!in_array($smart, $smarts)) {
-//				$smarts[] = $smart;
-//			}
-//			
-//			$mail = Mail::findFirstByIdMail($p->idMail);
-//			if (!in_array($mail, $mails)) {
-//				$mails[] = $mail;
-//			}
-//		}
-//		
-//		$score = Score::findFirst(array(
-//			'conditions' => 'idAccount = ?1',
-//			'bind' => array(1 => $id)
-//		));
-		
+		foreach ($page->items as $p) {
+			$this->logger->log("Smart: {$p->smartmanagment->name}");
+			$this->logger->log("Mail: {$p->mail->name}");
+			$this->logger->log("Mail: {$p->mail->subject}");
+		}
+
 		$this->view->setVar("page", $page);
-//		$this->view->setVar("smarts", $smarts);
-//		$this->view->setVar("mails", $mails);
 		$this->view->setVar("account", $account);
-//		$this->view->setVar("score", $score);
 	}
  }  
