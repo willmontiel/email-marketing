@@ -86,8 +86,6 @@
 												<div class="title" style="font-size: 1em !important;">{{smart.name}}</div>
 												<div class="title-info" style="padding-left: 0 !important;">{{smart.description}}</div>
 											</div>
-										{% else %}
-											Gestión inteligente indefinida o eliminada
 										{% endif %}
 									{% endfor %}
 								</td>
@@ -98,8 +96,6 @@
 												<div class="title" style="font-size: 1em !important;">{{mail.name}}</div>
 												<div class="title-info" style="padding-left: 0 !important;">{{mail.subject}}</div>
 											</div>
-										{% else %}
-											Correo indefinido o eliminado
 										{% endif %}
 									{% endfor %}
 								</td>
