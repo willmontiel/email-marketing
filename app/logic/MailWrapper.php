@@ -144,7 +144,7 @@ class MailWrapper extends BaseWrapper
 		
 		$this->mail->idAccount = $this->account->idAccount;
 		$this->mail->type = $this->content->type;
-		$this->mail->status = ($this->mail->status) ? $this->mail->status : 'draft';
+		$this->mail->status = (isset($this->mail->status)) ? $this->mail->status : 'draft';
 		$this->mail->wizardOption = 'setup';
 		$this->mail->totalContacts = (isset($this->content->totalContacts) ? $this->content->totalContacts : 0);
 		if ($this->scheduleDate != null) {
@@ -499,5 +499,28 @@ class MailWrapper extends BaseWrapper
 		$response->code = 200;
 
 		return $response;
+	}
+	
+	public function createHtmlMailContent($content)
+	{
+		$mc = new Mailcontent();
+		$mc->idMail = $this->mail->idMail;
+
+		$text = new PlainText();
+		$plainText = $text->getPlainText($content);
+
+		$buscar = array("<script" , "</script>");
+		$reemplazar = array("<!-- ", " -->");
+		$newContent = str_replace($buscar,$reemplazar, $content);
+
+		$mc->content = htmlspecialchars($newContent, ENT_QUOTES);
+		$mc->plainText = $plainText;
+
+		if(!$mc->save()) {
+			foreach ($mc->getMessages() as $msg) {
+				$this->logger->log("Error while saving mail html content {$msg}");
+			}
+			throw new \InvalidArgumentException("wrong content");
+		}
 	}
 }

@@ -186,6 +186,7 @@ class AppObjects
 			$router->addResource('Segmentapi', '/api/segment');
 			$router->addResource('Apistatistics', '/apistatistics');
 			$router->addResource('Apiversionone', '/api/v1');
+			$router->addResource('Apimail', '/api/mails');
 
 			return $router;
 		});
