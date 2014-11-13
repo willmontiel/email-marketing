@@ -4,6 +4,7 @@ class Scorehistory extends Modelbase
 {
 	public $idAccount;
 	public $idSmartmanagment;
+	public $idMail;
 	
 	public function initialize()
     {
@@ -12,6 +13,10 @@ class Scorehistory extends Modelbase
 		);
 		
 		$this->belongsTo("idSmartmanagment", "Smartmanagment", "idSmartmanagment",
+			array("foreignKey" => true)
+		);
+		
+		$this->belongsTo("idMail", "Mail", "idMail",
 			array("foreignKey" => true)
 		);
 		
