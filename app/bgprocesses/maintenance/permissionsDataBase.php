@@ -610,6 +610,7 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_STATISTICS', 'Action' => 'contactlist::read'),
 			array( 'Role' => 'ROLE_STATISTICS', 'Action' => 'dashboard::read'),
 			array( 'Role' => 'ROLE_STATISTICS', 'Action' => 'statistic::read'),
+			array( 'Role' => 'ROLE_STATISTICS', 'Action' => 'statistic::download'),
 			array( 'Role' => 'ROLE_STATISTICS', 'Action' => 'mail::read'),
 			
 			
