@@ -154,7 +154,7 @@ class SmartManagmentManager
 					AND finishedon <= {$this->time}
 				{$this->SQLRules}";
 			
-//		$this->logger->log("SQL: {$sql}");		
+		$this->logger->log("SQL: {$sql}");		
 				
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
