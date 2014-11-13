@@ -703,13 +703,6 @@ class AccountController extends ControllerBase
 		));
 		
 		$page = $paginator->getPaginate();
-		
-		foreach ($page->items as $p) {
-			$this->logger->log("Smart: {$p->smartmanagment->name}");
-			$this->logger->log("Mail: {$p->Mail->name}");
-			$this->logger->log("Mail: {$p->Mail->subject}");
-		}
-
 		$this->view->setVar("page", $page);
 		$this->view->setVar("account", $account);
 	}
