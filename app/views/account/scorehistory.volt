@@ -70,6 +70,7 @@
 						<tr>
 							<th>id</th>
 							<th>Gestión inteligente</th>
+							<th>Correo</th>
 							<th>Fecha</th>
 							<th class="orange-sigma star-shadow"><span class="glyphicon glyphicon-star"></span> Puntuación</th>
 						</tr>
@@ -86,7 +87,19 @@
 												<div class="title-info" style="padding-left: 0 !important;">{{smart.description}}</div>
 											</div>
 										{% else %}
-											Gestión inteligente o eliminada
+											Gestión inteligente indefinida o eliminada
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td>
+									{% for mail in mails %}
+										{% if item.idMail == mail.idMail%}
+											<div class="">
+												<div class="title" style="font-size: 1em !important;">{{mail.name}}</div>
+												<div class="title-info" style="padding-left: 0 !important;">{{mail.subject}}</div>
+											</div>
+										{% else %}
+											Correo indefinido o eliminado
 										{% endif %}
 									{% endfor %}
 								</td>

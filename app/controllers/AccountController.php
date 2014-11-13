@@ -704,11 +704,20 @@ class AccountController extends ControllerBase
 		
 		$page = $paginator->getPaginate();
 		
-		foreach ($page->items as $p) {
-			$this->logger->log("idMail: {$p->idMail}");
-		}
+		$smarts = array();
+		$mails = array();
 		
-		$smarts = Smartmanagment::find();
+		foreach ($page->items as $p) {
+			$smart = Smartmanagment::findFirstByIdSmartmanagment($p->idSmartmanagment);
+			if (!in_array($smart, $smarts)) {
+				$smarts[] = $smart;
+			}
+			
+			$mail = Smartmanagment::findFirstByIdMail($p->idMail);
+			if (!in_array($mail, $mails)) {
+				$mails[] = $mail;
+			}
+		}
 		
 		$score = Score::findFirst(array(
 			'conditions' => 'idAccount = ?1',
@@ -717,6 +726,7 @@ class AccountController extends ControllerBase
 		
 		$this->view->setVar("page", $page);
 		$this->view->setVar("smarts", $smarts);
+		$this->view->setVar("mails", $mails);
 		$this->view->setVar("account", $account);
 		$this->view->setVar("score", $score);
 	}
