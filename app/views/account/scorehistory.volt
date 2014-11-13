@@ -98,16 +98,22 @@
 									</div>
 								</td>
 								<td>
-									{#
-									{% for mail in mails %}
-										{% if item.idMail == mail.idMail%}
-											<div class="">
-												<div class="title" style="font-size: 1em !important;">{{mail.name}}</div>
-												<div class="title-info" style="padding-left: 0 !important;">{{mail.subject}}</div>
-											</div>
-										{% endif %}
-									{% endfor %}
-									#}
+									<div class="">
+										<div class="title" style="font-size: 1em !important;">
+											{% if item.mail.name is defined AND item.mail.name is not null%}
+												{{item.mail.name}}
+											{% else %}
+												Indefinido
+											{% endif %}		
+										</div>
+										<div class="title-info" style="padding-left: 0 !important;">
+											{% if item.mail.subject is defined AND item.mail.subject is not null%}
+												{{item.mail.subject}}
+											{% else %}
+												Indefinido
+											{% endif %}
+										</div>
+									</div>
 								</td>
 								<td>{{date('d/M/Y H:i', item.createdon)}}</td>
 								<td>{{item.score}}</td>
