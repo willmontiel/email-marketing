@@ -4,7 +4,8 @@ function OperatorRule(config) {
 	this.greater = '';
 	this.equals = '';
 	this.notequals = '';
-	
+	this.greaterequals = '';
+	this.lessequals = '';
 	this.value = '<';
 }
 
@@ -19,6 +20,8 @@ OperatorRule.prototype.create = function() {
 							<option value=">" ' + this.greater + '>></option>\n\
 							<option value="=" ' + this.equals + '>=</option>\n\
 							<option value="!=" ' + this.notequals + '>!=</option>\n\
+							<option value=">=" ' + this.greaterequals + '>!=</option>\n\
+							<option value="<=" ' + this.lessequals + '>!=</option>\n\
 						</select>\n\
 					</div>	');
 	
@@ -48,6 +51,14 @@ OperatorRule.prototype.serialize = function() {
 				
 			case '!=':
 				this.notequals = 'selected';
+				break;
+				
+			case '>=':
+				this.greaterequals = 'selected';
+				break;
+				
+			case '<=':
+				this.lessequals = 'selected';
 				break;
 		}
 		this.value = this.config.value;
