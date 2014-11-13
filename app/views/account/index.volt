@@ -86,6 +86,7 @@
 					<td>{{date('d/M/Y', item.createdon)}}</td>
 					<td>{{date('d/M/Y', item.updatedon)}}</td>
 					<td>
+						{{item.score}}
 						{% for score in scores%}
 							{% if score.idAccount == item.idAccount%}
 								{{score.score}}

@@ -80,6 +80,7 @@ class AccountController extends ControllerBase
 
 		$builder = $this->modelsManager->createBuilder()
 			->from('Account')
+			->join('Score')
 			->orderBy('idAccount');
 
 		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
