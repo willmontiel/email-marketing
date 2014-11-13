@@ -691,6 +691,8 @@ class AccountController extends ControllerBase
 
 		$builder = $this->modelsManager->createBuilder()
 			->from('Scorehistory')
+			->leftJoin('Score')
+			->leftJoin('Mail')
 			->where("idAccount = {$id}")
 			->orderBy('createdon');
 
@@ -702,30 +704,30 @@ class AccountController extends ControllerBase
 		
 		$page = $paginator->getPaginate();
 		
-		$smarts = array();
-		$mails = array();
-		
-		foreach ($page->items as $p) {
-			$smart = Smartmanagment::findFirstByIdSmartmanagment($p->idSmartmanagment);
-			if (!in_array($smart, $smarts)) {
-				$smarts[] = $smart;
-			}
-			
-			$mail = Mail::findFirstByIdMail($p->idMail);
-			if (!in_array($mail, $mails)) {
-				$mails[] = $mail;
-			}
-		}
-		
-		$score = Score::findFirst(array(
-			'conditions' => 'idAccount = ?1',
-			'bind' => array(1 => $id)
-		));
+//		$smarts = array();
+//		$mails = array();
+//		
+//		foreach ($page->items as $p) {
+//			$smart = Smartmanagment::findFirstByIdSmartmanagment($p->idSmartmanagment);
+//			if (!in_array($smart, $smarts)) {
+//				$smarts[] = $smart;
+//			}
+//			
+//			$mail = Mail::findFirstByIdMail($p->idMail);
+//			if (!in_array($mail, $mails)) {
+//				$mails[] = $mail;
+//			}
+//		}
+//		
+//		$score = Score::findFirst(array(
+//			'conditions' => 'idAccount = ?1',
+//			'bind' => array(1 => $id)
+//		));
 		
 		$this->view->setVar("page", $page);
-		$this->view->setVar("smarts", $smarts);
-		$this->view->setVar("mails", $mails);
+//		$this->view->setVar("smarts", $smarts);
+//		$this->view->setVar("mails", $mails);
 		$this->view->setVar("account", $account);
-		$this->view->setVar("score", $score);
+//		$this->view->setVar("score", $score);
 	}
  }  

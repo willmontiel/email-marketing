@@ -80,16 +80,25 @@
 							<tr>
 								<td>{{item.idScorehistory}}</td>
 								<td>
-									{% for smart in smarts %}
-										{% if item.idSmartmanagment == smart.idSmartmanagment%}
-											<div class="">
-												<div class="title" style="font-size: 1em !important;">{{smart.name}}</div>
-												<div class="title-info" style="padding-left: 0 !important;">{{smart.description}}</div>
-											</div>
-										{% endif %}
-									{% endfor %}
+									<div class="">
+										<div class="title" style="font-size: 1em !important;">
+											{% if item.smartmanagment.name is defined AND item.smartmanagment.name is not null%}
+												{{item.smartmanagment.name}}
+											{% else %}
+												Indefinido
+											{% endif %}		
+										</div>
+										<div class="title-info" style="padding-left: 0 !important;">
+											{% if item.smartmanagment.description is defined AND item.smartmanagment.description is not null%}
+												{{item.smartmanagment.description}}
+											{% else %}
+												Indefinido
+											{% endif %}
+										</div>
+									</div>
 								</td>
 								<td>
+									{#
 									{% for mail in mails %}
 										{% if item.idMail == mail.idMail%}
 											<div class="">
@@ -98,6 +107,7 @@
 											</div>
 										{% endif %}
 									{% endfor %}
+									#}
 								</td>
 								<td>{{date('d/M/Y H:i', item.createdon)}}</td>
 								<td>{{item.score}}</td>
