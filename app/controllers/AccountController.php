@@ -80,8 +80,8 @@ class AccountController extends ControllerBase
 
 		$builder = $this->modelsManager->createBuilder()
 			->from('Account')
-			->join('Score')
-			->orderBy('idAccount');
+			->leftJoin('Score')
+			->orderBy('Account.idAccount');
 
 		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
 			"builder" => $builder,
@@ -90,10 +90,14 @@ class AccountController extends ControllerBase
 		));
 		
 		$page = $paginator->getPaginate();
-		$scores = Score::find();
+		
+		foreach ($page->items as $p) {
+			$this->logger->log("P: {$p->idAccount}");
+			$this->logger->log("P: {$p->score->score}");
+		}
+		
 		
 		$this->view->setVar("page", $page);
-		$this->view->setVar("scores", $scores);
 	}
 	
 	/*

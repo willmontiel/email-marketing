@@ -86,14 +86,13 @@
 					<td>{{date('d/M/Y', item.createdon)}}</td>
 					<td>{{date('d/M/Y', item.updatedon)}}</td>
 					<td>
-						{{item.score}}
-						{% for score in scores%}
-							{% if score.idAccount == item.idAccount%}
-								{{score.score}}
-							{% else %}
-								0
-							{% endif %}
-						{% endfor %}<br />
+						{% if item.score.score is defined AND item.score.score is not null%}
+							{{item.score.score}}
+						{% else %}
+							0
+						{% endif %}	
+						
+						<br />
 						<a href="{{url('account/scorehistory')}}/{{item.idAccount}}">Ver historial</a>
 					</td>
 					<td class="text-right">
