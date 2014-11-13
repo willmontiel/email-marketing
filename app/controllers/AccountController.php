@@ -691,7 +691,7 @@ class AccountController extends ControllerBase
 
 		$builder = $this->modelsManager->createBuilder()
 			->from('Scorehistory')
-			->leftJoin('Score')
+			->leftJoin('Smartmanagment')
 			->leftJoin('Mail')
 			->where("Scorehistory.idAccount = {$id}")
 			->orderBy('Scorehistory.createdon');
