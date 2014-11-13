@@ -158,7 +158,7 @@ class SmartManagmentManager
 					AND finishedon <= {$this->time}
 				{$this->SQLRules}";
 			
-		$this->logger->log("SQL: {$sql}");		
+//		$this->logger->log("SQL: {$sql}");		
 				
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
@@ -231,10 +231,54 @@ class SmartManagmentManager
 	
 	private function sendCommunications()
 	{
-//		$mailWrapper = new MailWrapper();
-//		$mailWrapper->setAccount($this->account);
-//		$mailWrapper->setContent($content);
-//		$mailWrapper->processDataForMail();
-//		$mailWrapper->saveMail();
+		foreach ($this->accounts as $account) {
+			$users = User::find(array(
+				'conditions' => 'idAccount = ?1',
+				'bind' => array(1 => $account->idAccount)
+			));
+			
+			if (count($users) > 0) {
+				$transport = Swift_SendmailTransport::newInstance();
+				$swift = Swift_Mailer::newInstance($transport);
+
+				$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
+
+				$mail = new TestMail();
+				$mail->setAccount($account);
+				$mail->setDomain($domain);
+				$mail->setUrlManager($this->urlManager);
+				$mail->setContent($this->smart->content);
+
+				$mail->transformContent();
+
+				$subject = $mail->subject;
+				$from = array('soporte@sigmamovil.com' => 'Soporte Sigma Móvil');
+				$replyTo = $mail->replyTo;
+
+				$content = $mail->getBody();
+				$text = $mail->getPlainText();
+
+
+				foreach ($users as $user) {
+					$to = array($user->email => "{$user->name} {$user->lastName}");
+
+					$message = new Swift_Message($subject);
+					$message->setFrom($from);
+					$message->setTo($to);
+					$message->setBody($content, 'text/html');
+					$message->addPart($text, 'text/plain');
+
+					if (!empty($replyTo) && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
+						$message->setReplyTo($replyTo);
+					}
+
+					$sendMail = $swift->send($message, $failures);
+
+					if (!$sendMail){
+						$this->logger->log("Error while sending test mail: " . print_r($failures));
+					}
+				}
+			}
+		}
 	}
 }
