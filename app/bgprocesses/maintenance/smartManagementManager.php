@@ -176,7 +176,7 @@ class SmartManagmentManager
 			));
 			
 			if (!$scorehistory) {
-				$score = \Score::findFirstByIdAccount($account->idAccount);
+				$score = \Score::findFirstByIdAccount($account['idAccount']);
 
 				$db = Phalcon\DI::getDefault()->get('db');
 				$db->begin();
