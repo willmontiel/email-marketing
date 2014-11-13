@@ -1,15 +1,17 @@
 <?php
 require_once '../bootstrap/phbootstrap.php';
 
-$smart = new SmartManagment();
+$smart = new SmartManagmentManager();
 $smart->startManagment();
 
-class SmartManagment
+class SmartManagmentManager
 {
 	protected $logger;
+	protected $smarts;
 	protected $smart;
 	protected $time;
 	protected $rules = array();
+	protected $conditions = array();
 	protected $SQLRules = "";
 	protected $SQLRulesArray = array();
 	protected $points = 0;
@@ -24,24 +26,41 @@ class SmartManagment
 	public function startManagment()
 	{
 		$this->searchSmartManagment();
-		$this->validateAccount();
-		if (count($this->smart) > 0) {
-			$this->searchRules();
-			$this->convertRulesInSQL();
-			
-			if ($this->smart->logicOperator == 'and') {
-				$this->SQLRules = " AND " . implode(' AND ', $this->SQLRulesArray);
-				$this->searchMatches();
-				$this->scoreAccounts();
+		if (count($this->smarts) > 0) {
+			foreach ($this->smarts as $smart) {
+				$this->smart = $smart;
+				$this->time = strtotime("{$smart->time}");
+				$this->validateAccount();
+				$this->searchRules();
+				$this->convertRulesInSQL();
+				$this->executeQuerys();
+				$this->sendCommunications();
+				unset($this->smart);
 			}
-			
-			$this->sendCommunications();
 		}
 	}
 	
+	private function executeQuerys()
+	{
+		if ($this->smart->logicOperator == 'and') {
+			$this->SQLRules = " AND " . implode(' AND ', $this->conditions);
+			$this->searchMatches();
+			$this->scoreAccounts();
+			
+		}
+		else if ($this->smart->logicOperator == 'or') {
+			foreach ($this->conditions as $condition) {
+				$this->SQLRules = " AND {$condition}";
+				$this->searchMatches();
+				$this->scoreAccounts();
+			}
+		}
+	}
+
+
 	private function searchSmartManagment()
 	{
-		$this->smart = Smartmanagment::find();
+		$this->smarts = Smartmanagment::find();
 	}
 	
 	private function searchRules()
@@ -58,8 +77,11 @@ class SmartManagment
 		if (count($this->rules) > 0) {
 			foreach ($this->rules as $rule) {
 				$data = json_decode($rule->rule);
-				
 				if (is_array($data)) {
+					$part1 = "";
+					$part2 = "";
+					$part3 = "";
+					
 					foreach ($data as $d) {
 						switch ($d->type) {
 							case 'index-rule':
@@ -88,17 +110,10 @@ class SmartManagment
 							default :
 								break;
 						}
-						
-						if ($this->smart->logicOperator == 'OR') {
-							$this->SQLRules = " or {$part1} {$part2} {$part3}";
-							$this->searchMatches();
-							$this->scoreAccounts();
-							unset($this->accounts);
-						}
-						else {
-							$this->SQLRulesArray[] = "{$part1} {$part2} {$part3}";
-						}
 					}
+					
+					$condition = " {$part1} {$part2} {$part3}";
+					$this->conditions[] = $condition; 
 				}
 			}
 		}
@@ -108,7 +123,7 @@ class SmartManagment
 	{
 		$part1 = "";
 		switch ($index) {
-			case 'open':
+			case 'opens':
 				$part1 = "totalContacts";
 				break;
 			
@@ -138,6 +153,8 @@ class SmartManagment
 				WHERE status = 'Sent'
 					AND finishedon >= {$this->time}
 				{$this->SQLRules}";
+			
+//		$this->logger->log("SQL: {$sql}");		
 				
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
