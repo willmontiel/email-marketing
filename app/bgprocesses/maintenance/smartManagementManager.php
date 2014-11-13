@@ -81,6 +81,7 @@ class SmartManagmentManager
 					$part1 = "";
 					$part2 = "";
 					$part3 = "";
+					$condition = "";
 					
 					foreach ($data as $d) {
 						switch ($d->type) {
@@ -93,12 +94,10 @@ class SmartManagmentManager
 								break;
 							
 							case 'condition-rule':
-								if ($d->class == '%') {
-									$part3 = "((messagesSent*{$d->value})/100)";
+								if ($d->class == "%") {
+									$part1 = "(({$part1}*100)/messagesSent)";
 								}
-								else if ($d->class == '#') {
-									$part3 = $d->value;
-								}
+								$part3 = $d->value;
 								break;
 							
 							case 'points-rule':
@@ -124,7 +123,7 @@ class SmartManagmentManager
 		$part1 = "";
 		switch ($index) {
 			case 'opens':
-				$part1 = "totalContacts";
+				$part1 = "uniqueOpens";
 				break;
 			
 			case 'bounced':
