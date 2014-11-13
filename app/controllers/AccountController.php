@@ -693,7 +693,7 @@ class AccountController extends ControllerBase
 			->from('Scorehistory')
 			->leftJoin('Score')
 			->leftJoin('Mail')
-			->where("Account.idAccount = {$id}")
+			->where("Scorehistory.idAccount = {$id}")
 			->orderBy('Scorehistory.createdon');
 
 		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
