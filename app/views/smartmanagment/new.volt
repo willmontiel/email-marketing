@@ -226,6 +226,7 @@
 								
 							<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
 								<select name="date" id="date" class="select2" style="width:100%">
+									<option value="minutes">Minuto(s)</option>
 									<option value="hours">Hora(s)</option>
 									<option value="days">Día(s)</option>
 									<option value="weeks">Semana(s)</option>

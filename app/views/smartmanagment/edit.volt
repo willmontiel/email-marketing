@@ -76,6 +76,7 @@
 			
 			$(".sdate").select2({
 				data: [
+					{ id: 'minutes', text: 'Minutos(s)' },
 					{ id: 'hours', text: 'Hora(s)' },
 					{ id: 'days', text: 'Día(s)' },
 					{ id: 'weeks', text: 'Semana(s)' },
