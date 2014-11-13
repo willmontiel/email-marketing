@@ -703,7 +703,10 @@ class AccountController extends ControllerBase
 		));
 		
 		$page = $paginator->getPaginate();
+		$score = Score::findFirstByIdAccount($account->idAccount);
+		
 		$this->view->setVar("page", $page);
 		$this->view->setVar("account", $account);
+		$this->view->setVar("score", $score);
 	}
  }  
