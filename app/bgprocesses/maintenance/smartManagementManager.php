@@ -1,8 +1,13 @@
 <?php
 require_once '../bootstrap/phbootstrap.php';
 
-$smart = new SmartManagmentManager();
-$smart->startManagment();
+try {
+	$smart = new SmartManagmentManager();
+	$smart->startManagment();
+}
+catch (Exception $ex) {
+	\Phalcon\DI::getDefault()->get('logger')->log("Exception: {$ex}");
+}
 
 class SmartManagmentManager
 {
@@ -158,18 +163,20 @@ class SmartManagmentManager
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
 		$this->accounts = $result->fetchAll();
-		
-		$this->logger->log("SQL: " . print_r($this->accounts, true));
-		throw new Exception("Hi :D");
 	}
 	
 	private function scoreAccounts()
 	{
 		foreach ($this->accounts as $account) {
+			$this->logger->log("idAccount: {$account['idAccount']}");
+			$this->logger->log("idSmart: {$this->smart->idSmartmanagment}");
+			$this->logger->log("idMail: {$account['idMail']}");
+			
 			$scorehistory = Scorehistory::findFirst(array(
 				'conditions' => 'idAccount = ?1 AND idSmartmanagment = ?2',
-				'bind' => array(1 => $account->idAccount,
-								2 => $this->smart->idSmartmanagment)
+				'bind' => array(1 => $account['idAccount'],
+								2 => $this->smart->idSmartmanagment,
+								2 => $account['idMail'])
 			));
 			
 			if (!$scorehistory) {
