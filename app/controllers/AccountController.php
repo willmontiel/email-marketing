@@ -90,13 +90,6 @@ class AccountController extends ControllerBase
 		));
 		
 		$page = $paginator->getPaginate();
-		
-		foreach ($page->items as $p) {
-			$this->logger->log("P: {$p->idAccount}");
-			$this->logger->log("P: {$p->score->score}");
-		}
-		
-		
 		$this->view->setVar("page", $page);
 	}
 	
