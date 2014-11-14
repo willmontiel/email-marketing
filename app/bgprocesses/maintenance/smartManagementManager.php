@@ -12,6 +12,7 @@ catch (Exception $ex) {
 class SmartManagmentManager
 {
 	protected $logger;
+	protected $urlManager;
 	protected $smarts;
 	protected $smart;
 	protected $time;
@@ -26,6 +27,7 @@ class SmartManagmentManager
 	public function __construct() 
 	{
 		$this->logger = \Phalcon\DI::getDefault()->get('logger');
+		$this->urlManager = \Phalcon\DI::getDefault()->get('urlManager');
 	}
 	
 	public function startManagment()
@@ -177,7 +179,6 @@ class SmartManagmentManager
 	
 	private function scoreAccounts()
 	{
-		$this->logger->log("Accounts1: " . print_r($this->accounts, true));
 		foreach ($this->accounts as $account) {
 			$scorehistory = Scorehistory::findFirst(array(
 				'conditions' => 'idAccount = ?1 AND idSmartmanagment = ?2 AND idMail = ?3',
@@ -242,52 +243,60 @@ class SmartManagmentManager
 	
 	private function sendCommunications()
 	{
-		$this->logger->log("Accounts1: " . print_r($this->accounts, true));
+		$accounts = array();
 		
 		foreach ($this->accounts as $account) {
-			$users = User::find(array(
-				'conditions' => 'idAccount = ?1',
-				'bind' => array(1 => $account->idAccount)
-			));
-			
-			if (count($users) > 0) {
-				$transport = Swift_SendmailTransport::newInstance();
-				$swift = Swift_Mailer::newInstance($transport);
+			if (!in_array($account['idAccount'], $accounts)) {
+				$accounts[] = $account['idAccount'];
+			}
+		}
+		
+		if (count($accounts) > 0) {
+			foreach ($accounts as $id) {
+				$users = User::find(array(
+					'conditions' => 'idAccount = ?1',
+					'bind' => array(1 => $id)
+				));
 
-				$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
+				if (count($users) > 0) {
+					$transport = Swift_SendmailTransport::newInstance();
+					$swift = Swift_Mailer::newInstance($transport);
 
-				$mail = new TestMail();
-				$mail->setAccount($account);
-				$mail->setDomain($domain);
-				$mail->setUrlManager($this->urlManager);
-				$mail->setContent($this->smart->content);
+					$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
 
-				$mail->transformContent();
+					$mail = new TestMail();
+					$mail->setAccount($this->account);
+					$mail->setDomain($domain);
+					$mail->setUrlManager($this->urlManager);
+					$mail->setContent($this->smart->content);
 
-				$subject = $this->smart->subject;
-				$from = array($this->smart->fromEmail => $this->smart->fromName);
-				$replyTo = $this->smart->replyTo;
+					$mail->transformContent();
 
-				$content = $mail->getBody();
-				$text = $mail->getPlainText();
+					$subject = $this->smart->subject;
+					$from = array($this->smart->fromEmail => $this->smart->fromName);
+					$replyTo = $this->smart->replyTo;
 
-				foreach ($users as $user) {
-					$to = array($user->email => "{$user->name} {$user->lastName}");
+					$content = $mail->getBody();
+					$text = $mail->getPlainText();
 
-					$message = new Swift_Message($subject);
-					$message->setFrom($from);
-					$message->setTo($to);
-					$message->setBody($content, 'text/html');
-					$message->addPart($text, 'text/plain');
+					foreach ($users as $user) {
+						$to = array($user->email => "{$user->name} {$user->lastName}");
 
-					if (!empty($replyTo) && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
-						$message->setReplyTo($replyTo);
-					}
+						$message = new Swift_Message($subject);
+						$message->setFrom($from);
+						$message->setTo($to);
+						$message->setBody($content, 'text/html');
+						$message->addPart($text, 'text/plain');
 
-					$sendMail = $swift->send($message, $failures);
+						if (!empty($replyTo) && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
+							$message->setReplyTo($replyTo);
+						}
 
-					if (!$sendMail){
-						$this->logger->log("Error while sending test mail: " . print_r($failures));
+						$sendMail = $swift->send($message, $failures);
+
+						if (!$sendMail){
+							$this->logger->log("Error while sending test mail: " . print_r($failures));
+						}
 					}
 				}
 			}
