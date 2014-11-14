@@ -68,7 +68,9 @@ class SmartManagmentManager
 
 	private function searchSmartManagment()
 	{
-		$this->smarts = Smartmanagment::find();
+		$this->smarts = Smartmanagment::find(array(
+			'conditions' => 'status = 1'
+		));
 	}
 	
 	private function searchRules()
@@ -281,7 +283,7 @@ class SmartManagmentManager
 					$text = $mail->getPlainText();
 
 					foreach ($users as $user) {
-						$to = array($user->email => "{$user->name} {$user->lastName}");
+						$to = array($user->email => "{$user->firstName} {$user->lastName}");
 
 						$message = new Swift_Message($subject);
 						$message->setFrom($from);
@@ -297,6 +299,9 @@ class SmartManagmentManager
 
 						if (!$sendMail){
 							$this->logger->log("Error while sending test mail: " . print_r($failures));
+						}
+						else {
+							$this->logger->log("Smartmanagment communication {$this->smart->idSmartmanagment}, user {$user->idUser} sent");
 						}
 					}
 				}
