@@ -112,7 +112,7 @@ class SmartManagmentManager
 							
 							case 'points-rule':
 								if ($d->points == 'true') {
-									$this->points = $d->value;
+									$this->points += $d->value;
 								}
 								break;
 							

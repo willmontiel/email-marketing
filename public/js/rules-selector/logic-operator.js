@@ -21,15 +21,14 @@ LogicOperator.prototype.create = function() {
 		}
 	}
 	
+	//<option value="or" ' + this.or + '>Que cumpla cualquiera de las reglas</option>\n\
 	this.html = $('<div class="row">\n\
-					<div class="logic-operator col-xs-12 col-sm-12 col-md-6 col-lg-6">\n\
-						<select class="select2" id="logic-operator" name="logic-operator">\n\
-							<option value="and" ' + this.and + '>Que cumpla todas las reglas</option>\n\
-								<option value="or" ' + this.or + '>Que cumpla cualquiera de las reglas</option>\n\
-							</select>\n\
+					   <div class="logic-operator col-xs-12 col-sm-12 col-md-6 col-lg-6">\n\
+						   <select class="select2" id="logic-operator" name="logic-operator">\n\
+							   <option value="and" ' + this.and + '>Que cumpla todas las reglas</option>\n\
+						   </select>\n\
 						</div>\n\
-					</div>\n\
-				</div>');
+					</div>');
 	
 	var self = this;
 	
