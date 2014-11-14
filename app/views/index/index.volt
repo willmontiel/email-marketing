@@ -10,7 +10,7 @@
 			$.getJSON(MyBaseURL + 'account/gethistory',function(data){ 
 				setHighchart(data);
 			});
-		
+			
 			function setHighchart(data) {
 				$('#container').highcharts({
 					title: {
@@ -46,7 +46,7 @@
 					},
 					series: [{
 						name: 'Puntos',
-						data: [data.jan, data.Feb, data.Mar, data.Apr, data.May, data.Jun, data.July, data.Aug, data.Sep, data.Oct, data.Nov, data.Dec]
+						data: [data.Jan, data.Feb, data.Mar, data.Apr, data.May, data.Jun, data.Jul, data.Aug, data.Sep, data.Oct, data.Nov, data.Dec]
 					}]
 				});
 			}
