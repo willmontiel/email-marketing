@@ -1072,6 +1072,7 @@ body {
 .block {
 	padding: 20px;
 	margin-top: 15px;
+	margin-bottom: 15px;
 	border-radius: 8px;
 }
 
