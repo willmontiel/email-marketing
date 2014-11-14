@@ -152,9 +152,19 @@ class SmartManagmentManager
 	
 	private function searchMatches()
 	{
+		$accounts = json_decode($this->smart->target);
+		$targetSQL = "";
+		if ($accounts->type == 'certain-accounts') {
+			if (count($accounts->target) > 0) {
+				$ids = implode(',', $accounts->target);
+				$targetSQL = " AND idAccount in ({$ids})";
+			}
+		}
+		
 		$sql = "SELECT idAccount, idMail
 				FROM mail
 				WHERE status = 'Sent'
+					{$targetSQL}
 					AND finishedon <= {$this->time}
 				{$this->SQLRules}";
 			
@@ -251,13 +261,12 @@ class SmartManagmentManager
 
 				$mail->transformContent();
 
-				$subject = $mail->subject;
-				$from = array('soporte@sigmamovil.com' => 'Soporte Sigma Móvil');
-				$replyTo = $mail->replyTo;
+				$subject = $this->smart->subject;
+				$from = array($this->smart->fromEmail => $this->smart->fromName);
+				$replyTo = $this->smart->replyTo;
 
 				$content = $mail->getBody();
 				$text = $mail->getPlainText();
-
 
 				foreach ($users as $user) {
 					$to = array($user->email => "{$user->name} {$user->lastName}");

@@ -71,7 +71,10 @@ class TestMail
 		$text = new PlainText();
 		$this->plainText = $text->getPlainText($this->body);
 		
-//		$this->replaceUrlImages();
+		$imageService = new ImageService($this->account, $this->domain, $this->urlManager);
+		$linkService = new LinkService($this->account, null);
+		$prepareMail = new PrepareMailContent($linkService, $imageService, false);
+		list($this->body, $links) = $prepareMail->processContent($this->body, false);
 	}
 
 	protected function createBody()

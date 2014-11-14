@@ -173,13 +173,37 @@ class SmartmanagmentController extends ControllerBase
 		}
 		
 		if ($this->request->isPost()) {
+			$subject = $this->request->getPost('subject');
+			$fromName = $this->request->getPost('fromName');
+			$fromEmail = $this->request->getPost('fromEmail');
+			$replyTo = $this->request->getPost('replyTo');
 			$editor = $this->request->getPost('editor');
 			
-			if (empty($editor)) {
-				return $this->setJsonResponse(array('message' => 'Ha enviado campos vacíos, por favor valide la información'), 400, 'Datos invalidos');
+			$this->logger->log("S: {$subject}");
+			$this->logger->log("fn: {$fromName}");
+			$this->logger->log("fe: {$fromEmail}");
+			$this->logger->log("r: {$replyTo}");
+			
+			
+			if (empty($subject) || empty($fromName) || empty($fromEmail) || empty($editor)) {
+				return $this->setJsonResponse(array('message' => 'Ha enviado campos vacíos, por favor valide la información'), 400, 'Ha enviado campos vacios, por favor valide la informacion');
+			}
+			
+			if (!filter_var($fromEmail, FILTER_VALIDATE_EMAIL)) {
+				return $this->setJsonResponse(array('message' => 'La direccion de correo de remitente no es valida'), 400, 'La dirección de correo de remitente no es valida');
+			}
+			
+			if (!empty($replyTo) && !filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
+				return $this->setJsonResponse(array('message' => 'El campo "Responder a", no contiene una dirección de correo valida'), 400, 'El campo "Responder a", no contiene una direccion de correo valida');
 			}
 			
 			try {
+				$smart->subject = $subject;
+				$smart->fromName = $fromName;
+				$smart->fromEmail = $fromEmail;
+				if (!empty($replyTo)) {
+					$smart->replyTo = $replyTo;
+				}
 				$smart->content = $editor;
 				
 				if (!$smart->save()) {
@@ -189,11 +213,11 @@ class SmartmanagmentController extends ControllerBase
 					}
 				}
 				
-				return $this->setJsonResponse(array('message' => "Se ha guardado el contenido exitosamente"), 200, 'Operación exitosa');
+				return $this->setJsonResponse(array('message' => "Se ha guardado el contenido exitosamente"), 200, 'Se ha guardado el contenido exitosamente');
 			}
 			catch (Exception $ex) {
 				$this->logger->log("Exception: {$ex}");
-				return $this->setJsonResponse(array('message' => 'Ha ocurrido un error, por favor contacte al administrador'), 500, 'Ocurrió un error');
+				return $this->setJsonResponse(array('message' => 'Ha ocurrido un error, por favor contacte al administrador'), 500, 'Ha ocurrido un error, por favor contacte al administrador');
 			}
 		}
 		

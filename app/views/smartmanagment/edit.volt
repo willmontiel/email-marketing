@@ -45,6 +45,8 @@
 			var datetime = "{{smart.time}}";
 			var dt = datetime.split(" ");
 			
+			$(".select2").select2({});
+			
 			$(".stime").select2({
 				data: [
 					{ id: 1, text: "1" },
@@ -76,7 +78,7 @@
 			
 			$(".sdate").select2({
 				data: [
-					{ id: 'minutes', text: 'Minutos(s)' },
+					//{ id: 'minutes', text: 'Minutos(s)' },
 					{ id: 'hours', text: 'Hora(s)' },
 					{ id: 'days', text: 'Día(s)' },
 					{ id: 'weeks', text: 'Semana(s)' },
@@ -217,18 +219,52 @@
 							<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">
 								*Contenido
 							</label>
-							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
-								<div class="preview-mail img-wrap" style="margin-left: 0 !important;">
-									<a href="{{url('smartmanagment/content')}}/{{smart.idSmartmanagment}}">
-										<div class="not-available">
-										{% if smart.preview == 'null' OR smart.preview == null%}
-											<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
-											<label>Previsualización no disponible</label>
-										{% else %}
-											<img src="data: image/png;base64, {{smart.preview}}" />
-										{% endif %}	
+							<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" >
+								<div class="" style="background-color: #f5f5f5;border: 1px solid #ddd;padding: 30px;margin-right: 15px;border-radius: 10px;">
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-horizontal">
+											<div class="form-group">
+												<label class="col-sm-2 control-label">*Asunto</label>
+												<div class="col-sm-10">
+													<input type="text" class="form-control" id="subject" value="{{smart.subject}}" placeholder="Asunto" disabled>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-2 control-label">*De</label>
+												<div class="col-sm-5">
+													<input type="text" class="form-control" id="fromName" value="{{smart.fromName}}" placeholder="Nombre del remitente" disabled>
+												</div>
+												<div class="col-sm-5">
+													<input type="email" class="form-control" id="fromEmail" value="{{smart.fromEmail}}" placeholder="Correo del remitente" disabled>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-2 control-label">Responder a</label>
+												<div class="col-sm-10">
+													<input type="email" class="form-control" id="replyTo" value="{{smart.replyTo}}" placeholder="Responder a" disabled>
+												</div>
+											</div>
 										</div>
-									</a>
+									</div>
+									
+									<div class="row">
+										<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+											<div class="preview-mail img-wrap" style="margin-left: 0 !important;">
+												<a href="{{url('smartmanagment/content')}}/{{smart.idSmartmanagment}}">
+													<div class="not-available">
+													{% if smart.preview == 'null' OR smart.preview == null%}
+														<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
+														<label>Previsualización no disponible</label>
+													{% else %}
+														<img src="data: image/png;base64, {{smart.preview}}" />
+													{% endif %}	
+													</div>
+												</a>
+											</div>
+										</div>	
+									</div>	
 								</div>
 							</div>
 						</div>	
