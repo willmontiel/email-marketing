@@ -209,7 +209,7 @@
 			</div>
 			<div class="space"></div>
 		</form>
-<div class="create-email-spot">
+<div class="create-email-spot" style="display: none;">
 	<form class="form-inline" role="form">
 		<div class="title-advanced-editor form-group">
 		</div>
