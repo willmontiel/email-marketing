@@ -148,6 +148,11 @@ class MailController extends ControllerBase
 			$mailClone->status = "Draft";
 			$mailClone->wizardOption = "source";
 			$mailClone->finishedon = 0;
+			$mailClone->uniqueOpens = 0;
+			$mailClone->clicks = 0;
+			$mailClone->bounced = 0;
+			$mailClone->spam = 0;
+			$mailClone->unsubscribed = 0;
 			$mailClone->createdon = time();
 			$mailClone->deleted = 0;
 			$mailClone->previewData = $mail->previewData;
@@ -676,6 +681,11 @@ class MailController extends ControllerBase
 				$mail->status = 'Draft';
 				$mail->wizardOption = 'setup';
 				$mail->deleted = 0;
+				$mail->uniqueOpens = 0;
+				$mail->clicks = 0;
+				$mail->bounced = 0;
+				$mail->spam = 0;
+				$mail->unsubscribed = 0;
 			}
 			
 			$content = $this->request->getPost('editor');
