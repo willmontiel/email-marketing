@@ -51,14 +51,14 @@ class SmartManagmentManager
 	private function executeQuerys()
 	{
 		if ($this->smart->logicOperator == 'and') {
-			$this->SQLRules = " AND " . implode(' AND ', $this->conditions);
+			$this->SQLRules = " AND (" . implode(' AND ', $this->conditions) . ")";
 			$this->searchMatches();
 			$this->scoreAccounts();
 			
 		}
 		else if ($this->smart->logicOperator == 'or') {
 			foreach ($this->conditions as $condition) {
-				$this->SQLRules = " AND {$condition}";
+				$this->SQLRules = " AND ({$condition})";
 				$this->searchMatches();
 				$this->scoreAccounts();
 			}
