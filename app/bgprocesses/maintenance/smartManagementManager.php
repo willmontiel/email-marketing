@@ -1,4 +1,5 @@
 <?php
+require_once "../../library/swiftmailer/lib/swift_required.php";
 require_once '../bootstrap/phbootstrap.php';
 
 try {
