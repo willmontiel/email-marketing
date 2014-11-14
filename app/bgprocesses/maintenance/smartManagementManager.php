@@ -24,6 +24,7 @@ class SmartManagmentManager
 	protected $points = 0;
 	protected $accounts;
 	protected $account = null;
+	protected $comm = false;
 
 	public function __construct() 
 	{
@@ -173,7 +174,7 @@ class SmartManagmentManager
 					AND finishedon <= {$this->time}
 				{$this->SQLRules}";
 			
-		$this->logger->log("SQL: {$sql}");
+//		$this->logger->log("SQL: {$sql}");
 				
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
@@ -191,6 +192,8 @@ class SmartManagmentManager
 			));
 			
 			if (!$scorehistory) {
+				$this->comm = true;
+				
 				$score = \Score::findFirstByIdAccount($account['idAccount']);
 
 				$db = Phalcon\DI::getDefault()->get('db');
@@ -246,62 +249,64 @@ class SmartManagmentManager
 	
 	private function sendCommunications()
 	{
-		$accounts = array();
+		if ($this->comm) {
+			$accounts = array();
 		
-		foreach ($this->accounts as $account) {
-			if (!in_array($account['idAccount'], $accounts)) {
-				$accounts[] = $account['idAccount'];
+			foreach ($this->accounts as $account) {
+				if (!in_array($account['idAccount'], $accounts)) {
+					$accounts[] = $account['idAccount'];
+				}
 			}
-		}
-		
-		if (count($accounts) > 0) {
-			foreach ($accounts as $id) {
-				$users = User::find(array(
-					'conditions' => 'idAccount = ?1',
-					'bind' => array(1 => $id)
-				));
 
-				if (count($users) > 0) {
-					$transport = Swift_SendmailTransport::newInstance();
-					$swift = Swift_Mailer::newInstance($transport);
+			if (count($accounts) > 0) {
+				foreach ($accounts as $id) {
+					$users = User::find(array(
+						'conditions' => 'idAccount = ?1',
+						'bind' => array(1 => $id)
+					));
 
-					$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
+					if (count($users) > 0) {
+						$transport = Swift_SendmailTransport::newInstance();
+						$swift = Swift_Mailer::newInstance($transport);
 
-					$mail = new TestMail();
-					$mail->setAccount($this->account);
-					$mail->setDomain($domain);
-					$mail->setUrlManager($this->urlManager);
-					$mail->setContent($this->smart->content);
+						$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
 
-					$mail->transformContent();
+						$mail = new TestMail();
+						$mail->setAccount($this->account);
+						$mail->setDomain($domain);
+						$mail->setUrlManager($this->urlManager);
+						$mail->setContent($this->smart->content);
 
-					$subject = $this->smart->subject;
-					$from = array($this->smart->fromEmail => $this->smart->fromName);
-					$replyTo = $this->smart->replyTo;
+						$mail->transformContent();
 
-					$content = $mail->getBody();
-					$text = $mail->getPlainText();
+						$subject = $this->smart->subject;
+						$from = array($this->smart->fromEmail => $this->smart->fromName);
+						$replyTo = $this->smart->replyTo;
 
-					foreach ($users as $user) {
-						$to = array($user->email => "{$user->firstName} {$user->lastName}");
+						$content = $mail->getBody();
+						$text = $mail->getPlainText();
 
-						$message = new Swift_Message($subject);
-						$message->setFrom($from);
-						$message->setTo($to);
-						$message->setBody($content, 'text/html');
-						$message->addPart($text, 'text/plain');
+						foreach ($users as $user) {
+							$to = array($user->email => "{$user->firstName} {$user->lastName}");
 
-						if (!empty($replyTo) && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
-							$message->setReplyTo($replyTo);
-						}
+							$message = new Swift_Message($subject);
+							$message->setFrom($from);
+							$message->setTo($to);
+							$message->setBody($content, 'text/html');
+							$message->addPart($text, 'text/plain');
 
-						$sendMail = $swift->send($message, $failures);
+							if (!empty($replyTo) && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
+								$message->setReplyTo($replyTo);
+							}
 
-						if (!$sendMail){
-							$this->logger->log("Error while sending test mail: " . print_r($failures));
-						}
-						else {
-							$this->logger->log("Smartmanagment communication {$this->smart->idSmartmanagment}, user {$user->idUser} sent");
+							$sendMail = $swift->send($message, $failures);
+
+							if (!$sendMail){
+								$this->logger->log("Error while sending test mail: " . print_r($failures));
+							}
+							else {
+								$this->logger->log("Smartmanagment communication {$this->smart->idSmartmanagment}, user {$user->idUser} sent");
+							}
 						}
 					}
 				}
