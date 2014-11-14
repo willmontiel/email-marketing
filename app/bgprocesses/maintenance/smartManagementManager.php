@@ -177,6 +177,7 @@ class SmartManagmentManager
 	
 	private function scoreAccounts()
 	{
+		$this->logger->log("Accounts1: " . print_r($this->accounts, true));
 		foreach ($this->accounts as $account) {
 			$scorehistory = Scorehistory::findFirst(array(
 				'conditions' => 'idAccount = ?1 AND idSmartmanagment = ?2 AND idMail = ?3',
@@ -241,6 +242,8 @@ class SmartManagmentManager
 	
 	private function sendCommunications()
 	{
+		$this->logger->log("Accounts1: " . print_r($this->accounts, true));
+		
 		foreach ($this->accounts as $account) {
 			$users = User::find(array(
 				'conditions' => 'idAccount = ?1',
