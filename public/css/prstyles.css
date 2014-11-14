@@ -320,7 +320,7 @@ body {
 .field-content-zone:hover {
 	background-color: antiquewhite;
 }
-.hide-form-field
+.hide-form-field,
 .create-email-spot,
 .btn-form-email-creator-save {
 	display: none;

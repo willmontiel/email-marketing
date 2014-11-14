@@ -506,7 +506,7 @@ App.FormsUpdatingController = Ember.ObjectController.extend( Ember.SaveFormHandl
 			if( form.get('updatenotifysubject') === undefined && form.get('updatenotifyfromemail') === undefined ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para AVISO DE ACTUALIZACIÓN'};
 			}
-			var notify_update_mail = ( form.get('mailforupdatenotify') === undefined ) ? JSON.stringify(App.defaultmailoptin) : form.get('mailforupdatenotify');
+			var notify_update_mail = ( form.get('mailforupdatenotify') === undefined ) ? JSON.stringify(App.defaultmailcontactnotify) : form.get('mailforupdatenotify');
 			
 			form.set('updatenotifymail', JSON.stringify({	
 									subject: form.get('updatenotifysubject'), 
