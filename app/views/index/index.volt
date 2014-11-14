@@ -1,4 +1,58 @@
 {% extends "templates/index_b3.volt" %}
+{% block header_javascript %}
+	{{ super() }}
+	{# HighCharts & HighMaps #}
+	{{ javascript_include('vendors/highcharts/highcharts.js')}}
+	{{ javascript_include('vendors/highcharts/modules/exporting.js')}}
+
+	<script type="text/javascript">
+		$(function () {
+			$.getJSON(MyBaseURL + 'account/gethistory',function(data){ 
+				setHighchart(data);
+			});
+		
+			function setHighchart(data) {
+				$('#container').highcharts({
+					title: {
+						text: 'Puntos en el año 2014',
+						x: -20 //center
+					},
+					//subtitle: {
+					//	text: 'Source: WorldClimate.com',
+					//	x: -20
+					//},
+					xAxis: {
+						categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+							'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+					},
+					yAxis: {
+						title: {
+							text: 'Puntos'
+						},
+						plotLines: [{
+							value: 0,
+							width: 1,
+							color: '#808080'
+						}]
+					},
+					tooltip: {
+						valueSuffix: ''
+					},
+					legend: {
+						layout: 'vertical',
+						align: 'right',
+						verticalAlign: 'middle',
+						borderWidth: 0
+					},
+					series: [{
+						name: 'Puntos',
+						data: [data.jan, data.Feb, data.Mar, data.Apr, data.May, data.Jun, data.July, data.Aug, data.Sep, data.Oct, data.Nov, data.Dec]
+					}]
+				});
+			}
+		});
+	</script>
+{% endblock %}	
 {% block content %}
 	{#<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -7,32 +61,6 @@
 	</div>
 	#}
 
-	<div class="clearfix space-small"></div>
-			
-	<div class="row block-simple block-simple-gray">
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
-					<div class="block block-gray">
-						
-					</div>	
-				</div>
-				<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-					<div class="score-container">
-						<div class="score-image"></div>
-						<div class="score-detail">
-							{% if score.score is defined %}{{score.score}}{%else%}0{% endif %}
-						</div>
-						<div class="score-description">
-							Puntos
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>	
-	
-	
 	<div class="container-fluid">
 		{#<h1 class="sectiontitle">Interacciones de los últimos quince días</h1>#}
 		<h1 class="sectiontitle">Interacción de la última campaña enviada</h1>	
@@ -85,7 +113,32 @@
 		</div>
 		{%endfor%}
 	</div>
-
+	
+	<div class="clearfix space-small"></div>
+			
+	<div class="row block-simple block-simple-gray">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+					<div class="block block-gray">
+						<div id="container"></div>
+					</div>	
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+					<div class="score-container">
+						<div class="score-image"></div>
+						<div class="score-detail">
+							{% if score.score is defined %}{{score.score}}{%else%}0{% endif %}
+						</div>
+						<div class="score-description">
+							Puntos
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+	
 	<div class="clearfix space"></div>
 	
 	<div class="row">

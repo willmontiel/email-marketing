@@ -714,4 +714,37 @@ class AccountController extends ControllerBase
 		$this->view->setVar("account", $account);
 		$this->view->setVar("score", $score);
 	}
+	
+	public function gethistoryAction()
+	{
+		$history = Scorehistory::find(array(
+			'conditions' => 'idAccount = ?1',
+			'bind' => array(1 => $this->user->account->idAccount)
+		));
+		
+		$months = array(
+			'Jan' => 0,
+			'Feb' => 0,
+			'Mar' => 0,
+			'Apr' => 0,
+			'May' => 0,
+			'Jun' => 0,
+			'Jul' => 0,
+			'Aug' => 0,
+			'Sep' => 0,
+			'Oct' => 0,
+			'Nov' => 0,
+			'Dec' => 0
+		);
+		
+		if (count($history) > 0) {
+			foreach ($history as $h) {
+				$d = date('M', $h->createdon);
+				$months[$d] += $h->score;
+			}
+		}
+		
+		return $this->setJsonResponse($months);
+		
+	}
  }  

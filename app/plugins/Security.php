@@ -138,6 +138,7 @@ class Security extends Plugin
 				//Account controller
 				'account::index' => array('account' => array('read')),
 				'account::scorehistory' => array('account' => array('read')),
+				'account::gethistory' => array('account' => array('read')),
 				'account::getscore' => array('account' => array('read')),
 				'account::accounting' => array('account' => array('billing')),
 				'account::new' => array('account' => array('create', 'read')),
