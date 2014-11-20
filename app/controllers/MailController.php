@@ -2331,9 +2331,12 @@ class MailController extends ControllerBase
 	protected function stopScheduledTask(Mail $mail)
 	{
 		$scheduled = Mailschedule::findFirstByIdMail($mail->idMail);
-		if(!$scheduled->delete()) {
-			foreach ($scheduled->getMessages() as $msg) {
-				$this->flashSession->error($msg);
+		
+		if($scheduled) {
+			if(!$scheduled->delete()) {
+				foreach ($scheduled->getMessages() as $msg) {
+					$this->flashSession->error($msg);
+				}
 			}
 		}
 		$mail->status = "Draft";
