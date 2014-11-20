@@ -732,6 +732,7 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'dashboard::read'),
 			
 			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'mail::read'),
+			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'mail::create'),
 			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'template::create'),
 			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'template::read'),
 			array( 'Role' => 'ROLE_TEMPLATE', 'Action' => 'template::update'),
