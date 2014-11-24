@@ -156,27 +156,7 @@ class MailApiWrapper extends BaseWrapper
 	{
 		$schedule = Mailschedule::findFirstByIdMail($mail->idMail);
 
-		if($schedule) {
-			$mail->status = ($mail->status == 'Draft' || $mail->status == 'draft') ? 'Scheduled' : $mail->status;
-			
-			if(!$mail->save()) {
-				foreach ($mail->getMessages() as $msg) {
-					$this->logger->log($msg);
-				}
-				throw new Exception('Error saving mail in auto responder');
-			}
-
-			$schedule->confirmationStatus = 'Yes';
-
-			if(!$schedule->save()){
-				foreach ($schedule->getMessages() as $msg) {
-					$this->logger->log($msg);
-				}
-				throw new Exception('Error saving scheduling in auto responder');
-			}
-
-			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-			$commObj->sendSchedulingToParent($mail->idMail);	
-		}
+		$mailwrapper = new MailController();
+		$mailwrapper->sendMailToProcess($mail, $schedule);
 	}
 }

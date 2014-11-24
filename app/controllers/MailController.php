@@ -1956,35 +1956,8 @@ class MailController extends ControllerBase
 			return $this->setJsonResponse(array('error' => $this->errorMsg), 400);
 		}
 		
-		$this->db->begin();
-		
 		try {
-			$mail->status = 'Scheduled';
-			$mail->startedon = time();
-			
-			if(!$mail->save()) {
-				foreach ($mail->getMessages() as $msg) {
-					$this->logger->log("Error while updating mail {$msg}");
-				}
-				throw new Exception("Error while updating scheduleDate in mail");
-			}
-			
-			$schedule->confirmationStatus = 'Yes';
-			
-			if(!$schedule->save()){
-				foreach ($schedule->getMessages() as $msg) {
-					$this->logger->log("Error while updating schedule {$msg}");
-				}
-				throw new Exception("Error while updating status schedule's");
-			}
-			
-			$this->db->commit();
-			$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
-			$commObj->sendSchedulingToParent($mail->idMail);	
-			
-			$this->traceSuccess("Confirm mail, idMail: {$idMail}");
-			$this->flashSession->success('Se ha programado existosamente el correo');
-			return $this->setJsonResponse(array('status' => 'success'), 200);
+			$this->sendMailToProcess($mail, $schedule, true);
 		}
 		catch (Exception $e) {
 			$this->db->rollback();
@@ -2000,6 +1973,43 @@ class MailController extends ControllerBase
 			$this->traceFail("Error confirming mail, idMail: {$idMail}");
 			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error por favor contacte al administrador'), 500);
 		}
+		
+		$this->traceSuccess("Confirm mail, idMail: {$idMail}");
+		$this->flashSession->success('Se ha programado existosamente el correo');
+		return $this->setJsonResponse(array('status' => 'success'), 200);
+	}
+	
+	public function sendMailToProcess(Mail $mail, Mailschedule $schedule, $db = false)
+	{
+		if($db) {
+			$this->db->begin();
+		}
+		
+		$mail->status = 'Scheduled';
+		$mail->startedon = time();
+
+		if(!$mail->save()) {
+			foreach ($mail->getMessages() as $msg) {
+				$this->logger->log("Error while updating mail {$msg}");
+			}
+			throw new Exception("Error while updating scheduleDate in mail");
+		}
+
+		$schedule->confirmationStatus = 'Yes';
+
+		if(!$schedule->save()){
+			foreach ($schedule->getMessages() as $msg) {
+				$this->logger->log("Error while updating schedule {$msg}");
+			}
+			throw new Exception("Error while updating status schedule's");
+		}
+		
+		if($db) {
+			$this->db->commit();
+		}
+		
+		$commObj = new Communication(SocketConstants::getMailRequestsEndPointPeer());
+		$commObj->sendSchedulingToParent($mail->idMail);	
 	}
 	
 	protected function validateMailStatus(Mail $mail, Mailcontent $mailcontent)

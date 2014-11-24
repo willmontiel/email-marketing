@@ -36,11 +36,13 @@ class ApimailController extends ControllerBase
 			
 			$content = $mailapiwrapper->getContent($contentsT->content);
 			$MailWrapper->createHtmlMailContent($content);
+		
+			$db->commit();
+			
 			$mailapiwrapper->send_mail_to_process($mail);
 			
 			$response = $mailapiwrapper->response_new_mail($mail);
 			
-			$db->commit();
 			$this->traceSuccess("Create mail, idMail: {$mail->idMail}");
 			
 			return $this->setJsonResponse($response, 200);
