@@ -1000,6 +1000,123 @@ class ApiController extends ControllerBase
 	
 	/**
 	 * 
+	 * @Post("/contactlist/{idContactlist:[0-9]+}/contactsbatch")
+	 */
+	public function createcontactbybatchAction($idContactlist)
+	{
+		$contentsraw = $this->getRequestContent();
+		$contentsT = json_decode($contentsraw);
+		
+		$list = Contactlist::findFirstByIdContactlist($idContactlist);
+
+		$database = Dbase::findFirstByIdDbase($list->idDbase);
+
+		if (!$database || $database->account != $this->user->account) {
+			$this->traceFail("Error adding contacts by batch, idContactlist: {$idContactlist}");
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'Lista de contactos incorrecta');
+		}
+		
+		$eachrow = $contentsT->contacts;
+		
+		if (empty($eachrow)) {
+			$this->traceFail("Error adding contacts by batch, idContactlist: {$idContactlist}");
+			return $this->setJsonResponse(array('status' => 'failed'), 404, 'Información incorrecta');
+		}
+
+		$emailsToFind = array();
+
+		foreach ($eachrow as $e) {
+			$eachdata = explode(",", trim($e));
+
+			if(isset($eachdata[0]) && !empty($eachdata[0])) {
+				$email = $eachdata[0];
+				$name = (isset($eachdata[1]))?trim($eachdata[1]):'';
+				$last_name = (isset($eachdata[2]))?trim($eachdata[2]):'';
+				$birth_date = (isset($eachdata[3]))?trim($eachdata[3]):'';
+				
+				if (!isset($emailsToFind[$email])) {
+					$batchreal[] = array(
+						'email' => $email,
+						'name' => $name,
+						'lastName' => $last_name,
+						'birthDate' => $birth_date
+					);
+					$emailsToFind[$email] = true;
+				}
+			}
+		}
+
+		$dateFormat = new \EmailMarketing\General\Misc\DateFormat();
+		$all_contacts = array();
+		foreach ($batchreal as $batchC) {
+			
+			// Crear el nuevo contacto:
+			$wrapper = new ContactWrapper();
+			$wrapper->setAccount($this->user->account);
+			$wrapper->setDateFormat($dateFormat);
+			$wrapper->setIdDbase($list->idDbase);
+			$wrapper->setIdContactlist($idContactlist);
+			$wrapper->setIPAdress($_SERVER["REMOTE_ADDR"]);		
+
+			$newcontact = new stdClass();
+		
+			$newcontact->email = $batchC['email'];
+			$newcontact->name = $batchC['name'];
+			$newcontact->lastName = $batchC['lastName'];
+			
+			$date = explode('/', $batchC['birthDate']);
+			if (count($date) != 0) {
+				$newDate = (checkdate($date[1],$date[0],$date[2]) ? $batchC['birthDate'] : null);
+			}
+			else {
+				$newDate = null;
+			}
+			
+			$newcontact->birthDate = $newDate;
+			$newcontact->status = "";
+			$newcontact->activatedOn = "";
+			$newcontact->bouncedOn = "";
+			$newcontact->subscribedOn = "";
+			$newcontact->unsubscribedOn = "";
+			$newcontact->spamOn = "";
+			$newcontact->ipActive = "";
+			$newcontact->ipSubscribed = "";
+			$newcontact->updatedOn = "";
+			$newcontact->createdOn = "";
+			$newcontact->isBounced = "";
+			$newcontact->isSubscribed = 1;
+			$newcontact->isSpam = "";
+			$newcontact->isActive = 1;
+
+			try {
+				$contact = $wrapper->addExistingContactToListFromDbase($newcontact->email, $list);
+				if(!$contact) {
+					$contact = $wrapper->createNewContactFromJsonData($newcontact, $list);
+				}
+				
+				$all_contacts[]= array("email" => $contact->email->email, "idContact" => $contact->idContact);
+			}
+			catch (\InvalidArgumentException $e) {
+				$this->traceFail("Error adding contacts by newbatch, idContactlist: {$idContactlist}");
+				$this->logger->log('Exception: [' . $e . ']');
+				$a_contact = $wrapper->findContactByEmail($newcontact->email);
+				if($a_contact) {
+					$all_contacts[]= array("email" => $a_contact->email->email, "idContact" => $a_contact->idContact);
+				}
+			}
+			catch (\Exception $e) {
+				$this->traceFail("Error adding contacts by newbatch, idContactlist: {$idContactlist}");
+				$this->logger->log('Exception: [' . $e . ']');
+				return $this->setJsonResponse(array('status' => 'failed'), 404, 'Error en la creación de los contactos');
+			}
+		}
+		
+		return $this->setJsonResponse(array('contacts' => $all_contacts, "idContactlist" => $idContactlist), 201, 'Success');
+	}
+
+
+	/**
+	 * 
 	 * @Get("/dbases")
 	 */
 	public function dbaselistAction()

@@ -190,6 +190,7 @@ class Security extends Plugin
 				'api::updatecontactbylist' => array('contact' => array('read','update')),
 				'api::createcontactbylist' => array('contact' => array('read', 'create')),
 				'api::deletecontactbylist' => array('contact' => array('read', 'delete')),
+				'api::createcontactbybatch' => array('contact' => array('read', 'create')),
 				'api::listsedit' => array('contactlist' => array('read', 'update')),
 				'api::deletecontactlist' => array('contactlist' => array('read', 'delete')),
 				//listas de bloqueo
