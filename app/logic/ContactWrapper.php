@@ -948,6 +948,33 @@ class ContactWrapper extends BaseWrapper
 		return array('contacts' => $contactos, 'meta' => $this->pager->getPaginationObject());
 	}
 	
+	public function findContactByEmail($email)
+	{
+		$email = Email::findFirst(
+					array(
+						'conditions' => 'email = ?1 AND idAccount = ?2',
+						'bind' => array(
+							1 => $email, 
+							2 => $this->account->idAccount
+						)
+					) 
+		);
+		
+		if($email) {
+			$contact = Contact::findFirst(
+					array(
+						'conditions' => 'idEmail = ?1 AND idDbase = ?2',
+						'bind' => array(
+								1 => $email->idEmail,
+								2 => $this->idDbase
+							)
+					)
+			);
+		}
+		
+		return $contact;
+	}
+	
 	public function findContactByAnyValue($valueSearch)
 	{
 		$this->md5 = md5($valueSearch);
