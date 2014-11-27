@@ -18,7 +18,7 @@ class ApimailController extends ControllerBase
 		$this->logger->log('Turned it into this: [' . print_r($contentsT, true) . ']');
 		
 		try {
-			$mailapiwrapper = new MailApiWrapper($this->logger, $this->modelsManager);
+			$mailapiwrapper = new MailApiWrapper($this->logger, $this->modelsManager, $this->asset);
 			$mailapiwrapper->setAccount($this->user->account);
 			$mailapiwrapper->validateContent($contentsT->mail);
 			$contentsT->mail->type = "Html";
@@ -37,6 +37,8 @@ class ApimailController extends ControllerBase
 			$content = $mailapiwrapper->getContent($contentsT->content);
 			$MailWrapper->createHtmlMailContent($content);
 		
+			$mailapiwrapper->attachment_mail($contentsT->mail, $mail);
+			
 			$db->commit();
 			
 			$mailapiwrapper->send_mail_to_process($mail);

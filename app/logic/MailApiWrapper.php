@@ -2,10 +2,11 @@
 
 class MailApiWrapper extends BaseWrapper
 {
-	function __construct($logger, $modelsManager)
+	function __construct($logger, $modelsManager, $assetsrv)
 	{
 		$this->logger = $logger;
 		$this->modelsManager = $modelsManager;
+		$this->assetsrv = $assetsrv;
 	}
 	
 	public function createTarget($target)
@@ -77,6 +78,9 @@ class MailApiWrapper extends BaseWrapper
 					throw new Exception($e->getMessage());
 				}
 				break;
+			case 'html':
+					$content = $contentobj->content;
+				break;
 			default :
 				throw new InvalidArgumentException('wrong type of content');
 				break;
@@ -134,8 +138,80 @@ class MailApiWrapper extends BaseWrapper
 		
 		return $response;
 	}
+	
+	public function attachment_mail($content, Mail $mail)
+	{
+		if(isset($content->attachment) && !empty($content->attachment)) {
 
+			$path_parts = pathinfo($content->attachment);
+			
+			$dir = tempnam(sys_get_temp_dir(),'AF');
+			
+			$data = new stdClass();
+			$data->fileName = $path_parts['basename'];
+			$data->fileSize = $this->curl_get_file_size($content->attachment);
+			$data->fileType = $path_parts['extension'];
+			$data->tmpDir = $dir;
+			
+			$file = file_get_contents($content->attachment);
+			
+			file_put_contents($dir, $file);
+			
+			$att = new AttachmentObj();
+			$att->setAccount($this->account);
+			$att->setMail($mail);
+			$att->setData($data);
+			$att->uploadAttachment(false);
 
+			$mail->attachment = 1;
+			if (!$mail->save()) {
+				foreach ($mail->getMessages() as $msg) {
+					$this->logger->log("Error while updating attachment in mail: {$msg}");
+				}
+				throw new InvalidArgumentException('Mail attachment could not be updated');
+			}
+
+//			$dir = $this->assetsrv->dir . $this->account->idAccount . '/attachments/';
+//			if (!file_exists($dir)) {
+//				mkdir($dir, 0777, true);
+//			}
+//			$dir.= $path_parts['basename'];
+//			copy($content->attachment, $dir)
+		}
+	}
+	
+	public function curl_get_file_size( $url ) {
+
+		$result = -1;
+		$curl = curl_init( $url );
+
+		curl_setopt( $curl, CURLOPT_NOBODY, true );
+		curl_setopt( $curl, CURLOPT_HEADER, true );
+		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $curl, CURLOPT_FOLLOWLOCATION, true );
+		$data = curl_exec( $curl );
+		curl_close( $curl );
+
+		if( $data ) {
+		  $content_length = "unknown";
+		  $status = "unknown";
+
+		  if( preg_match( "/^HTTP\/1\.[01] (\d\d\d)/", $data, $matches ) ) {
+			$status = (int)$matches[1];
+		  }
+
+		  if( preg_match( "/Content-Length: (\d+)/", $data, $matches ) ) {
+			$content_length = (int)$matches[1];
+		  }
+		  
+		  if( $status == 200 || ($status > 300 && $status <= 308) ) {
+			$result = $content_length;
+		  }
+		}
+
+		return $result;
+  }
+	
 	public function response_new_mail($mail)
 	{
 		$obj = array(
