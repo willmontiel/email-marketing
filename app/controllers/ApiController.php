@@ -656,12 +656,14 @@ class ApiController extends ControllerBase
 		catch (InvalidArgumentException $e) {
 			$error = $wrapper->getFieldErrors();
 			$this->traceFail("Error Create contact list, USER: {$this->user->idUser}/{$this->user->username}");
-			return $this->setJsonResponse(array('errors' =>  $error['name']), 422, 'Error: ' . $e->getMessage());
+			//return $this->setJsonResponse(array('errors' =>  $error['name']), 422, 'Error: ' . $e->getMessage());
+			return $this->setJsonResponse(array('error' => 'Error creating contact list') );	
 		}
 		catch (Exception $e) {
 			$this->logger->log("Exception: {$e}");
 			$this->traceFail("Error Create contact list, USER: {$this->user->idUser}/{$this->user->username}");
-			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Problemas al crear lista de contactos')), 422, 'Error: ' . $e->getMessage());
+			//return $this->setJsonResponse(array('errors' => array('generalerror' => 'Problemas al crear lista de contactos')), 422, 'Error: ' . $e->getMessage());
+			return $this->setJsonResponse(array('error' => 'Error creating contact list') );	
 		}
 		
 		$list = $lists['list'];
