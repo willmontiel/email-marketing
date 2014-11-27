@@ -47,10 +47,10 @@ class AttachmentObj
 		$this->data = $data;
 	}	
 	
-	public function uploadAttachment()
+	public function uploadAttachment($post = true)
 	{
 		$this->validateFile();
-		$this->moveFileToServer(true);
+		$this->moveFileToServer(true, $post);
 		$this->saveAttachmentInfoInDb(true);
 	}
 	
@@ -121,7 +121,7 @@ class AttachmentObj
 	 * Esta función mueve el archivo del directorio temporal al servidor como tal
 	 * @throws InvalidArgumentException
 	 */
-	private function moveFileToServer($uploaded = true)
+	private function moveFileToServer($uploaded = true, $post = true)
 	{
 		$dir = $this->assetsrv->dir . $this->account->idAccount . '/attachments/' . $this->mail->idMail . '/';
 		
@@ -133,8 +133,15 @@ class AttachmentObj
 		
 		$dir .= $name;
 		
-		if (!move_uploaded_file($this->data->tmpDir, $dir)){ 
-			throw new InvalidArgumentException('File could not be uploaded on the server');
+		if($post) {
+			if (!move_uploaded_file($this->data->tmpDir, $dir)){ 
+				throw new InvalidArgumentException('File could not be uploaded on the server');
+			}
+		}
+		else {
+			if (!rename($this->data->tmpDir, $dir)){ 
+				throw new InvalidArgumentException('File could not be uploaded on the server');
+			}
 		}
 	}
 	
