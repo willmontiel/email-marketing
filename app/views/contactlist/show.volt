@@ -106,8 +106,8 @@
 	{# /Botones de navegacion pequeños  #}
 
 	<script type="text/x-handlebars" >
-		{{' {{#if errors.email}} '}}
-			<span class="text text-error">{{'{{errors.email}}'}}</span>
+		{{' {{#if error.email}} '}}
+			<span class="text text-error">{{'{{error.email}}'}}</span>
 		{{' {{/if }} '}}
 		{{'{{outlet}}'}}
 	</script>
@@ -269,8 +269,8 @@
 						{{ '{{errors.errormsg}}' }}
 					</div>
 				{{ '{{/if}}' }}
-				{{' {{#if errors.email}} '}}
-						<span class="text text-error">{{'{{errors.email}}'}}</span>
+				{{' {{#if error.email}} '}}
+						<span class="text text-error">{{'{{error.email}}'}}</span>
 				{{' {{/if }} '}}
 				<div class="form-group">
 					<label for="email" class="col-sm-4 control-label"><span class="required">*</span>Email:</label>

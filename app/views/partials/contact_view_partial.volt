@@ -27,8 +27,8 @@
 			{{ '{{#unless isActive}}' }}
 				<span class="label label-info">Inactivo</span>
 			{{ '{{/unless}}' }}
-			{{' {{#if errors.email}} '}}
-				<span class="text text-error">{{'{{errors.email}}'}}</span>
+			{{' {{#if error.email}} '}}
+				<span class="text text-error">{{'{{error.email}}'}}</span>
 			{{' {{/if }} '}}
 		</label>
 	</td>

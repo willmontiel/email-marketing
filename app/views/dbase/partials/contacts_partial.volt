@@ -163,8 +163,8 @@
 										{{' {{#if isEmailBlocked}} '}}
 											<span class="badge badge-dark-red">Correo bloqueado</span>
 										{{' {{/if }} '}}
-										{{' {{#if errors.email}} '}}
-											<span class="text text-error">{{'{{errors.email}}'}}</span>
+										{{' {{#if error.email}} '}}
+											<span class="text text-error">{{'{{error.email}}'}}</span>
 										{{' {{/if }} '}}
 									</td>
 								</tr>

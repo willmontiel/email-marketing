@@ -127,7 +127,7 @@ class MailWrapper extends BaseWrapper
 				}
 				$messages = implode(", ", $e);
 
-				$this->addMessageError('errors', $messages, 400);
+				$this->addMessageError('error', $messages, 400);
 				throw new \InvalidArgumentException($messages);
 			}
 		}
@@ -177,7 +177,7 @@ class MailWrapper extends BaseWrapper
 			}
 			$messages = implode(", ", $e);
 			
-			$this->addMessageError('errors', $messages, 400);
+			$this->addMessageError('error', $messages, 400);
 			throw new \InvalidArgumentException($messages);
 		}
 		
@@ -188,7 +188,7 @@ class MailWrapper extends BaseWrapper
 			$scheduled = $mailSchedule->scheduleTask();
 			
 			if (!$scheduled) {
-				$this->addMessageError('errors', 'Ha ocurrido un error por favor contacte al administrador', 500);
+				$this->addMessageError('error', 'Ha ocurrido un error por favor contacte al administrador', 500);
 				$this->logger->log("Error while saving mail {$this->mail->idMail} scheduleDate in Mailschedule table account {$this->mail->idAccount}");
 				throw new \Exception('Error while saving mail scheduleDate in Mailschedule table');
 			}
@@ -232,17 +232,17 @@ class MailWrapper extends BaseWrapper
 		
 		if (!$s) {
 			if (!\filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				$this->addMessageError('errors', 'Ha enviado una dirección de correo de remitente inválida, por favor verifique la información', 422);
+				$this->addMessageError('error', 'Ha enviado una dirección de correo de remitente inválida, por favor verifique la información', 422);
 				throw new InvalidArgumentException("Invalid sender email");
 			}
 
 			if (!$this->isAValidDomain($domain[1])) {
-				$this->addMessageError('errors', 'Ha enviado una dirección de correo de remitente invalida, recuerde que no debe usar dominios de correo públicas como hotmail o gmail', 422);
+				$this->addMessageError('error', 'Ha enviado una dirección de correo de remitente invalida, recuerde que no debe usar dominios de correo públicas como hotmail o gmail', 422);
 				throw new InvalidArgumentException("Invalid sender domain");
 			}
 
 			if (empty($name)) {
-				$this->addMessageError('errors', 'No ha enviado un nombre de remitente válido, por favor verifique la información', 422);
+				$this->addMessageError('error', 'No ha enviado un nombre de remitente válido, por favor verifique la información', 422);
 				throw new InvalidArgumentException("Invalid sender name");
 			}
 			
@@ -310,7 +310,7 @@ class MailWrapper extends BaseWrapper
 					$e[] = $msg;
 				}
 				$messages = implode(", ", $e);
-				$this->addMessageError('errors', $messages, 400);
+				$this->addMessageError('error', $messages, 400);
 				throw new \InvalidArgumentException($messages);
 			}
 		}
