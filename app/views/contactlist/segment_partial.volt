@@ -90,9 +90,9 @@
 				{{ '{{ App.errormessage }}' }}
 			</div>
 		{{ '{{/if}} '}}
-		{{'{{#if errors.segmentname}}'}}
+		{{'{{#if error.segmentname}}'}}
 			<div class="bs-callout bs-callout-danger">
-				{{'{{errors.segmentname}}'}}
+				{{'{{error.segmentname}}'}}
 			</div>
 		{{'{{/if}}'}}
 		<div class="col-sm-12 hidden-md hidden-lg">
@@ -185,9 +185,9 @@
 							</div>
 						</div>
 					<div class="clearfix"></div>
-					{{'{{#if errors.segment}}'}}
+					{{'{{#if error.segment}}'}}
 					<div class="bs-callout bs-callout-danger">
-						{{'{{errors.segment}}'}}
+						{{'{{error.segment}}'}}
 					</div>
 					{{'{{/if}}'}}
 
@@ -267,9 +267,9 @@
 				{{ '{{ App.errormessage }}' }}
 			</div>
 		{{ '{{/if}} '}}	
-		{{'{{#if errors.segmentname}}'}}
+		{{'{{#if error.segmentname}}'}}
 			<div class="bs-callout bs-callout-danger">
-				{{'{{errors.segmentname}}'}}
+				{{'{{error.segmentname}}'}}
 			</div>
 		{{'{{/if}}'}}
 
@@ -334,9 +334,9 @@
 					</div>
 				</div>
 				<div class="clearfix"></div>
-				{{'{{#if errors.segment}}'}}
+				{{'{{#if error.segment}}'}}
 					<div class="bs-callout bs-callout-danger">
-						{{'{{errors.segment}}'}}
+						{{'{{error.segment}}'}}
 					</div>
 				{{'{{/if}}'}}
 

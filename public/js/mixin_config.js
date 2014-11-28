@@ -34,7 +34,7 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 	actuallyHandlePromise: function(p, troute, message, fn, callmeback, norollback) {
 		var self = this;
 		p.then(function() {
-			
+
 			if (typeof self.get('errors.errormsg') !== 'undefined') {
 				self.set('errors.errormsg', '');
 			}
@@ -61,7 +61,7 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 						}
 						self.transitionToRoute(troute);
 					}
-					callmeback(obj.errors);
+					callmeback(obj.error);
 				}
 				catch (e) {
 				}

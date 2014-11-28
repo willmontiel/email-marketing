@@ -13,7 +13,7 @@ Ember.SaveFormHandlerMixin = Ember.Mixin.create({
 					var obj = $.parseJSON(error.responseText);
 					self.get("model").rollback();
 					self.transitionToRoute(troute);
-					$.gritter.add({title: 'Error', text: obj.errors, sticky: false, time: 3000});
+					$.gritter.add({title: 'Error', text: obj.error, sticky: false, time: 3000});
 				}
 				catch (e) {
 				}

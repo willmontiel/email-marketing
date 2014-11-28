@@ -160,7 +160,8 @@ class ApiController extends ControllerBase
 		$db = Dbase::findFirstByIdDbase($idDbase);
 		
 		if (!$db || $db->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+			//return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+			return $this->setJsonResponse(array('error' => 'No se encontro la base de datos' ), 404, 'No se encontro la base de datos');
 		}
 		
 		$log = $this->logger;
@@ -172,7 +173,8 @@ class ApiController extends ControllerBase
 		// Validar campos
 		$contents = $contentsT->field;
 		if (!$this->validFieldObject($contents)) {
-			return $this->setJsonResponse(array('status' => 'failed'), 400, 'Campos invalidos: ' . implode(';', $this->errortxt));
+			//return $this->setJsonResponse(array('status' => 'failed'), 400, 'Campos invalidos: ' . implode(';', $this->errortxt));
+			return $this->setJsonResponse(array('error' => 'Campos invalidos: ' . implode(';', $this->errortxt) ), 400, 'Campos invalidos: ' . implode(';', $this->errortxt));
 		}
 
 		// Validar que no exista otro campo en la base de datos con el mismo nombre
@@ -180,7 +182,8 @@ class ApiController extends ControllerBase
 		
 		if ($otro > 0) {
 			$log->log('Encontrado:' . $otro);
-			return $this->setJsonResponse(array('status' => 'failed'), 400, 'El campo ya existe');
+			//return $this->setJsonResponse(array('status' => 'failed'), 400, 'El campo ya existe');
+			return $this->setJsonResponse(array('error' => 'El campo ya existe' ), 400, 'El campo ya existe');
 		}
 		
 		// Insertar el objeto en la base de datos
@@ -193,7 +196,8 @@ class ApiController extends ControllerBase
 				$log->log('Error grabando Customfield: [' . $message . ']');
 			}
 			$this->traceFail("Error creating custom field USER: {$this->user->idUser}/{$this->user->username}");
-			return $this->setJsonResponse(array('status' => 'failed'), 400, 'Error grabando informacion');
+			//return $this->setJsonResponse(array('status' => 'failed'), 400, 'Error grabando informacion');
+			return $this->setJsonResponse(array('error' => 'Error grabando informacion' ), 400, 'Error grabando informacion');
 		}
 
 
@@ -214,7 +218,8 @@ class ApiController extends ControllerBase
 		$customfield = Customfield::findFirstByIdCustomField($idCustomfield);
 
 		if (!$customfield || $customfield->dbase->idDbase != $idDbase || $customfield->dbase->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');
+			//return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');
+			return $this->setJsonResponse(array('error' => 'No se encontro el campo' ), 404, 'No se encontro el campo');
 		}
 		$db = $customfield->dbase;
 
@@ -227,7 +232,8 @@ class ApiController extends ControllerBase
 		// Validar campos
 		$contents = $contentsT->field;
 		if (!$this->validFieldObject($contents)) {
-			return $this->setJsonResponse(array('status' => 'failed'), 400, 'Campos invalidos: ' . implode(';', $this->errortxt));
+			//return $this->setJsonResponse(array('status' => 'failed'), 400, 'Campos invalidos: ' . implode(';', $this->errortxt));
+			return $this->setJsonResponse(array('error' => 'Campos invalidos: ' . implode(';', $this->errortxt) ), 400, 'Campos invalidos: ' . implode(';', $this->errortxt));
 		}
 
 		// Validar que no exista otro campo en la base de datos con el mismo nombre
@@ -235,7 +241,8 @@ class ApiController extends ControllerBase
 		
 		if ($otro > 0) {
 			$log->log('Encontrado:' . $otro);
-			return $this->setJsonResponse(array('status' => 'failed'), 400, 'El nombre de campo ya existe en la base de datos');
+			//return $this->setJsonResponse(array('status' => 'failed'), 400, 'El nombre de campo ya existe en la base de datos');
+			return $this->setJsonResponse(array('error' => 'El nombre de campo ya existe en la base de datos' ), 400, 'El nombre de campo ya existe en la base de datos');
 		}
 		
 		// Actualizar el objeto en la base de datos
@@ -246,7 +253,8 @@ class ApiController extends ControllerBase
 				$this->traceFail("Error editing customfield, idCustomfield: {$idDbase} / idDbase: {$idCustomfield}");
 				$log->log('Error grabando Customfield: [' . $message . ']');
 			}
-			return $this->setJsonResponse(array('status' => 'failed'), 400, 'Error grabando informacion');
+			//return $this->setJsonResponse(array('status' => 'failed'), 400, 'Error grabando informacion');
+			return $this->setJsonResponse(array('error' => 'Error grabando informacion' ), 400, 'Error grabando informacion');
 		}
 
 		$fielddata = $this->fromPObjectToJObject($customfield);
@@ -265,7 +273,8 @@ class ApiController extends ControllerBase
 		$customfield = Customfield::findFirstByIdCustomField($idCustomfield);
 
 		if (!$customfield || $customfield->dbase->idDbase != $idDbase || $customfield->dbase->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');
+			//return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el campo');
+			return $this->setJsonResponse(array('error' => 'No se encontro el campo' ), 404, 'No se encontro el campo');
 		}
 		
 		// Eliminar el campo
@@ -284,7 +293,8 @@ class ApiController extends ControllerBase
 		catch (Exception $e) {
 			$this->traceFail("Error deleting customfield, idDbase: {$idDbase} / idCustomfield: {$idCustomfield}");
 			$this->logger->log("Exception: error while deleting customfield: {$e}");
-			return $this->setJsonResponse(array('status' => 'Ha ocurrido un error, contacte con el administrador'), 500);
+			//return $this->setJsonResponse(array('status' => 'Ha ocurrido un error, contacte con el administrador'), 500);
+			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error, contacte con el administrador' ), 500, 'Ha ocurrido un error, contacte con el administrador');
 		}
 		
 	}
@@ -339,7 +349,8 @@ class ApiController extends ControllerBase
 		$contact = Contact::findFirstByIdContact($idContact);
 
 		if (!$contact || $contact->dbase->idDbase != $idDbase || $contact->dbase->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
+			//return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
+			return $this->setJsonResponse(array('error' => 'No se encontro el contacto' ), 404, 'No se encontro el contacto');
 		}
 
 		$wrapper = new ContactWrapper();
@@ -361,7 +372,8 @@ class ApiController extends ControllerBase
 	{
 		$db = Dbase::findFirstByIdDbase($idDbase);
 		if (!$db || $db->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+			//return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+			return $this->setJsonResponse(array('error' => 'No se encontro la base de datos' ), 404, 'No se encontro la base de datos');
 		}
 
 		$log = $this->logger;
@@ -430,11 +442,11 @@ class ApiController extends ControllerBase
 			return $this->setJsonResponse(array('contact' => $contactdata), 201, 'Success');
 		}
 		catch (\InvalidArgumentException $e) {
-			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
+			return $this->setJsonResponse(array('error' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating new contact!');	
+			return $this->setJsonResponse(array('error' => 'Error while creating new contact'), 400, 'Error while creating new contact!');	
 		}
 	}
 	
@@ -447,7 +459,8 @@ class ApiController extends ControllerBase
 	{
 		$db = Dbase::findFirstByIdDbase($idDbase);
 		if (!$db || $db->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+			//return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la base de datos');
+			return $this->setJsonResponse(array('error' => 'No se encontro la base de datos' ), 404, 'No se encontro la base de datos');
 		}
 		
 		$log = $this->logger;
@@ -527,7 +540,7 @@ class ApiController extends ControllerBase
 		// Editar el contacto existente
 
 		if (!isset($contents->email) || trim($contents->email) == '') {
-			return $this->setJsonResponse(array('errors' => array('email'=> array('El email es requerido'))), 422, 'Invalid data');	
+			return $this->setJsonResponse(array('error' => array('email'=> 'El email es requerido')), 422, 'Invalid data');	
 		}
 		try {
 			$contact = $wrapper->updateContactFromJsonData($idContact, $contents);
@@ -536,11 +549,13 @@ class ApiController extends ControllerBase
 		}
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error: ' . $e->getMessage());	
+			//return $this->setJsonResponse(array('status' => 'error'), 400, 'Error: ' . $e->getMessage());	
+			return $this->setJsonResponse(array('error' => 'Error: ' . $e->getMessage() ), 400, 'Error: ' . $e->getMessage());
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while updating contact!');	
+			//return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while updating contact!');
+			return $this->setJsonResponse(array('error' => 'Error while updating contact!' ), 400, 'Error while updating contact!');
 		}
 	}
 
@@ -564,7 +579,8 @@ class ApiController extends ControllerBase
 		));
 
 		if (!$contact || $contact->dbase->idDbase != $db->idDbase || $contact->dbase->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
+			//return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
+			return $this->setJsonResponse(array('error' => 'No se encontro el contacto' ), 404, 'No se encontro el contacto');
 		}
 
 		// Eliminar el Contacto de la Base de Datos
@@ -573,7 +589,7 @@ class ApiController extends ControllerBase
 			$wrapper = new ContactWrapper();
 			$result = $wrapper->deleteContactFromDB($contact, $db, $override);
 		} catch(\Exception $e) {
-			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
+			return $this->setJsonResponse(array('error' => $e->getMessage()), 422, $e->getMessage());
 		}
 			
 		return $this->setJsonResponse($result);
@@ -617,7 +633,8 @@ class ApiController extends ControllerBase
 		}
 		catch (Exception $e) {
 			$this->logger->log("Exception {$e}");
-			return $this->setJsonResponse(array('status' => 'failed'), 500, 'Internal error');
+			//return $this->setJsonResponse(array('status' => 'failed'), 500, 'Internal error');
+			return $this->setJsonResponse(array('error' => 'Can´t find contactlists' ), 500, 'Can´t find contactlists');
 		}
 		
 	}
@@ -656,12 +673,14 @@ class ApiController extends ControllerBase
 		catch (InvalidArgumentException $e) {
 			$error = $wrapper->getFieldErrors();
 			$this->traceFail("Error Create contact list, USER: {$this->user->idUser}/{$this->user->username}");
-			return $this->setJsonResponse(array('errors' =>  $error['name']), 422, 'Error: ' . $e->getMessage());
+			return $this->setJsonResponse(array('error' =>  $error['name']), 422, 'Error: ' . $e->getMessage());
+			//return $this->setJsonResponse(array('error' => $error['name']) );	
 		}
 		catch (Exception $e) {
 			$this->logger->log("Exception: {$e}");
 			$this->traceFail("Error Create contact list, USER: {$this->user->idUser}/{$this->user->username}");
-			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Problemas al crear lista de contactos')), 422, 'Error: ' . $e->getMessage());
+			return $this->setJsonResponse(array('error' => 'Problemas al crear lista de contactos'), 422, 'Error: ' . $e->getMessage());
+			//return $this->setJsonResponse(array('error' => 'Error creating contact list') );	
 		}
 		
 		$list = $lists['list'];
@@ -689,12 +708,12 @@ class ApiController extends ControllerBase
 		}
 		catch (InvalidArgumentException $e) {
 			$error = $wrapper->getFieldErrors();
-			return $this->setJsonResponse(array('errors' =>  $error['error']), 422, 'Error: ' . $e->getMessage());
+			return $this->setJsonResponse(array('error' =>  $error['error']), 422, 'Error: ' . $e->getMessage());
 		}
 		catch (Exception $e) {
 			$this->logger->log("Exception: {$e}");
 			$this->traceFail("Error editing contactlist: {$idContactlist}, USER: {$this->user->idUser}/{$this->user->username}");
-			return $this->setJsonResponse(array('errors' => array('Ha ocurrido un error, por favor contacte al administrador'), 500));
+			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error, por favor contacte al administrador'), 500, 'Ha ocurrido un error, por favor contacte al administrador');
 		}
 		
 		$list = $mensaje['list'];
@@ -716,7 +735,8 @@ class ApiController extends ControllerBase
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 			
 		if ($list->dbase->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
+			//return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
+			return $this->setJsonResponse(array('error' => 'No se encontro el contacto'), 404, 'No se encontro el contacto');
 		}
 		$pager = new PaginationDecorator();
 		if ($limit) {
@@ -754,7 +774,8 @@ class ApiController extends ControllerBase
 		));
 			
 		if ($list->dbase->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la lista');
+			//return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la lista');
+			return $this->setJsonResponse(array('error' => 'No se encontro la lista'), 404, 'No se encontro la lista');
 		}
 		
 		$contacts['list'] = array(ContactListWrapper::convertListToJson($list, $list->dbase->account));
@@ -785,12 +806,13 @@ class ApiController extends ControllerBase
 		catch (\InvalidArgumentException $e) {
 			$this->traceFail("Error deleting contactlist: {$idContactlist}, USER: {$this->user->idUser}/{$this->user->username}");
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 422, "Error: {$e}");	
+			//return $this->setJsonResponse(array('status' => 'error'), 422, "Error: {$e}");
+			return $this->setJsonResponse(array('error' => $e->getMessage()), 422, "Error: {$e->getMessage()}");
 		}
 		catch (\Exception $e) {
 			$this->traceFail("Error deleting contactlist: {$idContactlist}, USER: {$this->user->idUser}/{$this->user->username}");
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
+			return $this->setJsonResponse(array('error' => $e->getMessage()), 422, $e->getMessage());
 		}
 		$this->traceSuccess("contactlist deleted, idContactlist: {$idContactlist}");
 		return $this->setJsonResponse(array('list' => null), 202, 'list deleted success');
@@ -815,7 +837,8 @@ class ApiController extends ControllerBase
 		));
 			
 		if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
+			//return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
+			return $this->setJsonResponse(array('error' => 'No se encontro el contacto'), 404, 'No se encontro el contacto');
 		}
 		
 		$wrapper = new ContactWrapper();
@@ -861,7 +884,7 @@ class ApiController extends ControllerBase
 		
 		// Crear el nuevo contacto:
 		if (!isset($contents->email) || trim($contents->email) == '') {
-			return $this->setJsonResponse(array('errors' => array('email'=> array('El email es requerido'))), 422, 'Invalid data');	
+			return $this->setJsonResponse(array('error' => array('email'=> array('El email es requerido'))), 422, 'Invalid data');	
 		}
 		try {
 			// Si el email ya existe en la base de datos, pero no esta en la lista, entonces adicionarlo a la lista
@@ -888,12 +911,12 @@ class ApiController extends ControllerBase
 			foreach ($errors as $f => $l) {
 				$errorstxt .= implode(',', $l);
 			}
-			return $this->setJsonResponse(array('errors' => $errorstxt), 422, 'Invalid data');	
+			return $this->setJsonResponse(array('error' => $errorstxt), 422, 'Invalid data');	
 		}
 		catch (\Exception $e) {
 			$this->traceFail("Error creating contact, USER: {$this->user->idUser}/{$this->user->username}");
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error', 'errors' => 'Error general. Contacte al administrador!'), 400, 'Error while creating new contact!');	
+			return $this->setJsonResponse(array('error' => 'Error general. Contacte al administrador!'), 400, 'Error while creating new contact!');	
 		}
 
 		$contactdata = $wrapper->convertContactToJson($contact);
@@ -912,7 +935,8 @@ class ApiController extends ControllerBase
 		$list = Contactlist::findFirstByIdContactlist($idContactlist);
 		
         if (!$list || $list->dbase->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la lista');
+			//return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro la lista');
+			return $this->setJsonResponse(array('error' => 'No se encontro la lista'), 404, 'No se encontro la lista');
 		}
                 
 		$log = $this->logger;
@@ -938,7 +962,7 @@ class ApiController extends ControllerBase
 		
 		// Editar el contacto existente
 		if (!isset($contents->email) || trim($contents->email) == '') {
-			return $this->setJsonResponse(array('errors' => array('email'=> array('El email es requerido'))), 422, 'Invalid data');	
+			return $this->setJsonResponse(array('error' => 'El email es requerido'), 422, 'Invalid data');	
 		}
 		try {
 			$contact = $wrapper->updateContactFromJsonData($idContact, $contents);
@@ -946,13 +970,18 @@ class ApiController extends ControllerBase
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
 			$this->traceFail("Error editing contact, idContact: {$idContact} / email: {$contentsT->email} / idContactlist: {$idContactlist}");
+			$errors = $wrapper->getFieldErrors();
+			$errorstxt = '';
+			foreach ($errors as $f => $l) {
+				$errorstxt .= implode(',', $l);
+			}
 			$contact = Contact::findFirst($idContact);
-			return $this->setJsonResponse(array('contact' => $wrapper->convertContactToJson($contact), 'errors' => $wrapper->getFieldErrors()), 422, 'Error: Invalid data');	
+			return $this->setJsonResponse(array('contact' => $wrapper->convertContactToJson($contact), 'error' => $errorstxt), 422, 'Error: Invalid data');	
 		}
 		catch (\Exception $e) {
 			$this->traceFail("Error editing contact, idContact: {$idContact} / email: {$contentsT->email} / idContactlist: {$idContactlist}");
 			$log->log('Exception: [' . $e . ']');
-			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while updating contact!');	
+			return $this->setJsonResponse(array('error' => 'Error while updating contact!'), 400, 'Error while updating contact!');	
 		}
 
 		$contactdata = $wrapper->convertContactToJson($contact);
@@ -979,7 +1008,8 @@ class ApiController extends ControllerBase
 		));
 		
 		if (!$contact || $contact->dbase->idDbase != $list->idDbase || $contact->dbase->account != $this->user->account) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
+			//return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontro el contacto');
+			return $this->setJsonResponse(array('error' => 'No se encontro el contacto'), 404, 'No se encontro el contacto');
 		}
 		
 		// Eliminar el Contacto de la Lista
@@ -991,7 +1021,7 @@ class ApiController extends ControllerBase
 		catch(\Exception $e) {
 			$this->logger->log("Exception while deleting contact: {$e}");
 			$this->traceFail("Error deleting contact, idContact: {$idContact} / idEmail: {$contact->idEmail} / idContactlist: {$idContactlist}");
-			return $this->setJsonResponse(array('errors' => $e->getMessage()), 422, $e->getMessage());
+			return $this->setJsonResponse(array('error' => $e->getMessage()), 422, $e->getMessage());
 		}
 		
 		$this->traceSuccess("Contact deleted, idContact: {$idContact} / idEmail: {$contact->idEmail} / idContactlist: {$idContactlist}");
@@ -1013,14 +1043,16 @@ class ApiController extends ControllerBase
 
 		if (!$database || $database->account != $this->user->account) {
 			$this->traceFail("Error adding contacts by batch, idContactlist: {$idContactlist}");
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'Lista de contactos incorrecta');
+			//return $this->setJsonResponse(array('status' => 'failed'), 404, 'Lista de contactos incorrecta');
+			return $this->setJsonResponse(array('error' => 'Lista de contactos incorrecta'), 404, 'Lista de contactos incorrecta');
 		}
 		
 		$eachrow = $contentsT->contacts;
 		
 		if (empty($eachrow)) {
 			$this->traceFail("Error adding contacts by batch, idContactlist: {$idContactlist}");
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'Información incorrecta');
+			//return $this->setJsonResponse(array('status' => 'failed'), 404, 'Información incorrecta');
+			return $this->setJsonResponse(array('error' => 'Información incorrecta'), 404, 'Información incorrecta');
 		}
 
 		$emailsToFind = array();
@@ -1107,7 +1139,8 @@ class ApiController extends ControllerBase
 			catch (\Exception $e) {
 				$this->traceFail("Error adding contacts by newbatch, idContactlist: {$idContactlist}");
 				$this->logger->log('Exception: [' . $e . ']');
-				return $this->setJsonResponse(array('status' => 'failed'), 404, 'Error en la creación de los contactos');
+				//return $this->setJsonResponse(array('status' => 'failed'), 404, 'Error en la creación de los contactos');
+				return $this->setJsonResponse(array('error' => 'Error en la creación de los contactos'), 404, 'Error en la creación de los contactos');
 			}
 		}
 		
@@ -1275,12 +1308,12 @@ class ApiController extends ControllerBase
 		catch (\InvalidArgumentException $e) {
 			$this->logger->log('Exception: [' . $e . ']');
 			$this->traceFail("Error creating segment, idDbase: {$idDbase}");
-			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors()), 422, 'Invalid data');
+			return $this->setJsonResponse(array('error' => $wrapper->getFieldErrors()), 422, 'Invalid data');
 		}
 		catch (\Exception $e) {
 			$this->logger->log('Exception: [' . $e . ']');
 			$this->traceFail("Error creating segment, idDbase: {$idDbase}");
-			return $this->setJsonResponse(array('status' => 'error'), 400, 'Error while creating segment!');	
+			return $this->setJsonResponse(array('error' => 'Error while creating segment!'), 400, 'Error while creating segment!');	
 		}
 
 		return $this->setJsonResponse($segment, 201, 'success');
@@ -1373,7 +1406,7 @@ class ApiController extends ControllerBase
 		));
 		
 		if ($segment) {
-			return $this->setJsonResponse(array('errors' => array('segmentname' => 'Ya existe un segmento con el nombre enviado, por favor verifique la información')), 422, 'Invalid data!');
+			return $this->setJsonResponse(array('error' => array('segmentname' => 'Ya existe un segmento con el nombre enviado, por favor verifique la información')), 422, 'Invalid data!');
 		}
 		
 		$wrapper = new SegmentWrapper();
@@ -1388,7 +1421,7 @@ class ApiController extends ControllerBase
 			$error = $wrapper->getFieldErrors();
 			$this->logger->log('Exception: [' . $e . ']');
 //			$this->traceFail("Error creating segment, idDbase: {$contents->dbase}");
-			return $this->setJsonResponse(array('errors' => $error['error']), 422, 'Invalid data');
+			return $this->setJsonResponse(array('error' => $error['error']), 422, 'Invalid data');
 		}
 		catch (\Exception $e) {
 			$this->logger->log('Exception: [' . $e . ']');
@@ -1442,12 +1475,12 @@ class ApiController extends ControllerBase
 		catch (InvalidArgumentException $e) {
 			$this->logger->log("InvalidArgumentException: error while updating segment: {$e}");
 			$this->traceFail("Error updating segment, idSegment: {$idSegment}");
-			return $this->setJsonResponse(array('errors' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
+			return $this->setJsonResponse(array('error' => $wrapper->getFieldErrors() ), 422, 'Error: ' . $e->getMessage());
 		}
 		catch (Exception $e) {
 			$this->traceFail("Error updating segment, idSegment: {$idSegment}");
 			$this->logger->log("Exception: error while updating segment: {$e}");
-			return $this->setJsonResponse(array('errors' => array('generalerror' => 'Error while updating segment')), 422, 'Error: ' . $e->getMessage());
+			return $this->setJsonResponse(array('error' => array('generalerror' => 'Error while updating segment')), 422, 'Error: ' . $e->getMessage());
 		}
 		
 		$this->traceSuccess("Edit segment, idSegment: {$idSegment}");
@@ -1520,7 +1553,7 @@ class ApiController extends ControllerBase
 		
 		// Editar el contacto existente
 		if (!isset($contents->email) || trim($contents->email) == '') {
-			return $this->setJsonResponse(array('errors' => array('email'=> array('El email es requerido'))), 422, 'Invalid data');	
+			return $this->setJsonResponse(array('error' => array('email'=> array('El email es requerido'))), 422, 'Invalid data');	
 		}
 		try {
 			$contact = $wrapper->updateContactFromJsonData($idContact, $contents);
@@ -1528,7 +1561,7 @@ class ApiController extends ControllerBase
 		catch (\InvalidArgumentException $e) {
 			$log->log('Exception: [' . $e . ']');
 			$contact = Contact::findFirst($idContact);
-			return $this->setJsonResponse(array('contact' => $wrapper->convertContactToJson($contact), 'errors' => $wrapper->getFieldErrors()), 422, 'Error: Invalid data');	
+			return $this->setJsonResponse(array('contact' => $wrapper->convertContactToJson($contact), 'error' => $wrapper->getFieldErrors()), 422, 'Error: Invalid data');	
 		}
 		catch (\Exception $e) {
 			$log->log('Exception: [' . $e . ']');

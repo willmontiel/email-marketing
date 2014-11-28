@@ -18,7 +18,7 @@
 				},
 				error: function(msg){
 					var obj = $.parseJSON(msg.responseText);
-					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.errors, sticky: false, time: 10000});
+					$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.error, sticky: false, time: 10000});
 					$('#wait').hide();
 				},
 				success: function(){
