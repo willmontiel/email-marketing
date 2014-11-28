@@ -19,7 +19,7 @@ class MailController extends ControllerBase
 			));
 			
 			if (!$mail) {
-				return $this->setJsonResponse(array('errors' => 'No se ha encontrado el correo por favor verifique la información'), 404, 'Mail not found!');
+				return $this->setJsonResponse(array('error' => 'No se ha encontrado el correo por favor verifique la información'), 404, 'Mail not found!');
 			}
 			
 			$mailcontent = Mailcontent::findFirst(array(
@@ -79,7 +79,7 @@ class MailController extends ControllerBase
 				}
 				
 				$this->logger->log("Exception: {$e}");
-				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error contacte al administrador'), 500);
+				return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador'), 500);
 			}
 		}	
 		
@@ -1127,7 +1127,7 @@ class MailController extends ControllerBase
 
 			if(!filter_var($url, FILTER_VALIDATE_URL)) {
 				$this->logger->log("Error url no válida {$url}");
-				return $this->setJsonResponse(array('errors' => 'La url ingresada no es válida, por favor verifique la información'), 400);
+				return $this->setJsonResponse(array('error' => 'La url ingresada no es válida, por favor verifique la información'), 400);
 			}
 
 			if (!file_exists($dir)) {
@@ -1176,12 +1176,12 @@ class MailController extends ControllerBase
 			catch (Exception $e){
 				$this->db->rollback();
 				$this->logger->log("Exception {$e}");
-				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error, contacte al administrador'), 500);
+				return $this->setJsonResponse(array('error' => 'Ha ocurrido un error, contacte al administrador'), 500);
 			}
 			catch (\InvalidArgumentException $e) {
 				$this->db->rollback();
 				$this->logger->log("Exception {$e}");
-				return $this->setJsonResponse(array('errors' => 'Ha ocurrido un error, contacte al administrador'), 500);
+				return $this->setJsonResponse(array('error' => 'Ha ocurrido un error, contacte al administrador'), 500);
 			}
 		}
 	}

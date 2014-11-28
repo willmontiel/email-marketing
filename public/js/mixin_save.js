@@ -17,7 +17,7 @@ Ember.SaveHandlerMixin = Ember.Mixin.create({
 				if (error.status == 400 || error.status == 500) {
 					try {
 						var obj = $.parseJSON(error.responseText);
-						callmeback(obj.errors);
+						callmeback(obj.error);
 					}
 					catch (e) {
 					}

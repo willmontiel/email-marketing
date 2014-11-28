@@ -75,10 +75,10 @@
 			</div>
 		</div>
 		{{ '{{/if}} '}}
-		{{'{{#if errors.segmentname}}'}}
+		{{'{{#if error.segmentname}}'}}
 		<div class="row">
 			<div class="alert alert-error">
-				{{'{{errors.segmentname}}'}}
+				{{'{{error.segmentname}}'}}
 			</div>
 		</div>
 		{{'{{/if}}'}}
@@ -173,9 +173,9 @@
 					</div>
 				</div>
 				<div class="clearfix"></div>
-				{{'{{#if errors.segment}}'}}
+				{{'{{#if error.segment}}'}}
 				<div class="alert alert-error">
-					{{'{{errors.segment}}'}}
+					{{'{{error.segment}}'}}
 				</div>
 				{{'{{/if}}'}}
 
@@ -273,10 +273,10 @@
 						</div>
 					</div>
 				{{ '{{/if}} '}}	
-				{{'{{#if errors.segmentname}}'}}
+				{{'{{#if error.segmentname}}'}}
 					<div class="row">
 						<div class="alert alert-error">
-							{{'{{errors.segmentname}}'}}
+							{{'{{error.segmentname}}'}}
 						</div>
 					</div>
 				{{'{{/if}}'}}
@@ -305,9 +305,9 @@
 									valueBinding="criterion"
 									class="form-control"}}'
 								}}
-								{{'{{#if errors.segment}}'}}
+								{{'{{#if error.segment}}'}}
 									<div class="alert alert-error">
-										{{'{{errors.segment}}'}}
+										{{'{{error.segment}}'}}
 									</div>
 								{{'{{/if}}'}}
 							</div>

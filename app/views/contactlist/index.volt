@@ -222,12 +222,12 @@
 
 				<div class="col-md-7">
 					<form  class="form-horizontal" role="form">
-						{{' {{#if errors.name }} '}}
-						<span class="text text-error">{{'{{errors.name}}'}}</span>
+						{{' {{#if error.name }} '}}
+						<span class="text text-error">{{'{{error.name}}'}}</span>
 						{{' {{/if }} '}}
 
-						{{' {{#if errors.description }} '}}
-							<span class="text text-error">{{'{{errors.description}}'}}</span>
+						{{' {{#if error.description }} '}}
+							<span class="text text-error">{{'{{error.description}}'}}</span>
 						{{' {{/if }} '}}
 
 						<div class="form-group">
@@ -306,8 +306,8 @@
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
 							<label for="" class="col-sm-4 control-label">*Nombre
-								{{' {{#if errors.name }} '}}
-									<span class="text text-error">{{'{{errors.name}}'}}</span>
+								{{' {{#if error.name }} '}}
+									<span class="text text-error">{{'{{error.name}}'}}</span>
 								{{' {{/if }} '}}
 							</label>
 							<div class="col-md-8">
@@ -316,8 +316,8 @@
 						</div>
 						<div class="form-group">
 							<label for="" class="col-sm-4 control-label">Descripción
-								{{' {{#if errors.description }} '}}
-									<span class="text text-error">{{'{{errors.description}}'}}</span>
+								{{' {{#if error.description }} '}}
+									<span class="text text-error">{{'{{error.description}}'}}</span>
 								{{' {{/if }} '}}
 							</label>
 							<div class="col-md-8">
