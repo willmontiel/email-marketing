@@ -144,8 +144,6 @@ class LoadHtml
 		
 		$imagenewurl = $this->url->get('asset/show') . '/' . $asset->idAsset;
 		
-		$this->logger->log('Asset ' . print_r($this->asset, true));
-		$this->logger->log('Imagen ' . $imagenewurl);
 		return $imagenewurl;
 	}
 	
