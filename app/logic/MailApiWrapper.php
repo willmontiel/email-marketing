@@ -72,7 +72,7 @@ class MailApiWrapper extends BaseWrapper
 				}
 				try {
 					$getHtml = new LoadHtml();
-					$content = $getHtml->gethtml($contentobj->content, false, false, $this->account, true);
+					$content = $getHtml->gethtml($contentobj->content, true, false, $this->account, true);
 				}
 				catch(Exception $e) {
 					throw new Exception($e->getMessage());
