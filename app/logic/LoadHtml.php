@@ -31,7 +31,7 @@ class LoadHtml
 	/**
 	 * Función que descarga código html desde una url y la guarda las imagenes de ser necesario en una carpeta determinada en el servidor
 	 * @param string $url 
-	 * @param boolean $image 
+	 * @param string $image 
 	 * @param string $dir
 	 * @return string
 	 */
