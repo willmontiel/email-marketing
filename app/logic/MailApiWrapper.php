@@ -71,8 +71,9 @@ class MailApiWrapper extends BaseWrapper
 					throw new InvalidArgumentException('wrong URL');
 				}
 				try {
+					$dir = $this->assetsrv->dir . $this->account->idAccount . "/images";
 					$getHtml = new LoadHtml();
-					$content = $getHtml->gethtml($contentobj->content, true, false, $this->account, true);
+					$content = $getHtml->gethtml($contentobj->content, true, $dir, $this->account, true);
 				}
 				catch(Exception $e) {
 					throw new Exception($e->getMessage());
