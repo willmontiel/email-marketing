@@ -73,7 +73,7 @@ class MailApiWrapper extends BaseWrapper
 				try {
 					$dir = $this->assetsrv->dir . $this->account->idAccount . "/images";
 					$getHtml = new LoadHtml();
-					$content = $getHtml->gethtml($contentobj->content, true, $dir, $this->account, true);
+					$content = $getHtml->gethtml($contentobj->content, 'load', $dir, $this->account, true);
 				}
 				catch(Exception $e) {
 					throw new Exception($e->getMessage());
