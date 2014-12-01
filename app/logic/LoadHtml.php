@@ -26,12 +26,13 @@ class LoadHtml
 	{
 		$this->asset = Phalcon\DI::getDefault()->get('asset');
 		$this->logger = Phalcon\DI::getDefault()->get('logger');
+		$this->url = Phalcon\DI::getDefault()->get('url');
 	}
 
 	/**
 	 * Función que descarga código html desde una url y la guarda las imagenes de ser necesario en una carpeta determinada en el servidor
 	 * @param string $url 
-	 * @param boolean $image 
+	 * @param string $image 
 	 * @param string $dir
 	 * @return string
 	 */
@@ -132,12 +133,16 @@ class LoadHtml
 		$imagepath = $dir . '/' . $asset->idAsset . '.' . $path['extension'];
 		
 		$this->image_map[$img] = $imagepath;
-		$imagenewurl  = $this->asset->url . $this->account->idAccount . "/images/" . $asset->idAsset . '.' . $path['extension'];
+		//$imagenewurl  = $this->asset->url . $this->account->idAccount . "/images/" . $asset->idAsset . '.' . $path['extension'];
 	
 		file_put_contents($imagepath, file_get_contents($imageurl));
 		$thumbnail = new Thumbnail($this->account);
 		
 		$thumbnail->createThumbnail($asset, $imagepath, $path['basename']);
+		
+		// Los assets deben quedar de la siguiente forma para ser procesados en ChildCommunication "/asset/show/idAsset"
+		
+		$imagenewurl = $this->url->get('asset/show') . '/' . $asset->idAsset;
 		
 		return $imagenewurl;
 	}
