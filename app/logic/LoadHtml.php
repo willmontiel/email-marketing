@@ -138,7 +138,8 @@ class LoadHtml
 		$thumbnail = new Thumbnail($this->account);
 		
 		$thumbnail->createThumbnail($asset, $imagepath, $path['basename']);
-		
+		$this->logger->log('Asset ' . print_r($this->asset, true));
+		$this->logger->log('Imagen ' . $imagenewurl);
 		return $imagenewurl;
 	}
 	
