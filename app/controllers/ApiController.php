@@ -673,6 +673,9 @@ class ApiController extends ControllerBase
 		catch (InvalidArgumentException $e) {
 			$error = $wrapper->getFieldErrors();
 			$this->traceFail("Error Create contact list, USER: {$this->user->idUser}/{$this->user->username}");
+			if(is_array($error['name'])) {
+				return $this->setJsonResponse(array('error' =>  $error['name'][0]), 422, 'Error: ' . $e->getMessage());
+			}
 			return $this->setJsonResponse(array('error' =>  $error['name']), 422, 'Error: ' . $e->getMessage());
 			//return $this->setJsonResponse(array('error' => $error['name']) );	
 		}
