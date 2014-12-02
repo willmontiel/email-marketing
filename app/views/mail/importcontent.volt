@@ -3,6 +3,11 @@
 	{{ super() }}
 	<script type="text/javascript">
 		var idMail = {{mail.idMail}};
+		var dir = "{{url('mail/compose')}}/";
+		{% if pdf is defined AND pdf == 'pdf'%}
+			dir = "{{url('pdfmail/compose')}}/";
+		{% endif %}	
+		
 		function sendData() {
 			var url = $('#url').val();
 			var image = $('#image').val();
@@ -22,7 +27,7 @@
 					$('#wait').hide();
 				},
 				success: function(){
-					$(location).attr('href', "{{url('mail/contenthtml')}}/" + idMail); 
+					$(location).attr('href', dir + idMail); 
 				}
 			});
 		}
@@ -48,7 +53,7 @@
 						<div class="col-sm-4"></div>
 						<div class="col-sm-4">
 							<a class="btn btn-sm btn-primary extra-padding" onClick="sendData();">Importar</a>
-							<a class="btn btn-sm btn-default extra-padding" href="{{url('mail/compose')}}/{{mail.idMail}}">Cancelar</a>
+							<a class="btn btn-sm btn-default extra-padding" href="{% if pdf is defined AND pdf == 'pdf'%}{{url('pdfmail/compose')}}{% else %}{{url('mail/compose')}}{% endif %}/{{mail.idMail}}">Cancelar</a>
 							<div id="wait" style="display: none;">Espere... procesando solicitud <img src="{{url('')}}images/loading4.GIF" width="20" height="20"><br />(podría tardar unos minutos)</div>
 						</div>
 					</div>

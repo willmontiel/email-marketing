@@ -451,6 +451,13 @@ class Security extends Plugin
 				'campaign::contenthtml' => array('campaign' => array('create')),
 				'campaign::getcancel' => array('campaign' => array('create')),
 				
+				'pdfmail::list' => array('pdf' => array('read')),
+				'pdfmail::compose' => array('pdf' => array('create','update')),
+				'pdfmail::savemail' => array('pdf' => array('create','update')),
+				'pdfmail::loadpdf' => array('pdf' => array('create','update')),
+				'pdfmail::delete' => array('pdf' => array('delete')),
+				'pdfmail::sendtest' => array('pdf' => array('send')),
+				
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

@@ -55,6 +55,7 @@ class PermissionsDataBase
 			'apikey' => 20,
 			'api' => 21,
 			'campaign' => 22,
+			'pdf' => 23,
 		);
 	}
 	
@@ -171,6 +172,12 @@ class PermissionsDataBase
 			'campaign::read' => 87,
 			'campaign::update' => 88,
 			'campaign::delete' => 89,
+			
+			'pdf::create' => 90,
+			'pdf::read' => 91,
+			'pdf::update' => 92,
+			'pdf::delete' => 93,
+			'pdf::send' => 94,
 		);
 	}
 	
@@ -288,6 +295,12 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'campaign::read'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'campaign::update'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'campaign::delete'),
+			
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::create'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::read'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::update'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::delete'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::send'),
 			
 			
 //			----------//----------**ROLE_ADMIN**----------//----------

@@ -46,6 +46,12 @@
 		});
 	}
 	
+	var dir = "{{url('mail/compose')}}/";
+	
+	{% if pdf is defined AND pdf == 'pdf'%}
+		dir = "{{url('pdfmail/compose')}}/";
+	{% endif %}	
+		
 	function sendData() {
 		var content = $('#redactor_content').val();
 		$.ajax({
@@ -57,7 +63,7 @@
 				$.gritter.add({class_name: 'error', title: '<i class="icon-warning-sign"></i> Atención', text: obj.msg, sticky: false, time: 10000});
 			},
 			success: function(msg) {
-				$(location).attr('href', "{{url('mail/compose')}}/" + idMail);
+				$(location).attr('href', dir + idMail);
 			}
 		});
 	}
@@ -89,7 +95,7 @@
 			</div>	
 			<div class="col-sm-6">
 				<div class="text-right">
-					<a href="{{url('mail/compose')}}/{{mail.idMail}}" class="btn btn-default">Regresar sin guardar</a>
+					<a href="{% if pdf is defined AND pdf == 'pdf'%}{{url('pdfmail/compose')}}{% else %}{{url('mail/compose')}}{% endif %}/{{mail.idMail}}" class="btn btn-default">Regresar sin guardar</a>
 					<button onclick="saveData();" class="btn btn-info">Guardar</button>
 					<button onclick="sendData();" class="btn btn-primary">Guardar y volver</button>
 				</div>

@@ -11,11 +11,16 @@
 	};
 	var objMail = {{objMail}};
 	var idMail = 'null';
+	var dir = "{{url('mail/compose')}}/";
 	
 	{% if mail is defined %}
 		var idMail = {{mail.idMail}};
 	{% endif %}
 	
+	{% if pdf is defined AND pdf == 'pdf'%}
+		dir = "{{url('pdfmail/compose')}}/";
+	{% endif %}	
+		
 	function sendData() {
 		//verHTML();
 		var editor = document.getElementById('iframeEditor').contentWindow.catchEditorData();
@@ -30,7 +35,7 @@
 				return false;
 			},
 			success: function(msg){
-				$(location).attr('href', "{{url('mail/compose')}}/" + msg.msg);
+				$(location).attr('href', dir + msg.msg);
 			}
 		});
 	}
@@ -146,7 +151,11 @@
 				<div class="box span12 padding-top">
 					<div class="pull-right">
 						{% if mail is defined%}
-							<a href="{{url('mail/compose')}}/{{mail.idMail}}" class="btn btn-sm btn-default extra-padding">Regresar sin guardar</a>
+							{% if pdf is defined AND pdf == 'pdf'%}
+								<a href="{{url('pdfmail/compose')}}/{{mail.idMail}}" class="btn btn-sm btn-default extra-padding">Regresar sin guardar</a>
+							{% else %}
+								<a href="{{url('pdfmail/compose')}}/{{mail.idMail}}" class="btn btn-sm btn-default extra-padding">Regresar sin guardar</a>
+							{% endif %}
 						{% else %}
 							<a href="{{url('template')}}" class="btn btn-sm btn-default extra-padding">Cancelar</a>
 						{% endif %}

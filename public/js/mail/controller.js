@@ -399,6 +399,52 @@ App.IndexController = Ember.ObjectController.extend(Ember.SaveHandlerMixin,{
 		return true;
 	}.property('content.name', 'content.fromName', 'content.fromEmail', 'content.subject', 'content.mailcontent', 'content.plainText', 'content.totalContacts', 'content.scheduleDate'),
 
+	//Observa el contenido del correo y una vez este completo habilita el botón para enviarlo
+	isPDFMailReadyToSend: function () {
+		var name, sender, subject, mailcontent, plainText, totalContacts;
+		
+		name = this.get('this.name');
+		sender = this.get('this.sender');
+		subject = this.get('this.subject');
+		mailcontent = this.get('this.mailcontent');
+		plainText = this.get('this.plainText');
+		totalContacts = this.get('this.totalContacts');
+
+		name = (name === '')?0:name;
+		sender = (sender === '')?0:sender;
+		subject = (subject === '')?0:subject;
+		mailcontent = (mailcontent === 0)?0:mailcontent;
+		plainText = (plainText === '')?0:plainText;
+		totalContacts = (totalContacts === '')?0:totalContacts;
+
+		if (!name) {
+			this.set('summaryMail', 'El campo "Nombre" se encuentra vacío');
+			return false;
+		}
+		else if (!sender) {
+			this.set('summaryMail', 'El campo "Remitente" se encuentra vacío');
+			return false;
+		}
+		else if (!subject) {
+			this.set('summaryMail', 'El campo "Asunto" se encuentra vacío');
+			return false;
+		}
+		else if (!totalContacts || totalContacts === '0') {
+			this.set('summaryMail', 'No hay destinatarios');
+			return false;
+		}
+		else if (!mailcontent) {
+			this.set('summaryMail', 'Aún no hay contenido');
+			return false;
+		}
+		else if (!plainText) {
+			this.set('summaryMail', 'No hay texto plano');
+			return false;
+		}
+		
+		return true;
+	}.property('content.name', 'content.fromName', 'content.fromEmail', 'content.subject', 'content.mailcontent', 'content.plainText', 'content.totalContacts'),
+	
 	SetAndSave: function (mail) {
 		var senderName = this.get('senderName');
 		var senderEmail = this.get('senderEmail');

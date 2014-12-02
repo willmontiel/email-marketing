@@ -4,6 +4,7 @@ class MailWrapper extends BaseWrapper
 {
 	protected $account;
 	protected $content;
+	protected $pdf = false;
 	protected $mail = null;
 	protected $mailcontent = null;
 	protected $target = null;
@@ -32,6 +33,11 @@ class MailWrapper extends BaseWrapper
 	public function setMail(Mail $mail = null)
 	{
 		$this->mail = $mail;
+	}
+	
+	public function isPdf($pdf)
+	{
+		$this->pdf = $pdf;
 	}
 
 	public function setMailContent($mailcontent = null)
@@ -140,6 +146,7 @@ class MailWrapper extends BaseWrapper
 		if ($this->mail == null) {
 			$this->mail = new Mail();
 			$this->mail->attachment = 0;
+			$this->mail->pdf = ($this->pdf ? 1 : 0);
 		}
 		
 		$this->mail->idAccount = $this->account->idAccount;
