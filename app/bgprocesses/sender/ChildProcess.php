@@ -137,7 +137,7 @@ abstract class ChildProcess
 	/**
 	 * Metodo para chequear estado de base de datos
 	 */
-	protected function pingDatabase()
+	protected function pingDatabase($attempts = 0)
 	{
 		/*
 		 * ================================================================
@@ -159,7 +159,9 @@ abstract class ChildProcess
 		} catch (Exception $ex) {
 			$log->log('Excepcion chequeando conexion a la base de datos... intentando la reconexion! [' . $ex->getMessage() . ']');
 			$db->connect();
-			$db->fetchAll('SELECT 1');
+			if($attempts <= 10) {
+				$this->pingDatabase($attempts + 1);
+			}
 		}
 	}
 }
