@@ -10,10 +10,15 @@ class ChildSender extends ChildProcess
 {
 	public function executeProcess($data) 
 	{
-		$this->pingDatabase();
-		$communication = new ChildCommunication();
-		$communication->setSocket($this);
-		$communication->startProcess($data);
+		try {
+			$this->pingDatabase();
+			$communication = new ChildCommunication();
+			$communication->setSocket($this);
+			$communication->startProcess($data);
+		} catch (Exception $ex) {
+			$log = \Phalcon\DI::getDefault()->get('logger');
+			$log->log('Error sending mailing ' . $ex);
+		}
 	}
 
 	public function publishToChildren()
