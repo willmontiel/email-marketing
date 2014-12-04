@@ -349,7 +349,90 @@ class PdfmailController extends ControllerBase
 		}
 		
 		if ($this->request->isPost()) {
+			$mailContent = Mailcontent::findFirst(array(
+				'conditions' => 'idMail = ?1',
+				'bind' => array(1 => $idMail)
+			));
 			
+			$target = $this->request->getPost("target");
+			$id = $this->request->getPost("id");
+			$message = $this->request->getPost("message");
+			
+			if (trim($target) === '' || trim($id) === '') {
+				$this->flashSession->error("Ha enviado campos vacíos por favor valide la información");
+				return $this->response->redirect("pdfmail/terminate/{$idMail}");
+			}
+			
+			if (!filter_var($target, FILTER_VALIDATE_EMAIL)) {
+				$this->flashSession->error("No ha enviado una direccion de correo válida por favor verifique la información");
+				return $this->response->redirect("pdfmail/terminate/{$idMail}");
+			}
+			
+			$transport = Swift_SendmailTransport::newInstance();
+			$swift = Swift_Mailer::newInstance($transport);
+			
+			$domain = Urldomain::findFirstByIdUrlDomain($account->idUrlDomain);
+			
+			$testMail = new TestMail();
+			$testMail->setAccount($account);
+			$testMail->setDomain($domain);
+			$testMail->setUrlManager($this->urlManager);
+			$testMail->setMail($mail);
+			$testMail->setMailContent($mailContent);
+			$testMail->setPersonalMessage($message);
+
+			try {
+				$testMail->load();
+				
+				$mssg = new Swift_Message($mail->subject);
+				$mssg->setFrom(array($mail->fromEmail => $mail->fromName));
+				$mssg->setTo(array($target => $target));
+				$mssg->setBody($testMail->getBody(), 'text/html');
+				$mssg->addPart($testMail->getPlainText(), 'text/plain');
+				
+				if ($mail->replyTo != null && filter_var($target, FILTER_VALIDATE_EMAIL)) {
+					$message->setReplyTo($mail->replyTo);
+				}
+				
+				if ($mail->pdf == 1) {
+					$pdfmail = Pdfmail::findFirst(array(
+						'conditions' => 'idMail = ?1',
+						'bind' => array(1 => $mail->idMail)
+					));
+					
+					if ($pdfmail) {
+						$name = "{$id}.pdf";
+						$original = "{$this->asset->dir}{$account->idAccount}/pdf/{$mail->idMail}/{$pdfmail->name}";
+						$copy = "{$this->asset->dir}{$account->idAccount}/pdf/{$mail->idMail}/{$name}";
+						
+						if (!copy($original, $copy)) {
+							throw new Exception("Error while copying pdf file test");
+						}
+						
+						$mssg->attach(Swift_Attachment::fromPath($copy)->setFilename($name));
+					}
+				}
+					
+				$sendMail = $swift->send($mssg, $failures);
+
+				if (!$sendMail){
+					$this->logger->log("Error while sending test mail: " . print_r($failures));
+					$this->flashSession->error("Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador");
+				}
+				
+				$this->flashSession->success("Se ha enviado el mensaje de prueba exitosamente");
+				return $this->response->redirect("pdfmail/terminate/{$idMail}");
+			}
+			catch (Exception $e) {
+				$this->logger->log("Exception, Error while sending test, {$e}");
+				$this->flashSession->error("Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador");
+				return $this->response->redirect("pdfmail/terminate/{$idMail}");
+			}
+			catch (\InvalidArgumentException $e) {
+				$this->logger->log("Exception, Error while sending test, {$e}");
+				$this->flashSession->error("Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador");
+				return $this->response->redirect("pdfmail/terminate/{$idMail}");
+			}
 		}
 		
 		$this->view->setVar('mail', $mail);

@@ -145,6 +145,12 @@
 		</div>
 	</div>
 	
+	<div class="row">
+		<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
+			{{flashSession.output()}}
+		</div>
+	</div>
+	
 	<div class="row header-background">
 		<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
 			<h4 class="paneltitle">Programación del envío</h4><br />
@@ -201,8 +207,41 @@
 	
 	<div class="row header-background" id="confirm" style="display: {% if mail.scheduleDate is not null %}block{% endif %};">
 		<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
-			<a href="{{url('pdfmail/sendtest')}}/{{mail.idMail}}" class="btn btn-sm btn-primary">Enviar una prueba</a>
+			<button class="ShowDialogSendTest btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Enviar prueba</button>
 			<button class="btn btn-sm btn-success" onClick="sendMail();">Confirmar</button>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h1 class="modal-title" id="myModalLabel">Enviar una prueba</h1>
+				</div>
+			<form {% if mail is defined %} action="{{url('pdfmail/sendtest')}}/{{mail.idMail}}" {% endif %} id="testmail" method="post" role="form">
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="target">Enviar una prueba a:</label>
+						<input type="text" class="form-control" id="target" name="target" autofocus="autofocus" placeholder="Escriba la dirección de correo"/>
+					</div>
+						
+					<div class="form-group">
+						<label for="id">Número de identificación:</label>
+						<input type="text" class="form-control" id="target" name="id" placeholder="Escriba un número de identificación cualquiera para hacer la prueba"/>
+					</div>
+						
+					<div class="form-group">
+						<label for="message">Incluír instrucciones o un mensaje personal (opcional)</label>
+						<textarea class="form-control" rows="3" cols="30" id="message" name="message"></textarea>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-sm btn-default extra-padding" data-dismiss="modal">Cancelar</button>
+					<input class="btn btn-sm btn-primary extra-padding" type="submit" value="Enviar">
+				</div>
+			</form>
+			</div>
 		</div>
 	</div>
 {% endblock %}
