@@ -74,8 +74,12 @@ class TasksHandler extends Handler
 	{
 		foreach ($this->scheduledTasks as $task) {
 			if($task->scheduleDate <= time()) {
+				$log = $this->di['logger'];
+				$log->log('Tarea Programada Iniciada [' . $task->idMail . ']');
 				$this->saveReadyTask(new Event('Play-Task', $task->idMail, NULL, $task->idMail));
+				$log->log('Tarea Programada Finalizada [' . $task->idMail . ']');
 				$task->delete();
+				$log->log('Tarea Programada Eliminada');
 			}
 		}
 		$this->SendReadyTasks();

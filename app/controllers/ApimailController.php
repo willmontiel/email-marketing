@@ -53,13 +53,13 @@ class ApimailController extends ControllerBase
 			$this->traceFail("Error creating mail, USER: {$this->user->idUser}/{$this->user->username}");
 			$this->logger->log("InvalidArgumentException: {$e}");
 			$db->rollback();
-			return $this->setJsonResponse(array('error' => $e->getMessage(), 'status' => 'fail'));
+			return $this->setJsonResponse(array('error' => $e->getMessage()), 200);
 		}
 		catch (\Exception $e) {
 			$this->traceFail("Error creating mail, USER: {$this->user->idUser}/{$this->user->username}");
 			$this->logger->log("Exception: {$e}");
 			$db->rollback();
-			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador', 'status' => 'fail'));
+			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador'), 200);
 		}
 	}
 	
@@ -79,7 +79,7 @@ class ApimailController extends ControllerBase
 		));
 		
 		if(!$mail && !$contact) {
-			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador', 'status' => 'fail'));
+			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador'), 200);
 		}
 		
 		try{
@@ -88,11 +88,11 @@ class ApimailController extends ControllerBase
 		}
 		catch (\InvalidArgumentException $e) {
 			$this->logger->log("InvalidArgumentException: {$e}");
-			return $this->setJsonResponse(array('error' => $e->getMessage(), 'status' => 'fail'));
+			return $this->setJsonResponse(array('error' => $e->getMessage()), 200);
 		}
 		catch (\Exception $e) {
 			$this->logger->log("Exception: {$e}");
-			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error, contacte al administrador', 'status' => 'fail'));
+			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error, contacte al administrador'), 200);
 		}
 		
 		return $this->setJsonResponse(array('contact' => $response), 200);
@@ -118,6 +118,9 @@ class ApimailController extends ControllerBase
 			$link = $linkdecoder->encodeLink('share/results', $parameters2);
 			
 			return $this->setJsonResponse(array('link' => $link), 200);
+		}
+		else {
+			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador'), 200);
 		}
 		
 		return $this->setJsonResponse(array('error' => "mail not found"), 200);
