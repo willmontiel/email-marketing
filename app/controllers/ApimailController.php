@@ -53,13 +53,13 @@ class ApimailController extends ControllerBase
 			$this->traceFail("Error creating mail, USER: {$this->user->idUser}/{$this->user->username}");
 			$this->logger->log("InvalidArgumentException: {$e}");
 			$db->rollback();
-			return $this->setJsonResponse(array('error' => $e->getMessage(), 'status' => 'fail'));
+			return $this->setJsonResponse(array('error' => $e->getMessage()), 400, 'Error ' . $e->getMessage());
 		}
 		catch (\Exception $e) {
 			$this->traceFail("Error creating mail, USER: {$this->user->idUser}/{$this->user->username}");
 			$this->logger->log("Exception: {$e}");
 			$db->rollback();
-			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador', 'status' => 'fail'));
+			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador'), 500, 'Ha ocurrido un error contacte al administrador');
 		}
 	}
 	
@@ -79,7 +79,7 @@ class ApimailController extends ControllerBase
 		));
 		
 		if(!$mail && !$contact) {
-			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador', 'status' => 'fail'));
+			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador'), 400, 'Ha ocurrido un error contacte al administrador');
 		}
 		
 		try{
@@ -88,11 +88,11 @@ class ApimailController extends ControllerBase
 		}
 		catch (\InvalidArgumentException $e) {
 			$this->logger->log("InvalidArgumentException: {$e}");
-			return $this->setJsonResponse(array('error' => $e->getMessage(), 'status' => 'fail'));
+			return $this->setJsonResponse(array('error' => $e->getMessage()), 400, 'Error ' . $e->getMessage());
 		}
 		catch (\Exception $e) {
 			$this->logger->log("Exception: {$e}");
-			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error, contacte al administrador', 'status' => 'fail'));
+			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error, contacte al administrador'), 500, 'Ha ocurrido un error, contacte al administrador');
 		}
 		
 		return $this->setJsonResponse(array('contact' => $response), 200);
@@ -119,7 +119,10 @@ class ApimailController extends ControllerBase
 			
 			return $this->setJsonResponse(array('link' => $link), 200);
 		}
+		else {
+			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador'), 400, 'Ha ocurrido un error contacte al administrador');
+		}
 		
-		return $this->setJsonResponse(array('error' => "mail not found"), 200);
+		return $this->setJsonResponse(array('error' => "mail not found"), 400);
 	}
 }
