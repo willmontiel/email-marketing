@@ -251,44 +251,114 @@ class PdfmailController extends ControllerBase
 		if ($this->request->isPost()) {
 			$structure = $this->request->getPost("structure");
 			$dir = "{$this->asset->dir}{$account->idAccount}/pdf/{$mail->idMail}/";
-			//Obtenemos las cantidad de archivos pdf en el directorio
-			$num_file = count(glob($dir . "{*.pdf}",GLOB_BRACE));
-			/* obtenemos los nombres de los archivos PDF */
-			$files = glob($dir . "{*.pdf}",GLOB_BRACE);
 			
-			$contador = 0;
-			$totalm = 0;
-			$matches = array();
-			// Recorremos los nombres encontrados y buscamos el texto de la cedula
-			foreach ($files as $file) { 
-				$archivos[] = array_pop(split("/",$file));
+			$totalFiles = $this->getTotalFilesInFolder($dir);
+			$files = $this->getFilesThatMatch($dir, $structure);
+			$totalM = count($files);
+			
+			$contacts = $this->findContacts($mail, $account);
+			
+			$pdfmails = Pdfmail::find(array(
+				'conditions' => 'idMail = ?1',
+				'bind' => array(1 => $mail->idMail)
+			));
+			
+			
+			foreach ($array as $value) {
 				
-				$totalm += preg_match_all($this->pdf_valid_names[$structure], $archivos[$contador], $result);
-				
-				$matches[] =  $result;
-				$contador = $contador +1;
 			}
 			
-			$data = array(
-				'total' => $num_file, 
-				'totalm' => $totalm
-			);
-			
-			$mail->pdfstructure = $structure;
-			
-			if (!$mail->save()) {
-				foreach ($mail->getMessages() as $msg) {
-					$this->logger->log("Error while saving pdfstructure in mail... {$msg->getMessage()}");
-				}
-				return $this->setJsonResponse(array('Error' => 'Ocurrió un error, por favor contacte al administrador'), 500);
-			}
-			//retornamos un array con la información de los archivos
-			return $this->setJsonResponse(array('result' => $data), 200);
+			$this->logger->log("Total files: {$totalFiles}");
+			$this->logger->log("files: " . print_r($files, true));
+			$this->logger->log("Total matches: {$totalM}");
 		}
 		
 		$this->view->setVar('mail', $mail);
 	}
 
+	private function getTotalFilesInFolder($dir)
+	{
+		//Obtenemos las cantidad de archivos pdf en el directorio
+		return count(glob($dir . "{*.pdf}",GLOB_BRACE));
+	}
+	
+	private function getFilesThatMatch($dir, $structure)
+	{
+		/* obtenemos los nombres de los archivos PDF */
+		$files = glob($dir . "{*.pdf}",GLOB_BRACE);
+		$matches = array();
+
+		// Recorremos los nombres encontrados y buscamos el texto de la cedula
+		$contador = 0;
+		foreach ($files as $file) { 
+			$filep = explode('/', $file) ;
+			$f = $filep[count($filep)-1];	
+			$archivos[] = array_pop($f);
+			preg_match_all($this->pdf_valid_names[$structure], $archivos[$contador], $result);
+			$matches[] =  $result[1][0];
+			$contador = $contador +1;
+		}
+		
+		return $matches;
+	}
+	
+	
+	public function getCustomfield($idDbase)
+	{
+		$customfield = Customfield::findFirst(array(
+			'conditions' => "idDbase = ?1 AND (name = 'cc' OR name = 'CC')",
+			'bind' => array(1 => $idDbase)
+		));
+		
+		if (!$customfield) {
+			return false;
+		}
+		
+		return $customfield;
+	}
+	
+	public function findContacts($mail, $account)
+	{
+		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
+		$interpreter->setMail($mail);
+		$interpreter->setAccount($account);
+		$interpreter->searchContacts();
+		$sql = $interpreter->getSQLForSearchContacts();
+
+		$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+		$executer->instanceDbAbstractLayer();
+		$executer->setSQL($sql);
+		$executer->queryAbstractLayer();
+		$result = $executer->getResult();
+		
+		$contacts = array();
+		$c = array();
+		$dbase = 0;
+		
+		if (count($result) > 0) {
+			$dbase = $result[0]['idDbase'];
+			
+			foreach ($result as $r) {
+				$c[] = $r['idContact'];
+			}
+			
+			$customf = $this->getCustomfield($dbase);
+			$ids = implode(',', $c);
+			
+			$sql = "SELECT c.idContact AS contact, fi.textValue AS cc1, fi.numberValue AS cc2
+						FROM contact AS c
+						JOIN fieldinstance AS fi ON (fi.idContact = c.idContact AND idCustomField = {$customf->idCustomField})
+					WHERE c.idContact IN ({$ids})";
+			
+			$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+			$executer->instanceDbAbstractLayer();
+			$executer->setSQL($sql);
+			$executer->queryAbstractLayer();
+			$contacts = $executer->getResult();
+		}
+		
+		return $contacts;
+	}
 	
 	public function deleteAction()
 	{

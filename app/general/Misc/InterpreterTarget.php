@@ -23,6 +23,9 @@ class InterpreterTarget
 	protected $sql;
 	protected $statDbaseSQL = "";
 	protected $statContactlistSQL = "";
+	protected $contactsSQL = "";
+	protected $completeContactsSQL = "";
+	protected $idsContactsSQL = "";
 
 	public function __construct()
 	{
@@ -286,6 +289,21 @@ class InterpreterTarget
 	
 	private function createSQLBaseForTarget()
 	{
+		$this->completeContactsSQL = "SELECT c.idContact, c.idDbase, c.name, c.lastName, c.birthDate, (SELECT GROUP_CONCAT(idContactlist) FROM coxcl x WHERE x.idContact = c.idContact) AS listas
+						  FROM {$this->SQLForContacts} AS c 
+						  JOIN email AS e ON (e.idEmail = c.idEmail) 
+						  {$this->joinsForFilters}
+					  WHERE {$this->conditionsWhenIsDbase} c.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 {$this->conditionsForFilters}";
+					  
+		$this->idsContactsSQL = "SELECT c.idContact
+						  FROM {$this->SQLForContacts} AS c 
+						  JOIN email AS e ON (e.idEmail = c.idEmail) 
+						  {$this->joinsForFilters} 
+					  WHERE {$this->conditionsWhenIsDbase} c.unsubscribed = 0 AND e.bounced = 0 AND e.blocked = 0 AND e.spam = 0 {$this->conditionsForFilters}";
+					  
+					  
+					  
+					  
 		$sql = "SELECT {$this->mail->idMail}, c.idContact, null, 'scheduled', 0, 0, 0, 0, 0, (SELECT GROUP_CONCAT(idContactlist) FROM coxcl x WHERE x.idContact = c.idContact) AS listas, 0, 0, 0, 0, 0, 0, 0, 0
 						  FROM {$this->SQLForContacts} AS c 
 						  JOIN email AS e ON (e.idEmail = c.idEmail) 
@@ -324,6 +342,21 @@ class InterpreterTarget
 	public function getCriteria()
 	{
 		return $this->criteria;
+	}
+	
+	public function getIds()
+	{
+		return $this->idsArray;
+	}
+	
+	public function getSQLForSearchContacts()
+	{
+		return $this->completeContactsSQL;
+	}
+
+	public function getSQLForSearchIdContacts()
+	{
+		return $this->idsContactsSQL;
 	}
 	
 	public function getNames()

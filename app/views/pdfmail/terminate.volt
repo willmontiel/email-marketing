@@ -205,7 +205,7 @@
 		</div>
 	</div>
 	
-	<div class="row header-background" id="confirm" style="display: {% if mail.scheduleDate is not null %}block{% endif %};">
+	<div class="row header-background" id="confirm" style="display: {% if mail.scheduleDate is null %}none{% else %}block{% endif %};">
 		<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
 			<button class="ShowDialogSendTest btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Enviar prueba</button>
 			<button class="btn btn-sm btn-success" onClick="sendMail();">Confirmar</button>
