@@ -79,7 +79,7 @@ class ApimailController extends ControllerBase
 		));
 		
 		if(!$mail && !$contact) {
-			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador'), 400, 'Ha ocurrido un error contacte al administrador');
+			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador'), 200);
 		}
 		
 		try{
