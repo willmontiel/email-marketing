@@ -76,7 +76,7 @@
 					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
 						<label>
 							<input type="radio" name="radios" id="1" value="1" checked>
-							NI_12345678_CC_12345678_1.pdf
+							NI_12345678.pdf
 						</label>
 					</div>
 				</div>
@@ -85,7 +85,7 @@
 					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
 						<label>
 							<input type="radio" name="radios" id="2" value="2">
-							NI_12345678_CC_12345678_1_12345678.pdf
+							11523458.pdf
 						</label>
 					</div>
 				</div>
@@ -94,15 +94,6 @@
 					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
 						<label>
 							<input type="radio" name="radios" id="3" value="3">
-							NI_12345678_CC_12345678_1_1.pdf
-						</label>
-					</div>
-				</div>
-					
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
-						<label>
-							<input type="radio" name="radios" id="4" value="4">
 							NI_12345678_CC_12345678.pdf
 						</label>
 					</div>
@@ -111,83 +102,11 @@
 				<div class="form-group">
 					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
 						<label>
-							<input type="radio" name="radios" id="5" value="5">
-							NI_12345678_.._12345678.pdf
+							<input type="radio" name="radios" id="4" value="4">
+							NI12345678.pdf
 						</label>
 					</div>
 				</div>
-					
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
-						<label>
-							<input type="radio" name="radios" id="6" value="6">
-							12345678_PEPITO_PEREZ.pdf
-						</label>
-					</div>
-				</div>	
-					
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
-						<label>
-							<input type="radio" name="radios" id="7" value="7">
-							12345678_pepito_perez.pdf
-						</label>
-					</div>
-				</div>		
-					
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
-						<label>
-							<input type="radio" name="radios" id="8" value="8">
-							12345678_PEPITO_PEREZ.pdf o 12345678_PEPITO_.pdf
-						</label>
-					</div>
-				</div>	
-					
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
-						<label>
-							<input type="radio" name="radios" id="9" value="9">
-							NI_12345678
-						</label>
-					</div>
-				</div>	
-					
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
-						<label>
-							<input type="radio" name="radios" id="10" value="10">
-							12345678.pdf
-						</label>
-					</div>
-				</div>
-					
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
-						<label>
-							<input type="radio" name="radios" id="11" value="11">
-							12345678_12345678_123456789_23456.pdf
-						</label>
-					</div>
-				</div>	
-					
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
-						<label>
-							<input type="radio" name="radios" id="12" value="12">
-							CC_12345678.pdf ó CE_12345678.pdf ó CC_12345678_12345678.pdf
-						</label>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
-						<label>
-							<input type="radio" name="radios" id="13" value="13">
-							CC12345678.pdf
-						</label>
-					</div>
-				</div>	
 					
 				<div class="form-group">
 					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">

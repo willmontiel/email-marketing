@@ -9,6 +9,8 @@ class Uploader
 	private $dir;
 	private $account;
 	private $mail;
+	private $folder;
+	private $source;
 
 	public function __construct()
 	{
@@ -68,10 +70,14 @@ class Uploader
 			mkdir($dir, 0777, true);
 		}
 		
+		$this->folder = $dir;
+		
 		$dir = $dir . $this->data->name;
 		if (!move_uploaded_file($this->data->tmp_dir, $dir)){ 
 			throw new \Exception('File could not be uploaded on the server');
 		}
+		
+		$this->source = $dir;
 	}
 
 	/**
@@ -82,5 +88,15 @@ class Uploader
 		if (!unlink($dir)) {
 			throw new \Exception('File could not delete from server!');
 		}
+	}
+	
+	public function getSource()
+	{
+		return $this->source;
+	}
+	
+	public function getFolder()
+	{
+		return $this->folder;
 	}
 }

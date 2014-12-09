@@ -1,29 +1,66 @@
 {% extends "templates/index_b3.volt" %}
 {% block header_javascript %}
 	{{ super() }}
-	{{ stylesheet_link('vendors/uploadfy/uploadify.css') }}
-	{{ javascript_include('vendors/uploadfy/jquery.uploadify.min.js')}}
+	{{ javascript_include('vendors/plupload-2.1.2/js/plupload.full.min.js')}}
 	<script type="text/javascript">
 		$(function() {
-			$('#file_upload').uploadify({
-				'requeueErrors' : true,
-				'auto' : false,
-				'method': 'Post',
-				'buttonText' : '<i class="glyphicon glyphicon-plus-sign"></i> Seleccionar',
-				'fileSizeLimit' : '2048KB',
-				'fileTypeExts' : '*.pdf',
-				'swf'      : '{{url('vendors/uploadfy/uploadify.swf')}}',
-				'uploader' : '{{url('pdfmail/loadpdf')}}/{{mail.idMail}}',
-				'removeTimeout' : 20,
-				'onQueueComplete' : function(queueData) {
-					$('#next').show('slow');
-					$.gritter.add({class_name: 'success', title: '<i class="glyphicon glyphicon-ok"></i> Atención', text: queueData.uploadsSuccessful + " Archivo(s) fueron cargado(s) exitosamente", sticky: false, time: 5000});
+			var uploader = new plupload.Uploader({
+				browse_button: 'browse',
+				container: document.getElementById('container'),
+				url: "{{url('pdfmail/loadpdf')}}/{{mail.idMail}}",
+				file_data_name: "file",
+				filters: {
+					mime_types : [
+						{title : "Zip files", extensions : "zip"}
+					],
+					max_file_size: "500mb"
 				},
-				'onSelectError' : function() {
-					$.gritter.add({class_name: 'error', title: '<i class="glyphicon glyphicon-warning"></i> Atención', text: 'El archivo ' + file.name + ' contiene errores, por favor valide la información', sticky: false, time: 5000});
+				multi_selection: false,
+				rename: true,
+				sortable: true,
+				dragdrop: true,
+				
+				views: {
+					list: false,
+					thumbs: false
+				},
+	
+				init: {
+					 PostInit: function() {
+						document.getElementById('filelist').innerHTML = '';
+
+						document.getElementById('start-upload').onclick = function() {
+							uploader.start();
+							return false;
+						};
+					},
+					
+					FilesAdded: function(up, files) {
+						var html = '';
+						plupload.each(files, function(file) {
+							html += '<li id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></li>';
+						});
+						document.getElementById('filelist').innerHTML += html;
+					},
+
+					UploadProgress: function(up, file) {
+						document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+					},
+					
+					UploadComplete: function(up, err) {
+						$('#next').show('slow');
+					},
+					
+					Error: function(up, err) {
+						var message = JSON.parse(err.response);
+						document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + message.error;
+					}
 				}
 			});
+			
+			uploader.init();
 		});
+		
 	</script>
 {% endblock %}
 {% block content %}
@@ -37,8 +74,11 @@
 	</div>
 	
 	<div class="row header-background" id="next" style="display: none;">
-		<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12 text-right">
-			<a href="{{url('pdfmail/structurename')}}/{{mail.idMail}}" class="btn btn-sm btn-success">Siguiente</a>
+		<div class="col-sm-12 col-xs-12 col-md-10 col-lg-10">
+			Se han cargado los PDF's exitosamente, para continuar con el proceso haga clic en continuar
+		</div>
+		<div class="col-sm-12 col-xs-12 col-md-10 col-lg-10 text-right">
+			<a href="{{url('pdfmail/structurename')}}/{{mail.idMail}}" class="btn btn-sm btn-success">Continuar</a>
 		</div>
 	</div>
 	
@@ -46,10 +86,15 @@
 	
 	<div class="row">
 		<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
-			<a href="javascript:$('#file_upload').uploadify('cancel','*');" class="btn btn-sm btn-danger">Remover todo</a>
-			<a href="javascript:$('#file_upload').uploadify('upload','*')" class="btn btn-sm btn-primary">Subir archivos</a>
-			<div class="space"></div>
-			<input type="file" name="file_upload" id="file_upload" />
+			<ul id="filelist"></ul>
+			<br />
+			<div id="container">
+				<a id="browse" href="javascript:;" class="btn btn-sm btn-primary">Selecciona archivo</a>
+				<a id="start-upload" href="javascript:;" class="btn btn-sm btn-success">Cargar</a>
+			</div>
+			<br />
+			<pre id="console"></pre>
+			
 		</div>
 	</div>
 {% endblock %}

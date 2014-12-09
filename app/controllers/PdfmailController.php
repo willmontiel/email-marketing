@@ -4,19 +4,10 @@ require_once "../app/library/swiftmailer/lib/swift_required.php";
 class PdfmailController extends ControllerBase
 {
 	public $pdf_valid_names = array(
-		1 => '/^NI_([0-9]+)_CC_([0-9]+)_[0-9].*\.pdf$/',//NI_12345678_CC_12345678_1.pdf
-		2 => '/^NI_([0-9]+)_CC_([0-9]+)_[0-9]_([0-9]+).*\.pdf$/',//NI_12345678_CC_12345678_1_12345678.pdf
-		3 => '/^NI_([0-9]+)_CC_([0-9]+)_[0-9]_[0-9].*\.pdf$/',//NI_12345678_CC_12345678_1_1.pdf
-		4 => '/^NI_([0-9]+)_CC_([0-9]+)*\.pdf$/', //NI_12345678_CC_12345678.pdf
-		5 => '/^NI_([0-9]+)_.._([0-9]+)*\.pdf$/', //NI_12345678_.._12345678.pdf
-		6 => '/^([0-9]+)*_[A-Z]*_[A-Z].*\.pdf/', //12345678_PEPITO_PEREZ.pdf
-		7 => '/^([0-9]+)*_[a-z]*_[a-z].*\.pdf/', //12345678_pepito_perez.pdf
-		8 => '/^([0-9]+)*_[A-Z].*\.pdf/', //3132319_PEPITO_PEREZ.pdf o 3132319_PEPITO_.pdf
-		9 => '/^NI_[0-9]*_([0-9]+)_CC.*\.pdf$/',//NI_860508392
-		10 => '/^([0-9]+).*\.pdf/', //11523458.pdf
-		11 => '/^[0-9]*_([0-9]+).*\.pdf/', //20130306152836_1013586831_310495422_86824.pdf
-		12 => '/^[A-Z]*_([0-9]+).*\.pdf/', //CC_2986509.pdf ó CE_2986509.pdf o CC_6108950_201306.pdf
-		13 => '/^[A-Z]*([0-9]+).*\.pdf/', //CC2986509.pdf
+		1 => '/^[a-zA-Z]+_[0-9]+.*\.pdf$/',//NI_12345678.pdf
+		2 => '/^[0-9]+.*\.pdf/',//11523458.pdf
+		3 => '/^[a-zA-Z]+_[0-9]+_[a-zA-Z]+_[0-9]+.*\.pdf$/',//NI_12345678_CC_12345678.pdf
+		4 => '/^[a-zA-Z]+[0-9]+.*\.pdf$/', //NI12345678.pdf
 	);
 	
 	public function listAction()
@@ -175,19 +166,25 @@ class PdfmailController extends ControllerBase
 		}
 		
 		if ($this->request->isPost()) {
-			if (empty($_FILES['Filedata']['name'])) {
+			if ($_FILES["file"]["error"]) {
 				return $this->setJsonResponse(array(
-												'error' => 'No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, por favor verifique la información')
-												, 400 , 'Archivo vacio o incorrecto');
+					'error' => 'No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, contacte al administrador para más información')
+					, 400 , 'Archivo vacio o incorrecto');
+			}
+			
+			if (empty($_FILES['file']['name'])) {
+				return $this->setJsonResponse(array(
+					'error' => 'No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, por favor verifique la información')
+					, 400 , 'Archivo vacio o incorrecto');
 			}
 			else {
 				$data = new stdClass();
-				$data->name = $_FILES['Filedata']['name'];
-				$data->size = $_FILES['Filedata']['size'];
-				$data->type = $_FILES['Filedata']['type'];
-				$data->tmp_dir = $_FILES['Filedata']['tmp_name'];
+				$data->name = $_FILES['file']['name'];
+				$data->size = $_FILES['file']['size'];
+				$data->type = $_FILES['file']['type'];
+				$data->tmp_dir = $_FILES['file']['tmp_name'];
 				
-				$ext = array('pdf','PDF');
+				$ext = array('zip', 'ZIP');
 				
 				try {
 					$uploader = new \EmailMarketing\General\Misc\Uploader();
@@ -195,27 +192,18 @@ class PdfmailController extends ControllerBase
 					$uploader->setMail($mail);
 					$uploader->setData($data);
 					$uploader->validateExt($ext);
-					$uploader->validateSize(2048);
-					
-					$this->db->begin();
-					
-					$pdf = new Pdfmail();
-					$pdf->idMail = $mail->idMail;
-					$pdf->name = $data->name;
-					$pdf->size = $data->size;
-					$pdf->type = $data->type;
-					$pdf->createdon = time();
-					
-					if (!$pdf->save()) {
-						foreach ($pdf->getMessages() as $msg) {
-							throw new Exception("Error while saving pdfmail... {$msg->getMessage()}");
-						}
-					}
-					
+					$uploader->validateSize(512000);
 					$uploader->uploadFile();
 					
-					$this->db->commit();
-					return $this->setJsonResponse(array("success" => "Se ha cargado el archivo exitosamente"), 200);
+					$pdfmanager = new \EmailMarketing\General\Misc\PdfManager();
+					$pdfmanager->setMail($mail);
+					$pdfmanager->setSource($uploader->getSource());
+					$pdfmanager->setDestination($uploader->getFolder());
+					$pdfmanager->extract();
+					$pdfmanager->save();
+					$total = $pdfmanager->getTotal();
+					
+					return $this->setJsonResponse(array("success" => "Se han cargado {$total} archivo(s) exitosamente"), 200);
 				} 
 				catch (InvalidArgumentException $e) {
 					$this->db->rollback();
@@ -250,8 +238,6 @@ class PdfmailController extends ControllerBase
 		
 		if ($this->request->isPost()) {
 			$structure = $this->request->getPost("structure");
-			
-			$this->logger->log("Structure: {$structure}");
 			$dir = "{$this->asset->dir}{$account->idAccount}/pdf/{$mail->idMail}/";
 			
 			$totalFiles = $this->getTotalFilesInFolder($dir);
@@ -314,7 +300,6 @@ class PdfmailController extends ControllerBase
 			$f = $filep[count($filep)-1];
 			
 			preg_match_all($this->pdf_valid_names[$structure], $f, $result);
-			
 			if (!empty($result[1]) || !empty($result[0])) {
 				$matches[] =  $result;
 				$contador++;
@@ -350,7 +335,7 @@ class PdfmailController extends ControllerBase
 		$interpreter->setAccount($account);
 		$interpreter->searchContacts();
 		$sql = $interpreter->getSQLForSearchContacts();
-
+		
 		$executer = new \EmailMarketing\General\Misc\SQLExecuter();
 		$executer->instanceDbAbstractLayer();
 		$executer->setSQL($sql);
@@ -456,17 +441,11 @@ class PdfmailController extends ControllerBase
 				'bind' => array(1 => $idMail)
 			));
 			
-			$target = $this->request->getPost("target");
 			$id = $this->request->getPost("id");
 			$message = $this->request->getPost("message");
 			
-			if (trim($target) === '' || trim($id) === '') {
+			if (trim($id) === '') {
 				$this->flashSession->error("Ha enviado campos vacíos por favor valide la información");
-				return $this->response->redirect("pdfmail/terminate/{$idMail}");
-			}
-			
-			if (!filter_var($target, FILTER_VALIDATE_EMAIL)) {
-				$this->flashSession->error("No ha enviado una direccion de correo válida por favor verifique la información");
 				return $this->response->redirect("pdfmail/terminate/{$idMail}");
 			}
 			
@@ -486,43 +465,57 @@ class PdfmailController extends ControllerBase
 			try {
 				$testMail->load();
 				
-				$mssg = new Swift_Message($mail->subject);
-				$mssg->setFrom(array($mail->fromEmail => $mail->fromName));
-				$mssg->setTo(array($target => $target));
-				$mssg->setBody($testMail->getBody(), 'text/html');
-				$mssg->addPart($testMail->getPlainText(), 'text/plain');
+				$sql = "SELECT c.idContact, c.name, c.lastName, e.email
+						FROM contact AS c
+							JOIN customfield AS cf ON (cf.name = 'cc' OR cf.name = 'CC')
+							JOIN fieldinstance AS fi ON (fi.idCustomfield = cf.idCustomfield AND fi.idContact = c.idContact)
+							JOIN email AS e ON (e.idEmail = c.idEmail)
+						WHERE  fi.textValue = :id1 OR fi.numberValue = :id2";
 				
-				if ($mail->replyTo != null && filter_var($target, FILTER_VALIDATE_EMAIL)) {
-					$message->setReplyTo($mail->replyTo);
-				}
+				$result = $this->db->query($sql, array("id1" => "{$id}", 
+													   "id2" => $id));
+				$contact = $result->fetchAll();
 				
-				if ($mail->pdf == 1) {
-					$pdfmail = Pdfmail::findFirst(array(
-						'conditions' => 'idMail = ?1',
-						'bind' => array(1 => $mail->idMail)
-					));
-					
-					if ($pdfmail) {
-						$name = "{$id}.pdf";
-						$original = "{$this->asset->dir}{$account->idAccount}/pdf/{$mail->idMail}/{$pdfmail->name}";
-						$copy = "{$this->asset->dir}{$account->idAccount}/pdf/{$mail->idMail}/{$name}";
-						
-						if (!copy($original, $copy)) {
-							throw new Exception("Error while copying pdf file test");
-						}
-						
-						$mssg->attach(Swift_Attachment::fromPath($copy)->setFilename($name));
-					}
-				}
-					
-				$sendMail = $swift->send($mssg, $failures);
+				$this->logger->log("Contact: " . print_r($contact, true));
+				
+				if (count($contact) > 0) {
+					$mssg = new Swift_Message($mail->subject);
+					$mssg->setFrom(array($mail->fromEmail => $mail->fromName));
+					$mssg->setTo(array($contact[0]['email'] => "{$contact[0]['name']} {$contact[0]['lastName']}"));
+					$mssg->setBody($testMail->getBody(), 'text/html');
+					$mssg->addPart($testMail->getPlainText(), 'text/plain');
 
-				if (!$sendMail){
-					$this->logger->log("Error while sending test mail: " . print_r($failures));
-					$this->flashSession->error("Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador");
+					if ($mail->replyTo != null) {
+						$message->setReplyTo($mail->replyTo);
+					}
+
+					if ($mail->pdf == 1) {
+						$pdfmail = Pdfmail::findFirst(array(
+							'conditions' => 'idMail = ?1 AND idContact = ?2',
+							'bind' => array(1 => $mail->idMail,
+											2 => $contact[0]['idContact'])
+						));
+
+						if ($pdfmail) {
+							$name = "{$id}.pdf";
+							$dir = "{$this->asset->dir}{$account->idAccount}/pdf/{$mail->idMail}/{$pdfmail->name}";
+							$mssg->attach(Swift_Attachment::fromPath($dir)->setFilename($name));
+						}
+					}
+
+					$sendMail = $swift->send($mssg, $failures);
+
+					if (!$sendMail){
+						$this->logger->log("Error while sending test mail: " . print_r($failures));
+						$this->flashSession->error("Ha ocurrido un error mientras se intentaba enviar el correo de prueba, contacte al administrador");
+					}
+
+					$this->flashSession->success("Se ha enviado el mensaje de prueba exitosamente");
+				}
+				else {
+					$this->flashSession->warning("No se ha encontrado un contacto relacionado con el id enviado, por favor valide la información");
 				}
 				
-				$this->flashSession->success("Se ha enviado el mensaje de prueba exitosamente");
 				return $this->response->redirect("pdfmail/terminate/{$idMail}");
 			}
 			catch (Exception $e) {

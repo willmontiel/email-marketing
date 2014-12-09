@@ -220,12 +220,7 @@
 					<h1 class="modal-title" id="myModalLabel">Enviar una prueba</h1>
 				</div>
 			<form {% if mail is defined %} action="{{url('pdfmail/sendtest')}}/{{mail.idMail}}" {% endif %} id="testmail" method="post" role="form">
-				<div class="modal-body">
-					<div class="form-group">
-						<label for="target">Enviar una prueba a:</label>
-						<input type="text" class="form-control" id="target" name="target" autofocus="autofocus" placeholder="Escriba la dirección de correo"/>
-					</div>
-						
+				<div class="modal-body">	
 					<div class="form-group">
 						<label for="id">Número de identificación:</label>
 						<input type="text" class="form-control" id="target" name="id" placeholder="Escriba un número de identificación cualquiera para hacer la prueba"/>

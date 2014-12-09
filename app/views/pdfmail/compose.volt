@@ -115,9 +115,15 @@
 							<div class="wrapper">
 								{{ '{{#if isPDFMailReadyToSend}}' }}
 									<div class="row">
-										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
+										<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+											<p style="font-size: 1.3em;">
+												La configuración primaria del correo (primer paso) esta completa. El siguiente paso es 
+												cargar los PDF's, haga clic en continuar para seguir el proceso
+											</p>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 text-right">
 											<a href="{{url('pdfmail/loadpdf')}}/{{ '{{unbound id}}' }}" class="btn btn-sm btn-success">
-												Siguiente paso
+												Continuar
 											</a>
 										</div>
 									</div>
