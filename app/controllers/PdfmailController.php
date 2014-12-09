@@ -250,27 +250,46 @@ class PdfmailController extends ControllerBase
 		
 		if ($this->request->isPost()) {
 			$structure = $this->request->getPost("structure");
+			
+			$this->logger->log("Structure: {$structure}");
 			$dir = "{$this->asset->dir}{$account->idAccount}/pdf/{$mail->idMail}/";
 			
 			$totalFiles = $this->getTotalFilesInFolder($dir);
 			$files = $this->getFilesThatMatch($dir, $structure);
-			$totalM = count($files);
-			
 			$contacts = $this->findContacts($mail, $account);
 			
-			$pdfmails = Pdfmail::find(array(
-				'conditions' => 'idMail = ?1',
-				'bind' => array(1 => $mail->idMail)
-			));
+			$totalContacts = count($contacts);
 			
+			$contactsM = 0;
 			
-			foreach ($array as $value) {
-				
+			foreach ($files->matches as $file) {
+				$pdfmail = Pdfmail::findFirst(array(
+					'conditions' => 'idMail = ?1 AND name = ?2',
+					'bind' => array(1 => $mail->idMail,
+									2 => "{$file[0][0]}")
+				));
+
+				if ($pdfmail) {
+					$clave = array_search($file[1][0], $contacts);
+					if ($clave != false) {
+						$pdfmail->idContact = $clave;
+						if (!$pdfmail->save()) {
+							foreach ($pdfmail->getMessages() as $msg) {
+								$this->logger->log("Error while saving pdfmail: {$msg->getMessage()}");
+							}
+						}
+						$contactsM++;
+					}
+				}
 			}
 			
-			$this->logger->log("Total files: {$totalFiles}");
-			$this->logger->log("files: " . print_r($files, true));
-			$this->logger->log("Total matches: {$totalM}");
+			$result = new stdClass();
+			$result->totalfiles = $totalFiles;
+			$result->totalfilematch = $files->total;
+			$result->totalcontacts = $totalContacts;
+			$result->totalcontactsmatch = $contactsM;
+			
+			return $this->setJsonResponse(array("result" => $result), 200);
 		}
 		
 		$this->view->setVar('mail', $mail);
@@ -287,19 +306,26 @@ class PdfmailController extends ControllerBase
 		/* obtenemos los nombres de los archivos PDF */
 		$files = glob($dir . "{*.pdf}",GLOB_BRACE);
 		$matches = array();
-
+		
 		// Recorremos los nombres encontrados y buscamos el texto de la cedula
 		$contador = 0;
 		foreach ($files as $file) { 
 			$filep = explode('/', $file) ;
-			$f = $filep[count($filep)-1];	
-			$archivos[] = array_pop($f);
-			preg_match_all($this->pdf_valid_names[$structure], $archivos[$contador], $result);
-			$matches[] =  $result[1][0];
-			$contador = $contador +1;
+			$f = $filep[count($filep)-1];
+			
+			preg_match_all($this->pdf_valid_names[$structure], $f, $result);
+			
+			if (!empty($result[1]) || !empty($result[0])) {
+				$matches[] =  $result;
+				$contador++;
+			}	
 		}
 		
-		return $matches;
+		$result = new stdClass();
+		$result->total = $contador;
+		$result->matches = $matches;
+		
+		return $result;
 	}
 	
 	
@@ -354,7 +380,13 @@ class PdfmailController extends ControllerBase
 			$executer->instanceDbAbstractLayer();
 			$executer->setSQL($sql);
 			$executer->queryAbstractLayer();
-			$contacts = $executer->getResult();
+			$cs = $executer->getResult();
+			
+			if (count($cs) > 0) {
+				foreach ($cs as $c) {
+					$contacts[$c['contact']] = (empty($c['cc1']) ? $c['cc2'] : $c['cc1']);
+				}
+			}
 		}
 		
 		return $contacts;

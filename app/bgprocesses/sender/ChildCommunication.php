@@ -301,7 +301,28 @@ class ChildCommunication extends BaseWrapper
 				}
 				
 			}			
+			
+			$pdfs = array();
+			$dir2 = $this->assetsrv->dir . $this->account->idAccount . '/pdf/' . $mail->idMail . '/';
+			if ($mail->pdf == 1) {
+				$pdfmails = Pdfmail::find(array(
+					'conditions' => 'idMail = ?1',
+					'bind' => array(1 => $mail->idMail)
+				));
+				
+				if (count($pdfmails) > 0) {
+					foreach ($pdfmails as $pdfmail) {
+						$attPath = $dir2 . $pdfmail->name;
 						
+						$obj = new stdClass();
+						$obj->idContact = $pdfmail->idContact;
+						$obj->name = $pdfmail->name;
+						$obj->path = $attPath;
+						$pdfs[] = $obj;
+					}
+				}
+			}
+			
 			foreach ($contactIterator as $contact) {
 //				if ($messagesLimit <= $messagesSent) {
 //					$this->commitSentMessages($mail, $sentContacts);
@@ -417,6 +438,16 @@ class ChildCommunication extends BaseWrapper
 						$message->attach(
 							Swift_Attachment::fromPath($at->path)->setFilename($at->name)
 						);
+					}
+				}
+				
+				if (count($pdfs) > 0) {
+					foreach ($pdfs as $pdf) {
+						if ($contact['contact']['idContact'] == $pdf->idContact) {
+							$message->attach(
+								Swift_Attachment::fromPath($pdf->path)->setFilename($pdf->name)
+							);
+						}
 					}
 				}
 				

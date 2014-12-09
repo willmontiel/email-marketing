@@ -14,11 +14,15 @@
 					$.gritter.add({class_name: 'error', title: '<i class="glyphicon glyphicon-warning"></i> Atención', text: "Error", sticky: false, time: 5000});
 				},
 				success: function(msg){
+				console.log(msg);
 					$.gritter.add({class_name: 'success', title: '<i class="glyphicon glyphicon-ok"></i> Atención', text: "Validación completada", sticky: false, time: 5000});
 					
-					$('#total').empty(); $('#matches').empty();
-					$('#total').append(msg.result.total);
-					$('#matches').append(msg.result.totalm);
+					$('#total').empty(); $('#totalM').empty(); $('#contacts').empty(); $('#contactsM').empty();
+					
+					$('#total').append(msg.result.totalfiles);
+					$('#totalM').append(msg.result.totalfilematch);
+					$('#contacts').append(msg.result.totalcontacts);
+					$('#contactsM').append(msg.result.totalcontactsmatch);
 					
 					$("#resume").show('slow');
 				}
@@ -37,23 +41,27 @@
 	</div>
 	
 	<div class="row header-background" id="resume" style="display: none;">
-		<div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+		<div class="col-xs-12 col-sm-10 col-md-10 col-lg-10">
 			<table class="table table-bordered">
 				<thead>
 					<tr>
 						<th>Archivos encontrados en el servidor</th>
-						<th>Coincidencias encontradas</th>
+						<th>Archivos que coinciden con la estructura seleccionada</th>
+						<th>Contactos totales en la lista</th>
+						<th>Contactos totales que coinciden con al menos un pdf</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td id="total">0</td>
-						<td id="matches">0</td>
+						<td id="totalM">0</td>
+						<td id="contacts">0</td>
+						<td id="contactsM">0</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-		<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 text-right">
+		<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 text-right">
 			<a href="{{url('pdfmail/terminate')}}/{{mail.idMail}}" class="btn btn-sm btn-success">Siguiente</a>
 		</div>
 	</div>
