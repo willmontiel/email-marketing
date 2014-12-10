@@ -1932,7 +1932,7 @@ class MailController extends ControllerBase
 	public function confirmmailAction($idMail)
 	{
 		$mail = Mail::findFirst(array(
-			'conditions' => 'idMail = ?1 AND idAccount = ?2 AND pdf = 0',
+			'conditions' => 'idMail = ?1 AND idAccount = ?2',
 			'bind' => array(1 => $idMail,
 							2 => $this->user->account->idAccount)
 		));
