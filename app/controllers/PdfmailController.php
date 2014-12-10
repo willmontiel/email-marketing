@@ -393,31 +393,45 @@ class PdfmailController extends ControllerBase
 		));
 		
 		if (!$mail) {
-			$this->response->redirect("error");
+			return $this->setJsonResponse(array('Error' => 'El correo que intenta programar no existe, por favor valide la información'), 404);
 		}
 		
 		if ($this->request->isPost()) {
-			$schedule = $this->request->getPost("schedule");
-			
-			if(!empty($schedule)) {
-				if ($schedule == 'now') {
-					$mail->scheduleDate = time();
+			try {
+				$schedule = $this->request->getPost("schedule");
+				if(!empty($schedule)) {
+					if ($schedule == 'now') {
+						$mail->scheduleDate = time();
+					}
+					else if ($schedule !== '' || !empty($schedule)) {
+						list($day, $month, $year, $hour, $minute) = preg_split('/[\s\/|-|:]+/', $schedule);
+						$mail->scheduleDate = mktime($hour, $minute, 0, $month, $day, $year);
+					}
 				}
-				else if ($schedule !== '' || !empty($schedule)) {
-					list($day, $month, $year, $hour, $minute) = preg_split('/[\s\/|-|:]+/', $schedule);
-					$mail->scheduleDate = mktime($hour, $minute, 0, $month, $day, $year);
+				
+				if (!$mail->save()) {
+					foreach ($mail->getMessages() as $msg) {
+						$this->logger->log("Error while saving pdfstructure in mail... {$msg->getMessage()}");
+						throw new Exception("Error while saving mail... {$msg->getMessage()}");
+					}
 				}
+				
+				if ($this->scheduleDate != null) {
+					$mailSchedule = new MailScheduleObj($this->mail);
+					$scheduled = $mailSchedule->scheduleTask();
+
+					if (!$scheduled) {
+						$this->logger->log("Error while saving mail {$this->mail->idMail} scheduleDate in Mailschedule table account {$this->mail->idAccount}");
+						throw new Exception('Error while saving mail scheduleDate in Mailschedule table');
+					}
+				}
+				//retornamos un array con la información de los archivos
+				return $this->setJsonResponse(array('success' => "Se ha programado el correo exitosamente"), 200);
 			}
-			
-			if (!$mail->save()) {
-				foreach ($mail->getMessages() as $msg) {
-					$this->logger->log("Error while saving pdfstructure in mail... {$msg->getMessage()}");
-				}
+			catch (Exception $ex) {
+				$this->logger->log("Exception: {$ex}");
 				return $this->setJsonResponse(array('Error' => 'Ocurrió un error, por favor contacte al administrador'), 500);
 			}
-			//retornamos un array con la información de los archivos
-			return $this->setJsonResponse(array('success' => "Se ha programado el correo exitosamente"), 200);
-			
 		}
 		
 		$this->view->setVar('mail', $mail);
