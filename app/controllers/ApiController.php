@@ -1826,6 +1826,8 @@ class ApiController extends ControllerBase
 			$wrapper->searchTotalContacts();
 			$sql = $wrapper->getSQL();
 			
+			$this->logger->log("SQL: {$sql}");
+			
 			if ($sql != false) {
 				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
 				$executer->setSQL($sql);
