@@ -73,7 +73,12 @@
 	{% for item in page.items %}
 		<div class="mail-block">
 			<div class="row">
-				{# Variables para la vista inteligente#}	
+				{# Variables para la vista inteligente#}
+				{% set pdf = '' %}
+				{% if item.pdf == 1%}
+					{% set pdf = '' %}
+				{% endif %}
+					
 				{% set idItem = item.idMail %}
 				{% if item.status == 'Sent' %}
 					{% set hexagon = 'hexagon-success' %}
@@ -108,15 +113,19 @@
 					{% set icon = 'glyphicon glyphicon-edit'%}
 					{% set status = 'Borrador'%}
 					{% set color = "black" %}
-				{% endif %}
-
+				{% endif %}	
+					
 				<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
 					<div class="hexagon hexagon-sm {{hexagon}}" id="{{idItem}}">
 						<div class="hexagon-wrap">
 							{% if item.status == 'Sent' %}
 								<a href="{{url('statistic/mail')}}/{{item.idMail}}" class="hexagon-inner toolTip">
 							{% elseif item.status == 'Draft' %}
-								<a href="{{url('mail/compose')}}/{{item.idMail}}" class="hexagon-inner toolTip">
+								{% if item.pdf == 1%}
+									<a href="{{url('pdfmail/compose')}}/{{item.idMail}}" class="hexagon-inner toolTip">	
+								{% else %}
+									<a href="{{url('mail/compose')}}/{{item.idMail}}" class="hexagon-inner toolTip">
+								{% endif %}
 							{% else %}
 								<a href="#" class="hexagon-inner toolTip">
 							{% endif %}
@@ -132,10 +141,18 @@
 							{% if item.status == 'Sent' %}
 								<a href="{{url('statistic/mail')}}/{{item.idMail}}">{{item.name}}</a>
 							{% elseif item.status == 'Draft' %}
-								<a href="{{url('mail/compose')}}/{{item.idMail}}">{{item.name}}</a>
+								{% if item.pdf == 1%}
+									<a href="{{url('pdfmail/compose')}}/{{item.idMail}}">{{item.name}}</a>
+								{% else %}
+									<a href="{{url('mail/compose')}}/{{item.idMail}}">{{item.name}}</a>
+								{% endif %}
 							{% else %}
 								{{item.name}}
 							{% endif %}
+								
+							{% if item.pdf == 1%}
+								<img src="{{url('')}}images/icon-pdf.png" height="45" width="45">	
+							{% endif %}		
 						</div>
 
 						<div class="mail-detail {{color}}">{{status}}</div>
