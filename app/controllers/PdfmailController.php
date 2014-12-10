@@ -416,15 +416,14 @@ class PdfmailController extends ControllerBase
 					}
 				}
 				
-				if ($this->scheduleDate != null) {
-					$mailSchedule = new MailScheduleObj($this->mail);
-					$scheduled = $mailSchedule->scheduleTask();
+				$mailSchedule = new MailScheduleObj($mail);
+				$scheduled = $mailSchedule->scheduleTask();
 
-					if (!$scheduled) {
-						$this->logger->log("Error while saving mail {$this->mail->idMail} scheduleDate in Mailschedule table account {$this->mail->idAccount}");
-						throw new Exception('Error while saving mail scheduleDate in Mailschedule table');
-					}
+				if (!$scheduled) {
+					$this->logger->log("Error while saving mail {$this->mail->idMail} scheduleDate in Mailschedule table account {$this->mail->idAccount}");
+					throw new Exception('Error while saving mail scheduleDate in Mailschedule table');
 				}
+				
 				//retornamos un array con la información de los archivos
 				return $this->setJsonResponse(array('success' => "Se ha programado el correo exitosamente"), 200);
 			}
