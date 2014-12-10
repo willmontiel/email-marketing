@@ -256,7 +256,8 @@ class PdfmailController extends ControllerBase
 				));
 
 				if ($pdfmail) {
-					$clave = array_search($file[1][0], $contacts);
+					$name = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file[0][0]);
+					$clave = array_search($name, $contacts);
 					if ($clave != false) {
 						$pdfmail->idContact = $clave;
 						if (!$pdfmail->save()) {
