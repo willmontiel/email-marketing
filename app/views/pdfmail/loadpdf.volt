@@ -52,8 +52,16 @@
 					},
 					
 					Error: function(up, err) {
-						var message = JSON.parse(err.response);
-						document.getElementById('console').innerHTML += "\n<strong>Error:</strong> " + message.error;
+						var message;
+						if (err.response !== undefined) {
+							var msg = JSON.parse(err.response);
+							message = msg.error;
+						}
+						else {
+							message = err.message;
+						}
+						
+						document.getElementById('console').innerHTML += "\n<strong>Error:</strong> " + message;
 					}
 				}
 			});
