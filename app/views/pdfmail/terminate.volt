@@ -198,6 +198,7 @@
 				
 				<div class="form-group">
 					<div class="col-sm-12">
+						<a href="{{url('pdfmail/structurename')}}/{{mail.idMail}}" class="btn btn-sm btn-default">Atrás</a>
 						<button class="btn btn-default btn-sm" onClick="saveData();">Programar</button>
 					</div>
 				</div>

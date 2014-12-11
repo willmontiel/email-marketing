@@ -164,6 +164,14 @@ class PdfmailController extends ControllerBase
 		if (!$mail) {
 			$this->response->redirect("error");
 		}
+
+		if (!empty($mail->pdfstructure)) {
+			$dir = "{$this->asset->dir}{$account->idAccount}/pdf/{$mail->idMail}/";
+			$files = $this->getFilesInFolder($dir);
+			$total = count($files);
+			$this->view->setVar('files', $files);
+			$this->view->setVar('total', $total);
+		}
 		
 		if ($this->request->isPost()) {
 			if ($_FILES["file"]["error"]) {
@@ -236,6 +244,10 @@ class PdfmailController extends ControllerBase
 			$this->response->redirect("error");
 		}
 		
+		if (!empty($mail->pdfstructure)) {
+			$this->view->setVar('structure', $mail->pdfstructure);
+		}
+		
 		if ($this->request->isPost()) {
 			$structure = $this->request->getPost("structure");
 			$dir = "{$this->asset->dir}{$account->idAccount}/pdf/{$mail->idMail}/";
@@ -247,6 +259,8 @@ class PdfmailController extends ControllerBase
 			$totalContacts = count($contacts);
 			
 			$contactsM = 0;
+			
+			$this->resetPdfmail($mail);
 			
 			foreach ($files->matches as $file) {
 				$pdfmail = Pdfmail::findFirst(array(
@@ -270,6 +284,14 @@ class PdfmailController extends ControllerBase
 				}
 			}
 			
+			$mail->pdfstructure = $structure;
+			
+			if (!$mail->save()) {
+				foreach ($mail->getMessages() as $msg) {
+					$this->logger->log("Error while saving structure mail: {$msg->getMessage()}");
+				}
+			}
+			
 			$result = new stdClass();
 			$result->totalfiles = $totalFiles;
 			$result->totalfilematch = $files->total;
@@ -282,10 +304,31 @@ class PdfmailController extends ControllerBase
 		$this->view->setVar('mail', $mail);
 	}
 
+	private function resetPdfmail($mail)
+	{
+		try {
+			$sql = "UPDATE pdfmail SET idContact = 0 WHERE idMail = {$mail->idMail}";
+			$executer = new \EmailMarketing\General\Misc\SQLExecuter();
+			$executer->instanceDbAbstractLayer();
+			$executer->setSQL($sql);
+			$executer->executeAbstractLayer();
+		}
+		catch (Exception $ex) {
+			$this->logger->log("Exception while reseting pdfmail ... {$ex}");
+		}
+	}
+
+
 	private function getTotalFilesInFolder($dir)
 	{
 		//Obtenemos las cantidad de archivos pdf en el directorio
 		return count(glob($dir . "{*.pdf}",GLOB_BRACE));
+	}
+	
+	private function getFilesInFolder($dir)
+	{
+		//Obtenemos la lista de archivos en el directorio
+		return glob($dir . "{*.pdf}",GLOB_BRACE);
 	}
 	
 	private function getFilesThatMatch($dir, $structure)

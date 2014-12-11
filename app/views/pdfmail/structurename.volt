@@ -40,6 +40,20 @@
 		</div>
 	</div>
 	
+	{% if structure is defined %}
+		<div class="row">
+			<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
+				<div class="bs-callout bs-callout-success" style="padding-bottom: 24px !important;">
+					Para refrescar la información, seleccione una estructura y haga clic en envia datos
+					<span class="pull-right">
+						<a href="{{url('pdfmail/loadpdf')}}/{{mail.idMail}}" class="btn btn-sm btn-default">Atrás</a>
+						<a href="{{url('pdfmail/terminate')}}/{{mail.idMail}}" class="btn btn-sm btn-success">Siguiente</a>
+					</span>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+	
 	<div class="row header-background" id="resume" style="display: none;">
 		<div class="col-xs-12 col-sm-10 col-md-10 col-lg-10">
 			<table class="table table-bordered">
@@ -62,20 +76,19 @@
 			</table>
 		</div>
 		<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 text-right">
-			<a href="{{url('pdfmail/terminate')}}/{{mail.idMail}}" class="btn btn-sm btn-success">Siguiente</a>
+			<a href="{{url('pdfmail/terminate')}}/{{mail.idMail}}" class="btn btn-sm btn-success">Continuar</a>
 		</div>
 	</div>
 	
-	<div class="small-space"></div>
-	
-	<div class="row header-background">
+	<div class="row">
 		<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
-			<div class="space"></div>
-			<div class="form-horizontal">
+			<div class="small-space"></div>
+			<div class="form-horizontal header-background">
+				<div class="small-space"></div>
 				<div class="form-group">
 					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
 						<label>
-							<input type="radio" name="radios" id="1" value="1" checked>
+							<input type="radio" name="radios" id="1" value="1" {% if mail.pdfstructure == 1%}checked{% endif %}>
 							NI_12345678.pdf
 						</label>
 					</div>
@@ -84,7 +97,7 @@
 				<div class="form-group">
 					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
 						<label>
-							<input type="radio" name="radios" id="2" value="2">
+							<input type="radio" name="radios" id="2" value="2" {% if mail.pdfstructure == 2%}checked{% endif %}>
 							11523458.pdf
 						</label>
 					</div>
@@ -93,7 +106,7 @@
 				<div class="form-group">
 					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
 						<label>
-							<input type="radio" name="radios" id="3" value="3">
+							<input type="radio" name="radios" id="3" value="3" {% if mail.pdfstructure == 3%}checked{% endif %}>
 							NI_12345678_CC_12345678.pdf
 						</label>
 					</div>
@@ -102,7 +115,7 @@
 				<div class="form-group">
 					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 radio">
 						<label>
-							<input type="radio" name="radios" id="4" value="4">
+							<input type="radio" name="radios" id="4" value="4" {% if mail.pdfstructure == 4%}checked{% endif %}>
 							NI12345678.pdf
 						</label>
 					</div>

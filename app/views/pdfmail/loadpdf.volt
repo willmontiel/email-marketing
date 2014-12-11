@@ -47,13 +47,13 @@
 						document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
 					},
 					
-					UploadComplete: function(up, err) {
+					FileUploaded: function(up, err) {
 						$('#next').show('slow');
 					},
 					
 					Error: function(up, err) {
 						var message = JSON.parse(err.response);
-						document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + message.error;
+						document.getElementById('console').innerHTML += "\n<strong>Error:</strong> " + message.error;
 					}
 				}
 			});
@@ -66,19 +66,65 @@
 {% block content %}
 	<div class="row">
 		<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
-			<h1 class="sectiontitle">Cargar los archivos pdf</h1>
-			<div class="bs-callout bs-callout-info">
-				El siguiente paso es cargar todos los archivos PDF, para que el sistema los empareje con sus respectivo contacto
+			<h1 class="sectiontitle">Cargar los archivos <strong>PDF</strong></h1>
+			<div class="bs-callout bs-callout-info" style="font-size: 1.1em;">
+				<p>
+				Aqui se cargan los archivos <strong>PDF:</strong>
+				</p>
+				<ol>
+					<li>Se deben comprimir todos los <strong>PDF's</strong> en un archivo <strong>ZIP.</strong></li>
+					<li>Hacer clic en el botón <strong>Seleccionar</strong> archivo y seleccionar el archivo <strong>ZIP</strong> con los <strong>PDF's.</strong></li>
+					<li>Hacer clic en el botón <strong>Cargar</strong> y esperar a que finalice el proceso.</li>
+				</ol>
+				si todo esta bien aparecerá un botón que dice <strong>Continuar</strong>, haga clic en él para seguir con el 
+				proceso.
 			</div>
 		</div>
 	</div>
 	
-	<div class="row header-background" id="next" style="display: none;">
-		<div class="col-sm-12 col-xs-12 col-md-10 col-lg-10">
-			Se han cargado los PDF's exitosamente, para continuar con el proceso haga clic en continuar
+	{% if files is defined %}
+		<div class="row">
+			<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
+				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+					<div class="panel panel-default">
+						<div class="panel-heading" role="tab" id="headingOne">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+									Archivos encontrados en el servidor: <strong>{{total}}</strong>, clic aqui para ampliar la información
+								</a>
+							</h4>
+						</div>
+						<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+							<div class="panel-body">
+								<ol>
+									{% for file in files%}
+										<li>{{file}}</li>
+									{% endfor %}
+								</ol>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+				
+			<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12 text-right">
+				<a href="{{url('pdfmail/compose')}}/{{mail.idMail}}" class="btn btn-sm btn-default">Atrás</a>
+				<a href="{{url('pdfmail/structurename')}}/{{mail.idMail}}" class="btn btn-sm btn-success">Siguiente</a>
+			</div>
 		</div>
-		<div class="col-sm-12 col-xs-12 col-md-10 col-lg-10 text-right">
-			<a href="{{url('pdfmail/structurename')}}/{{mail.idMail}}" class="btn btn-sm btn-success">Continuar</a>
+	{% endif %}
+	
+	<div class="row" id="next" style="display: none;">
+		<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
+			<div class="header-background">
+				<p style="font-size: 1.4em;color: #5cb85c;font-weight: 600;">
+					Se han cargado los PDF's exitosamente, para continuar con el proceso haga clic en continuar
+				</p>
+				<p class="text-right">
+					<a href="{{url('pdfmail/compose')}}/{{mail.idMail}}" class="btn btn-sm btn-default">Atrás</a>
+					<a href="{{url('pdfmail/structurename')}}/{{mail.idMail}}" class="btn btn-sm btn-success">Continuar</a>
+				</p>
+			</div>
 		</div>
 	</div>
 	
@@ -93,8 +139,7 @@
 				<a id="start-upload" href="javascript:;" class="btn btn-sm btn-success">Cargar</a>
 			</div>
 			<br />
-			<pre id="console"></pre>
-			
+			<pre id="console" style="color: #d9534f;font-size: 1.2em;background-color: white;"></pre>
 		</div>
 	</div>
 {% endblock %}
