@@ -79,7 +79,8 @@ class ApimailController extends ControllerBase
 		));
 		
 		if(!$mail && !$contact) {
-			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador'), 200);
+			$this->logger->log("mail or contact not found");
+			return $this->setJsonResponse(array('error' => 'mail or contact not found'), 200);
 		}
 		
 		try{
@@ -120,7 +121,8 @@ class ApimailController extends ControllerBase
 			return $this->setJsonResponse(array('link' => $link), 200);
 		}
 		else {
-			return $this->setJsonResponse(array('error' => 'Ha ocurrido un error contacte al administrador'), 200);
+			$this->logger->log("Can't find Mail");
+			return $this->setJsonResponse(array('error' => 'mail not found'), 200);
 		}
 		
 		return $this->setJsonResponse(array('error' => "mail not found"), 200);
