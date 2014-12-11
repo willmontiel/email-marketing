@@ -61,6 +61,7 @@
 							message = err.message;
 						}
 						
+						$('#console').empty('slow');
 						document.getElementById('console').innerHTML += "\n<strong>Error:</strong> " + message;
 					}
 				}

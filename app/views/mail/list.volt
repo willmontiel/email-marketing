@@ -151,7 +151,7 @@
 							{% endif %}
 								
 							{% if item.pdf == 1%}
-								<img src="{{url('')}}images/icon-pdf.png" height="45" width="45">	
+								<img src="{{url('')}}images/icon-pdf.png" height="40" width="40">	
 							{% endif %}		
 						</div>
 
