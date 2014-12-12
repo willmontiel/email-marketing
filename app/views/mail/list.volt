@@ -74,10 +74,6 @@
 		<div class="mail-block">
 			<div class="row">
 				{# Variables para la vista inteligente#}
-				{% set pdf = '' %}
-				{% if item.pdf == 1%}
-					{% set pdf = '' %}
-				{% endif %}
 					
 				{% set idItem = item.idMail %}
 				{% if item.status == 'Sent' %}
