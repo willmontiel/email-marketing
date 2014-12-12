@@ -29,8 +29,12 @@ class TemplateController extends ControllerBase
 		$this->view->setVar('global_permissions', $this->acl->isAllowed($this->user->userrole, 'template', 'on any template'));
 	}
 	
-	public function selectAction($idMail)
+	public function selectAction($idMail, $pdf = null)
 	{
+		if ($pdf == 'pdf') {
+			$this->view->setVar('pdf', $pdf);
+		}
+		
 		$account = $this->user->account;
 		$mail = Mail::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idAccount = ?2',
