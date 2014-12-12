@@ -544,7 +544,7 @@ class PdfmailController extends ControllerBase
 					$mssg->addPart($testMail->getPlainText(), 'text/plain');
 
 					if ($mail->replyTo != null) {
-						$message->setReplyTo($mail->replyTo);
+						$mssg->setReplyTo($mail->replyTo);
 					}
 
 					if ($mail->pdf == 1) {
