@@ -387,11 +387,11 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'campaign::update'),
 			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'campaign::delete'),
 			
-			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::create'),
-			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::read'),
-			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::update'),
-			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::delete'),
-			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::send'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'pdf::create'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'pdf::read'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'pdf::update'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'pdf::delete'),
+			array( 'Role' => 'ROLE_ADMIN', 'Action' => 'pdf::send'),
 			
 //			----------//----------**ROLE_ADMIN_DB**----------//----------
 			
