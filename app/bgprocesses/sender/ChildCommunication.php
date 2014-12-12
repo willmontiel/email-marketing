@@ -323,6 +323,10 @@ class ChildCommunication extends BaseWrapper
 				}
 			}
 			
+			
+			$totalAttch = count($attach);
+			$totalPdfs = count($pdfs);
+			
 			foreach ($contactIterator as $contact) {
 //				if ($messagesLimit <= $messagesSent) {
 //					$this->commitSentMessages($mail, $sentContacts);
@@ -433,7 +437,7 @@ class ChildCommunication extends BaseWrapper
 				}
 				$message->addPart($text, 'text/plain');
 				
-				if (count($attach) > 0) {
+				if ($totalAttch > 0) {
 					foreach ($attach as $at) {
 						$message->attach(
 							Swift_Attachment::fromPath($at->path)->setFilename($at->name)
@@ -441,7 +445,7 @@ class ChildCommunication extends BaseWrapper
 					}
 				}
 				
-				if (count($pdfs) > 0) {
+				if ($totalPdfs > 0) {
 					foreach ($pdfs as $pdf) {
 						if ($contact['contact']['idContact'] == $pdf->idContact) {
 							$message->attach(
