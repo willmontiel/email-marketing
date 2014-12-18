@@ -40,7 +40,7 @@ class BirthdayAutoResponder {
 	
 	protected function addClauseBirthdate($origin_sql)
 	{
-		return $origin_sql . ' AND  c.birthDate = DATE_FORMAT(NOW(), \'%Y-%m-%d\')';
+		return $origin_sql . ' AND  c.birthDate = DATE_FORMAT(NOW(), \'%m-%d\')';
 	}
 	
 	protected function createMXC($sql)
