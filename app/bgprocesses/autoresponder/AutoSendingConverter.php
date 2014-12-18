@@ -112,7 +112,7 @@ class AutoSendingConverter
 		$sql = $wrapper->getSQL();
 
 		if($this->autoresponder->type == 'birthday') {
-			$sql.= ' AND  c.birthDate = DATE_FORMAT(NOW(), \'%Y-%m-%d\')';
+			$sql.= ' AND  c.birthDate = DATE_FORMAT(NOW(), \'%m-%d\')';
 		}
 				
 		if ($sql != false) {
