@@ -116,7 +116,6 @@ class AutoSendingConverter
 		}
 				
 		if ($sql != false) {
-			$this->logger->log('SQL para checkeo: ' . $sql);
 			$executer = new \EmailMarketing\General\Misc\SQLExecuter();
 			$executer->setSQL($sql);
 			$executer->instanceDbAbstractLayer();

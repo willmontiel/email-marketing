@@ -25,7 +25,6 @@ class BirthdayAutoResponder {
 		$interpreter->setMail($this->mail);
 		$interpreter->searchContacts();
 		$sql = $interpreter->getSQL();
-		$this->logger->log('SQL para seleccion: ' . $sql);
 		$statDbaseSQL = $interpreter->getStatDbaseSQL();
 		$statContactlistSQL = $interpreter->getStatContactlistSQL();
 		
