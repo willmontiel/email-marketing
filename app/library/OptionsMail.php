@@ -7,23 +7,33 @@ class OptionsMail
 		
 		switch ($mail->status) {
 			case 'Draft':
-				$array[] = self::getObject("Editar");
+				if ($mail->pdf == 1) {
+					$array[] = self::getObject("Editar-pdf");
+				}
+				else {
+					$array[] = self::getObject("Editar");
+				}
 				break;
+				
 			case 'Scheduled':
 				$array[] = self::getObject("Cancelar");
 				break;
+			
 			case 'Sending':
 				$array[] = self::getObject("Detener");
 				$array[] = self::getObject("Cancelar");
 				break;
+			
 			case 'Paused':
 				$array[] = self::getObject("Reanudar");
 				$array[] = self::getObject("Cancelar");
 				break;
+			
 			case 'Pending':
 				$array[] = self::getObject("Reanudar");
 				$array[] = self::getObject("Cancelar");
 				break;
+			
 			default :
 				break;
 		}
@@ -39,6 +49,11 @@ class OptionsMail
 				$object->text = "Reanudar el envío de este correo";
 				$object->url = "mail/play/";
 				$object->icon = "glyphicon glyphicon-play";
+				break;
+			case 'Editar-pdf':
+				$object->text = "Editar este correo";
+				$object->url = "pdfmail/compose/";
+				$object->icon = "glyphicon glyphicon-edit";
 				break;
 			case 'Editar':
 				$object->text = "Editar este correo";

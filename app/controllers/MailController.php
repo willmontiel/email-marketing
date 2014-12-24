@@ -145,6 +145,7 @@ class MailController extends ControllerBase
 			$mailClone->replyTo = $mail->replyTo;
 			$mailClone->type = $mail->type;
 			$mailClone->attachment = 0;
+			$mailClone->pdf = $mail->pdf;
 			$mailClone->status = "Draft";
 			$mailClone->wizardOption = "source";
 			$mailClone->finishedon = 0;
@@ -617,8 +618,12 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function contenteditorAction($idMail = null, $idTemplate = null) 
+	public function contenteditorAction($idMail = null, $idTemplate = null, $pdf = null) 
 	{
+		if ($pdf == 'pdf') {
+			$this->view->setVar('pdf', $pdf);
+		}
+		
 		$account = $this->user->account;
 		
 		$mail = Mail::findFirst(array(
@@ -910,8 +915,12 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function contenthtmlAction($idMail)
+	public function contenthtmlAction($idMail, $pdf = null)
 	{
+		if ($pdf == 'pdf') {
+			$this->view->setVar('pdf', $pdf);
+		}
+		
 		$account = $this->user->account;
 		$mail = Mail::findFirst(array(
 			'conditions' => "idMail = ?1 AND idAccount = ?2 AND status = 'Draft'",
@@ -1103,8 +1112,12 @@ class MailController extends ControllerBase
 		}
 	}
 	
-	public function importcontentAction($idMail)
+	public function importcontentAction($idMail, $pdf = null)
 	{	
+		if ($pdf == 'pdf') {
+			$this->view->setVar('pdf', $pdf);
+		}
+		
 		$account = $this->user->account;
 		$mail = Mail::findFirst(array(
 			'conditions' => 'idMail = ?1 AND idAccount = ?2',
@@ -2489,7 +2502,7 @@ class MailController extends ControllerBase
 		
 		if($idMail != null) {
 			$mail = Mail::findFirst(array(
-				'conditions' => "idAccount = ?1 AND idMail = ?2 AND status = 'Draft'",
+				'conditions' => "idAccount = ?1 AND idMail = ?2 AND status = 'Draft' AND pdf = 0",
 				'bind' => array(1 => $account->idAccount,
 								2 => $idMail)
 			));
@@ -2517,7 +2530,7 @@ class MailController extends ControllerBase
 				
 				$urlObj = new TrackingUrlObject();
 				$linksForTrack = $urlObj->searchDomainsAndProtocols($html, $mailcontent->plainText);
-				$this->logger->log(print_r($linksForTrack, true));
+//				$this->logger->log(print_r($linksForTrack, true));
 
 				$campaignNameExample = substr($mail->name, 0, 24);
 				

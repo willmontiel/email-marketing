@@ -15,7 +15,11 @@
 {% block content %}
 	<h4 class="sectiontitle">Plantillas predeterminadas</h4>
 	<div class="row">
-		<a href="{{url('mail/compose')}}/{{mail.idMail}}" class="btn btn-default extra-padding pull-right">Cancelar</a>
+		{% if pdf is defined AND pdf == 'pdf'%}
+			<a href="{{url('pdfmail/compose')}}/{{mail.idMail}}" class="btn btn-default extra-padding pull-right">Cancelar</a>
+		{% else %}
+			<a href="{{url('mail/compose')}}/{{mail.idMail}}" class="btn btn-default extra-padding pull-right">Cancelar</a>
+		{% endif %}
 	</div>
 	
 	<div class="row">
@@ -34,7 +38,7 @@
 						   {% for t in template %}
 								<div class="col-xs-6 col-md-3">
 									<div class="thumbnail thumn-hight">
-										<a href="{{url('mail/contenteditor')}}/{{t['idMail']}}/{{t['id']}}" >
+										<a href="{{url('mail/contenteditor')}}/{{t['idMail']}}/{{t['id']}}{% if pdf is defined AND pdf == 'pdf'%}/pdf{% endif %}" >
 											<img src="{{url('template/thumbnailpreview')}}/{{t['id']}}/210x240" />
 										</a>
 										<div class="caption text-center">
