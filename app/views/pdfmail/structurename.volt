@@ -4,7 +4,8 @@
 	<script type="text/javascript">
 		function sendData() {
 			var val = document.querySelector('input[name="radios"]:checked').value;
-			
+			$('#loading').empty();
+			$('#loading').append('<img src="{{url('')}}/images/loading4.GIF" height="35" width="35"/>');
 			$.ajax({
 				url: "{{url('pdfmail/structurename')}}/{{mail.idMail}}",
 				type: "POST",			
@@ -25,6 +26,8 @@
 					$('#contactsM').append(msg.result.totalcontactsmatch);
 					
 					$("#resume").show('slow');
+					$("#buttons").hide();
+					$('#loading').empty();
 				}
 			});
 		}
@@ -45,7 +48,7 @@
 			<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
 				<div class="bs-callout bs-callout-success" style="padding-bottom: 24px !important;">
 					Para refrescar la información, seleccione una estructura y haga clic en envia datos
-					<span class="pull-right">
+					<span id="buttons" class="pull-right" style="display: block;">
 						<a href="{{url('pdfmail/loadpdf')}}/{{mail.idMail}}" class="btn btn-sm btn-default">Atrás</a>
 						<a href="{{url('pdfmail/terminate')}}/{{mail.idMail}}" class="btn btn-sm btn-success">Siguiente</a>
 					</span>
@@ -54,26 +57,28 @@
 		</div>
 	{% endif %}
 	
-	<div class="row header-background" id="resume" style="display: none;">
+	<div class="row" id="resume" style="display: none;">
 		<div class="col-xs-12 col-sm-10 col-md-10 col-lg-10">
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>Archivos encontrados en el servidor</th>
-						<th>Archivos que coinciden con la estructura seleccionada</th>
-						<th>Contactos totales en la lista</th>
-						<th>Contactos totales que coinciden con al menos un pdf</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td id="total">0</td>
-						<td id="totalM">0</td>
-						<td id="contacts">0</td>
-						<td id="contactsM">0</td>
-					</tr>
-				</tbody>
-			</table>
+			<div class="header-background">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>Archivos encontrados en el servidor</th>
+							<th>Archivos que coinciden con la estructura seleccionada</th>
+							<th>Contactos totales en la lista</th>
+							<th>Contactos totales que coinciden con al menos un pdf</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="total">0</td>
+							<td id="totalM">0</td>
+							<td id="contacts">0</td>
+							<td id="contactsM">0</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 		<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 text-right">
 			<a href="{{url('pdfmail/terminate')}}/{{mail.idMail}}" class="btn btn-sm btn-success">Continuar</a>
@@ -123,7 +128,10 @@
 					
 				<div class="form-group">
 					<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
-					  <button class="btn btn-sm btn-default" onClick="sendData();">Enviar datos</button>
+						<div style="display: inline-flex;">
+							<button class="btn btn-sm btn-default" onClick="sendData();">Enviar datos</button>
+							<div id="loading" style="padding-left: 20px;"></div>
+						</div>
 					</div>
 				</div>
 			 </div>

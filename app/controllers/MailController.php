@@ -145,6 +145,7 @@ class MailController extends ControllerBase
 			$mailClone->replyTo = $mail->replyTo;
 			$mailClone->type = $mail->type;
 			$mailClone->attachment = 0;
+			$mailClone->pdf = $mail->pdf;
 			$mailClone->status = "Draft";
 			$mailClone->wizardOption = "source";
 			$mailClone->finishedon = 0;

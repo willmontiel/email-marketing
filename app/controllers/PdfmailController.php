@@ -271,6 +271,7 @@ class PdfmailController extends ControllerBase
 
 				if ($pdfmail) {
 					$name = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file[0][0]);
+					$name = preg_replace("/[^0-9,.]/", "", $name);
 					$clave = array_search($name, $contacts);
 					if ($clave != false) {
 						$pdfmail->idContact = $clave;
@@ -543,7 +544,7 @@ class PdfmailController extends ControllerBase
 					$mssg->addPart($testMail->getPlainText(), 'text/plain');
 
 					if ($mail->replyTo != null) {
-						$message->setReplyTo($mail->replyTo);
+						$mssg->setReplyTo($mail->replyTo);
 					}
 
 					if ($mail->pdf == 1) {
