@@ -5,7 +5,7 @@
 		function sendData() {
 			var val = document.querySelector('input[name="radios"]:checked').value;
 			$('#loading').empty();
-			$('#loading').append('<img src="{{url('')}}/images/loading4.GIF" height="35" width="35"/>');
+			$('#loading').append('<img src="{{url('')}}images/loading4.GIF" height="35" width="35"/>');
 			$.ajax({
 				url: "{{url('pdfmail/structurename')}}/{{mail.idMail}}",
 				type: "POST",			

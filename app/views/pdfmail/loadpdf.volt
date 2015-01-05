@@ -49,6 +49,7 @@
 					
 					FileUploaded: function(up, err) {
 						$('#next').show('slow');
+						$('#buttons').hide('slow');
 					},
 					
 					Error: function(up, err) {
@@ -116,7 +117,7 @@
 				</div>
 			</div>
 				
-			<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12 text-right">
+			<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12 text-right" id="buttons">
 				<a href="{{url('pdfmail/compose')}}/{{mail.idMail}}" class="btn btn-sm btn-default">Atrás</a>
 				<a href="{{url('pdfmail/structurename')}}/{{mail.idMail}}" class="btn btn-sm btn-success">Siguiente</a>
 			</div>
