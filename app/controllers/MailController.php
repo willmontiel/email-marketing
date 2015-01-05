@@ -681,6 +681,7 @@ class MailController extends ControllerBase
 				$mail->status = 'Draft';
 				$mail->wizardOption = 'setup';
 				$mail->deleted = 0;
+				$mail->pdf = ($pdf == null ? 0 : 1);
 			}
 			
 			$content = $this->request->getPost('editor');
