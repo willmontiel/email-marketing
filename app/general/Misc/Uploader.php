@@ -44,7 +44,7 @@ class Uploader
 	{
 		$e = implode('|', $ext);
 		$expr = "%\.({$e})$%i";
-		$isValid = preg_match($expr, $this->data->name);
+		$isValid = preg_match($expr, $this->data->originalName);
 		if (!$isValid) {
 			throw new \InvalidArgumentException('Extensión de archivo invalida, por favor valide la información');
 		}
@@ -62,10 +62,8 @@ class Uploader
 		}
 	}
 	
-	public function uploadFile()
+	public function uploadFile($dir)
 	{
-		$dir = "{$this->dir->dir}{$this->account->idAccount}/pdf/{$this->mail->idMail}/";
-		
 		if (!file_exists($dir)) {
 			mkdir($dir, 0777, true);
 		}

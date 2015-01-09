@@ -76,6 +76,7 @@ class AppObjects
 			$this->setDb();
 			$this->setModelsManager();
 			
+			$this->setPdfTemplatesFolder();
 			$this->setPrivateAssetsFolder();
 			$this->setPublicAssetsFolder();
 			$this->setTmpFolder();
@@ -357,7 +358,16 @@ class AppObjects
 		});
 	}
 
-
+	/**
+	 * Directorio de assets privados
+	 */
+	private function setPdfTemplatesFolder()
+	{
+		$pt = new \stdClass;
+		$pt->folder = $this->config->general->pdftemplatesfolder;
+		$this->di->set('pdftemplates', $pt);
+	}
+	
 	/**
 	 * Directorio de assets privados
 	 */

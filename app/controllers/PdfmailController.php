@@ -187,6 +187,7 @@ class PdfmailController extends ControllerBase
 			}
 			else {
 				$data = new stdClass();
+				$data->originalName = $_FILES['file']['name'];
 				$data->name = $_FILES['file']['name'];
 				$data->size = $_FILES['file']['size'];
 				$data->type = $_FILES['file']['type'];
@@ -195,13 +196,15 @@ class PdfmailController extends ControllerBase
 				$ext = array('zip', 'ZIP');
 				
 				try {
+					$dir = "{$this->asset->dir}{$account->idAccount}/pdf/{$mail->idMail}/";
+					
 					$uploader = new \EmailMarketing\General\Misc\Uploader();
 					$uploader->setAccount($account);
 					$uploader->setMail($mail);
 					$uploader->setData($data);
 					$uploader->validateExt($ext);
 					$uploader->validateSize(512000);
-					$uploader->uploadFile();
+					$uploader->uploadFile($dir);
 					
 					$pdfmanager = new \EmailMarketing\General\Misc\PdfManager();
 					$pdfmanager->setMail($mail);

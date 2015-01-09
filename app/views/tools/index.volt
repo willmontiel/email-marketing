@@ -77,6 +77,18 @@
 		</div>
 	</div>
 	<div class="space"></div>
+	
+	<div class="container-fluid">
+		<div class="col-xs-6 col-md-3">
+			<div class="big-btn-nav sm-btn-blue">
+				<a href="{{ url('pdf/loadtemplate') }}"  class="shortcuts"><span class="sm-button-large-program-envios"></span></a>
+			</div>
+			<div class="w-190 center">
+				<a href="{{ url('pdf/loadtemplate') }}" class="btn-actn">Cargar plantilla para PDF</a>
+			</div>
+		</div>
+	</div>
+	<div class="space"></div>
 </div>
 
 
