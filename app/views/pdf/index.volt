@@ -16,6 +16,14 @@
 			{{flashSession.output()}}
 		</div>
 	</div>
+	
+	<div class="row">
+		<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12 text-right">
+			<a href="{{url('pdf/loadtemplate')}}" class="btn btn-sm btn-primary">
+				<i class="glyphicon glyphicon-plus"></i> Cargar nueva plantilla
+			</a>
+		</div>
+	</div>
 	<!-- Lista de mis correos -->
 	{% if pdfs|length != 0%}
 		{% for pdf in pdfs %}
@@ -54,7 +62,7 @@
 							<span class="glyphicon glyphicon-edit"></span>
 						</a>
 
-						<button class="ShowDialog btn btn-sm btn btn-danger tooltip-b3" data-toggle="modal" href="#modal-simple" data-id="{{ url('mail/delete/') }}{{pdf.idPdftemplate}}" data-placement="top" title="Eliminar">
+						<button class="ShowDialog btn btn-sm btn btn-danger tooltip-b3" data-toggle="modal" href="#modal-simple" data-id="{{ url('pdf/delete') }}/{{pdf.idPdftemplate}}" data-placement="top" title="Eliminar">
 							<span class="glyphicon glyphicon-trash"></span>
 						</button>
 					</div>
@@ -62,8 +70,24 @@
 				<div id="preview{{pdf.idPdftemplate}}" class="collapse row">
 					<hr>	
 					<div style="font-size: 1.8em; text-align: center; color: #777;">Detalles</div><br />
-					{% set x = accounts[pdf.idPdftemplate] %} {{accounts[pdf.idPdftemplate]}}
-					{{x.idAccount}}
+					<div class="col-xs-12 col-sm-12 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>Id</th>
+									<th>Nombre</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for account in accounts[pdf.idPdftemplate]%}
+									<tr>
+										<td>{{account['idAccount']}}</td>
+										<td>{{account['companyName']}}</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 			<div class="small-space"></div>

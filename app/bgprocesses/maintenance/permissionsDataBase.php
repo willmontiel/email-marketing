@@ -179,7 +179,9 @@ class PermissionsDataBase
 			'pdf::delete' => 93,
 			'pdf::send' => 94,
 			'pdf::loadtemplate' => 95,
-			'pdf::readtemplate' => 96
+			'pdf::readtemplate' => 96,
+			'pdf::deletetemplate' => 97,
+			'pdf::edittemplate' => 98,
 		);
 	}
 	
@@ -305,6 +307,8 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::send'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::loadtemplate'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::readtemplate'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::deletetemplate'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::edittemplate'),
 			
 			
 //			----------//----------**ROLE_ADMIN**----------//----------

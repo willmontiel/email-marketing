@@ -461,6 +461,8 @@ class Security extends Plugin
 				'pdfmail::sendtest' => array('pdf' => array('send')),
 				'pdf::loadtemplate' => array('pdf' => array('loadtemplate')),
 				'pdf::index' => array('pdf' => array('readtemplate')),
+				'pdf::edit' => array('pdf' => array('edittemplate')),
+				'pdf::delete' => array('pdf' => array('deletetemplate')),
 				
 			);
 		}
