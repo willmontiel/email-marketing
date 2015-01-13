@@ -112,7 +112,8 @@ class AutoSendingConverter
 		$sql = $wrapper->getSQL();
 
 		if($this->autoresponder->type == 'birthday') {
-			$sql.= ' AND  c.birthDate = DATE_FORMAT(NOW(), \'%m-%d\')';
+			$sql.= ' AND DATE_FORMAT(c.birthDate, \'%m-%d\') = DATE_FORMAT(NOW(), \'%m-%d\')';
+			$this->logger->log('SQL FINAL ' . $sql);
 		}
 				
 		if ($sql != false) {
@@ -126,7 +127,6 @@ class AutoSendingConverter
 		
 		if($total == 0) {
 			$this->db->rollback();
-			$this->logger->log('Paso por aqui');
 			$this->logger->log('No hay destinatarios');
 			throw new Exception(400);
 		}
