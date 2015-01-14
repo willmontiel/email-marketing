@@ -60,27 +60,25 @@ abstract class ChildProcess
 							case 'Echo-Request':
 								$response = sprintf("%s %s Echo-Reply", 'Child-'.$this->pid, $data);
 								break;
+							
 							case 'Echo-Tmp-Request':
 								$this->mode = 'TEMP';
-
 								$response = sprintf("%s %s Echo-Tmp-Reply", 'Child-'.$this->pid, $data);
 								break;
+							
 							case 'Processing-Task':
-								Phalcon\DI::getDefault()->get('logger')->log('Soy el PID ' . $pid . ' Y me Llego Esto: ' . $data . PHP_EOL);
-
+								Phalcon\DI::getDefault()->get('logger')->log('Soy el PID ' . $pid . ' Y me Llego Esto: ' . $data);
 								$this->executeProcess($data);
-
 								Phalcon\DI::getDefault()->get('logger')->log(Phalcon\DI::getDefault()->get('timerObject'));
-
-								Phalcon\DI::getDefault()->get('logger')->log('PID ' . $pid . ' Acabo' . PHP_EOL);
-
 								$response = sprintf("%s %s Process-Available", 'Child-'.$this->pid, $this->pid);
 								break;
+							
 							case 'Processing-Task':
 								$response = sprintf("%s %s %s", 'Child-'.$this->pid, 0, 'Work-Checked');
 								break;
+							
 							case 'Echo-Kill':
-								Phalcon\DI::getDefault()->get('logger')->log($pid . ' Es hora de que muera' . PHP_EOL);
+								Phalcon\DI::getDefault()->get('logger')->log($pid . ' Es hora de que muera');
 								exit(0);
 								break;
 						}
@@ -120,7 +118,7 @@ abstract class ChildProcess
 					 * ================================================================
 					 */
 					
-					Phalcon\DI::getDefault()->get('logger')->log($pid . ' Estoy trabajando pero debo morir' . PHP_EOL);
+					Phalcon\DI::getDefault()->get('logger')->log($pid . ' Estoy trabajando pero debo morir');
 					exit(0);
 					break;
 			}
