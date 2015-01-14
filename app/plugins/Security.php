@@ -463,6 +463,7 @@ class Security extends Plugin
 				'pdf::index' => array('pdf' => array('readtemplate')),
 				'pdf::edit' => array('pdf' => array('edittemplate')),
 				'pdf::delete' => array('pdf' => array('deletetemplate')),
+				'pdf::createbatch' => array('pdf' => array('createbatch')),
 				
 			);
 		}

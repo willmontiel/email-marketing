@@ -81,10 +81,19 @@
 	<div class="container-fluid">
 		<div class="col-xs-6 col-md-3">
 			<div class="big-btn-nav sm-btn-blue">
-				<a href="{{ url('pdf/loadtemplate') }}"  class="shortcuts"><span class="sm-button-large-program-envios"></span></a>
+				<a href="{{ url('pdf') }}"  class="shortcuts"><span class="sm-button-large-program-envios"></span></a>
 			</div>
 			<div class="w-190 center">
-				<a href="{{ url('pdf/loadtemplate') }}" class="btn-actn">Cargar plantilla para PDF</a>
+				<a href="{{ url('pdf') }}" class="btn-actn">Plantillas para PDF</a>
+			</div>
+		</div>
+			
+		<div class="col-xs-6 col-md-3">
+			<div class="big-btn-nav sm-btn-blue">
+				<a href="{{ url('pdf/createbatch') }}"  class="shortcuts"><span class="sm-button-large-socialnet"></span></a>
+			</div>
+			<div class="w-190 center">
+				<a href="{{ url('pdf/createbatch') }}" class="btn-actn">Crear lote de PDF's</a>
 			</div>
 		</div>
 	</div>

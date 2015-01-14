@@ -32,55 +32,92 @@ class PdfController extends ControllerBase
 			
 			if (empty($name)) {
 				$this->flashSession->error('Debe envíar un nombre para la plantilla, por favor verifique la información');
+				return $this->response->redirect('pdf/loadtemplate');
 			}
-			else if (count($accounts) <= 0) {
+			
+			if (count($accounts) <= 0) {
 				$this->flashSession->error('Debe seleccionar al menos una cuenta, por favor verifique la información');
+				return $this->response->redirect('pdf/loadtemplate');
 			}
-			else if ($_FILES["file"]["error"]) {
-				$this->flashSession->error('No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, contacte al administrador para más información');
+			
+			if ($_FILES["template"]["error"]) {
+				$this->flashSession->error('No ha enviado ningún archivo de template(XSL) o ha enviado un tipo de archivo no soportado, contacte al administrador para más información');
+				return $this->response->redirect('pdf/loadtemplate');
 			}
-			else if (empty($_FILES['file']['name'])){
-				$this->flashSession->error('No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, por favor verifique la información');
+			
+			if (empty($_FILES['template']['name'])){
+				$this->flashSession->error('No ha enviado ningún archivo de template(XSL) o ha enviado un tipo de archivo no soportado, por favor verifique la información');
+				return $this->response->redirect('pdf/loadtemplate');
 			}
-			else {
-				$data = new stdClass();
-				$data->originalName = $_FILES['file']['name'];
-				$data->size = $_FILES['file']['size'];
-				$data->type = $_FILES['file']['type'];
-				$data->tmp_dir = $_FILES['file']['tmp_name'];
-				$data->name = str_replace(" ", "_", "{$name}.xsl");
+			
+			if ($_FILES["source"]["error"]) {
+				$this->flashSession->error('No ha enviado ningún archivo condificador(PHP) o ha enviado un tipo de archivo no soportado, contacte al administrador para más información');
+				return $this->response->redirect('pdf/loadtemplate');
+			}
+			
+			if (empty($_FILES['source']['name'])){
+				$this->flashSession->error('No ha enviado ningún archivo condificador(PHP) o ha enviado un tipo de archivo no soportado, por favor verifique la información');
+				return $this->response->redirect('pdf/loadtemplate');
+			}
+			
+			$template = $_FILES['template'];
+			$source = $_FILES['source'];
+			
+			$data1 = new stdClass();
+			$data1->originalName = $template['name'];
+			$data1->size = $template['size'];
+			$data1->type = $template['type'];
+			$data1->tmp_dir = $template['tmp_name'];
+			$name2 = str_replace(" ", "_", "{$name}.xsl");
+			$data1->name = strtolower($name2);
+			$ext1 = array('xsl');
+
+			$data2 = new stdClass();
+			$data2->originalName = $source['name'];
+			$data2->size = $source['size'];
+			$data2->type = $source['type'];
+			$data2->tmp_dir = $source['tmp_name'];
+			$data2->name = $source['name'];
+			$ext2 = array('php');
+			
+			try {
+				$this->db->begin();
 				
-				$ext = array('xsl');
+				$pdf = new Pdftemplate();
+				$pdf->name = $name;
+				$pdf->idAccounts = json_encode($accounts);
+				$pdf->created = time();
+				$pdf->updated = time();
 				
-				try {
-					$dir = "{$this->pdftemplates->folder}";
-					
-					$uploader = new \EmailMarketing\General\Misc\Uploader();
-					$uploader->setData($data);
-					$uploader->validateExt($ext);
-					$uploader->validateSize(512000);
-					$uploader->uploadFile($dir);
-					
-					$pdf = new Pdftemplate();
-					$pdf->name = $name;
-					$pdf->idAccounts = json_encode($accounts);
-					$pdf->created = time();
-					$pdf->updated = time();
-					
-					if (!$pdf->save()) {
-						foreach ($pdf->getMessages() as $m) {
-							$this->logger->log("Error while saving pdftemplate: {$m}");
-						}
-						throw new Exception("Ocurrió mientras se guardaba el template, por favor contacte al administrador");
+				if (!$pdf->save()) {
+					foreach ($pdf->getMessages() as $m) {
+						$this->logger->log("Error while saving pdftemplate: {$m}");
 					}
-					
-					$this->flashSession->success('Se ha cargado el template de PDF exitosamente');
-					return $this->response->redirect('pdf');
+					throw new Exception("Ocurrió mientras se guardaba el template, por favor contacte al administrador");
 				}
-				catch (Exception $e) {
-					$this->logger->log("Exception: Error while uplodaing pdf {$e}");
-					$this->flashSession->error("{$e->getMessage()}");
-				}
+				
+				$dir = "{$this->pdftemplates->folder}/{$pdf->idPdftemplate}/";
+				$uploader = new \EmailMarketing\General\Misc\Uploader();
+				
+				$uploader->setData($data1);
+				$uploader->validateExt($ext1);
+				$uploader->validateSize(2000);
+				$uploader->uploadFile($dir);
+			
+				$uploader->setData($data2);
+				$uploader->validateExt($ext2);
+				$uploader->validateSize(2000);
+				$uploader->uploadFile($dir);
+
+				$this->db->commit();
+				
+				$this->flashSession->success('Se ha cargado el template de PDF exitosamente');
+				return $this->response->redirect('pdf');
+			}
+			catch (Exception $e) {
+				$this->db->rollback();
+				$this->logger->log("Exception: Error while uplodaing pdf {$e}");
+				$this->flashSession->error("{$e->getMessage()}");
 			}
 		}
 		
@@ -101,9 +138,12 @@ class PdfController extends ControllerBase
 			return $this->response->redirect('pdf');
 		}
 		
+		$dir = "{$this->pdftemplates->folder}";
+		
 		if ($this->request->isPost()) {
 			$name = $this->request->getPost('name');
 			$accounts = $this->request->getPost('accounts');
+			$editfile = $this->request->getPost('edit-file');
 			
 			if (empty($name)) {
 				$this->flashSession->error('Debe envíar un nombre para la plantilla, por favor verifique la información');
@@ -111,32 +151,34 @@ class PdfController extends ControllerBase
 			else if (count($accounts) <= 0) {
 				$this->flashSession->error('Debe seleccionar al menos una cuenta, por favor verifique la información');
 			}
-			else if ($_FILES["file"]["error"]) {
+			else if ($editfile == 1 AND $_FILES["file"]["error"]) {
 				$this->flashSession->error('No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, contacte al administrador para más información');
 			}
-			else if (empty($_FILES['file']['name'])){
+			else if ($editfile == 1 AND empty($_FILES['file']['name'])){
 				$this->flashSession->error('No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, por favor verifique la información');
 			}
 			else {
-				$data = new stdClass();
-				$data->originalName = $_FILES['file']['name'];
-				$data->size = $_FILES['file']['size'];
-				$data->type = $_FILES['file']['type'];
-				$data->tmp_dir = $_FILES['file']['tmp_name'];
-				$data->name = str_replace(" ", "_", "{$name}.xsl");
-				
-				$ext = array('xsl');
+				if ($editfile == 1) {
+					$data = new stdClass();
+					$data->originalName = $_FILES['file']['name'];
+					$data->size = $_FILES['file']['size'];
+					$data->type = $_FILES['file']['type'];
+					$data->tmp_dir = $_FILES['file']['tmp_name'];
+					$name2 = str_replace(" ", "_", "{$name}.xsl");
+					$data->name = strtolower($name2);
+
+					$ext = array('xsl');
+				}
 				
 				try {
-					$dir = "{$this->pdftemplates->folder}";
+					if ($editfile == 1) {
+						$uploader = new \EmailMarketing\General\Misc\Uploader();
+						$uploader->setData($data);
+						$uploader->validateExt($ext);
+						$uploader->validateSize(2000);
+						$uploader->uploadFile($dir);
+					}
 					
-					$uploader = new \EmailMarketing\General\Misc\Uploader();
-					$uploader->setData($data);
-					$uploader->validateExt($ext);
-					$uploader->validateSize(512000);
-					$uploader->uploadFile($dir);
-					
-					$pdf = new Pdftemplate();
 					$pdf->name = $name;
 					$pdf->idAccounts = json_encode($accounts);
 					$pdf->created = time();
@@ -158,8 +200,20 @@ class PdfController extends ControllerBase
 				}
 			}
 		}
+		$file = 0;
+		$files = glob($dir . "{*.xsl}",GLOB_BRACE);
+		$name = str_replace(" ", '_', $pdf->name);
+		$name = strtolower($name);
+		$name = "{$name}.xsl";
+		$dir = "{$dir}{$name}";
+		
+		if (in_array($dir, $files)) {
+			$file = 1;
+		}
 		
 		$this->view->setVar('pdf', $pdf);
+		$this->view->setVar('file', $file);
+		$this->view->setVar('name', $name);
 		$accounts = Account::find();
 		$this->view->setVar('accounts', $accounts);
 		$ids = json_decode($pdf->idAccounts);
@@ -193,5 +247,75 @@ class PdfController extends ControllerBase
 			$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
 			return $this->response->redirect('pdf');
 		}
+	}
+	
+	public function createbatchAction()
+	{
+		$templates = Pdftemplate::find();
+		$account = $this->user->account;
+		$t = array();
+		
+		if (count($templates) > 0) {
+			foreach ($templates as $template) {
+				$ids = json_decode($template->idAccounts);
+				if (in_array($account->idAccount, $ids)) {
+					$t[] = $template;
+				}
+			}
+		}
+		
+		if ($this->request->isPost()) {
+			$name = $this->request->getPost('name');
+			$template = $this->request->getPost('template');
+			
+			if (empty($name)) {
+				$this->flashSession->error('Debe envíar un nombre para la plantilla, por favor verifique la información');
+			}
+			else if (empty($template)) {
+				$this->flashSession->error('Debe seleccionar al menos una cuenta, por favor verifique la información');
+			}
+			else if ($_FILES["file"]["error"]) {
+				$this->flashSession->error('No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, contacte al administrador para más información');
+			}
+			else if (empty($_FILES['file']['name'])){
+				$this->flashSession->error('No ha enviado ningún archivo o ha enviado un tipo de archivo no soportado, por favor verifique la información');
+			}
+			else {
+				$data = new stdClass();
+				$data->originalName = $_FILES['file']['name'];
+				$data->size = $_FILES['file']['size'];
+				$data->type = $_FILES['file']['type'];
+				$data->tmp_dir = $_FILES['file']['tmp_name'];
+				$name2 = str_replace(" ", "_", "{$name}.csv");
+				$data->name = strtolower($name2);
+
+				$ext = array('csv');
+				
+				$dir = "{$this->pdftemplates->sourcefolder}{$account->idAccount}/";
+				$uploader = new \EmailMarketing\General\Misc\Uploader();
+				$uploader->setData($data);
+				$uploader->validateExt($ext);
+				$uploader->validateSize(2000);
+				$uploader->uploadFile($dir);
+
+				$batch = new Pdfbatch();
+				$batch->idAccount = $account->idAccount;
+				$batch->name = $name;
+				$batch->sourceName = $name2;
+				$batch->createdon = time();
+				
+				if (!$batch->save()) {
+					foreach ($batch->getMessages() as $m) {
+						$this->logger->log("Error while saving pdftemplate: {$m}");
+					}
+					throw new Exception("Ocurrió mientras se intentaba iniciar el proceso de creación de lotes de PDF, por favor contacte al administrador");
+				}
+
+				$this->flashSession->success('Se ha cargado el template de PDF exitosamente');
+				return $this->response->redirect('pdf');
+			}
+		}
+		
+		$this->view->setVar('templates', $t);
 	}
 }

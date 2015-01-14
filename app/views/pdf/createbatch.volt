@@ -16,7 +16,7 @@
 {% block content %}
 	<div class="row">
 		<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
-			<h1 class="sectiontitle">Cargar un nueva plantilla para crear archivos PDF</h1>
+			<h1 class="sectiontitle">Crear un lote de archivos PDF basado en una plantilla.</h1>
 			<div class="bs-callout bs-callout-info" style="font-size: 1.1em;">
 				<p>
 				Aqui se cargan los archivos <strong>PDF:</strong>
@@ -34,7 +34,7 @@
 	<div class="row">
 		<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
 			<div class="header-background">
-				<form method="POST" action="{{url('pdf/loadtemplate')}}" class="form-horizontal" enctype="multipart/form-data">
+				<form method="POST" action="{{url('pdf/createbatch')}}" class="form-horizontal" enctype="multipart/form-data">
 					<div class="form-group">
 						<label for="name" class="col-sm-3 control-label">Nombre</label>
 						<div class="col-sm-6">
@@ -42,37 +42,31 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="accounts" class="col-sm-3 control-label">Seleccionar cuentas</label>
+						<label for="template" class="col-sm-3 control-label">Seleccionar template</label>
 						<div class="col-sm-6">
-							<select class="select2" name="accounts[]" multiple id="accounts" style="width: 100%;">
-								{% if accounts|length > 0%}
-									{% for account in accounts %}
-										<option value="{{account.idAccount}}">{{account.companyName}}</option>
+							<select class="select2" name="template" id="template" style="width: 100%;">
+								{% if templates|length > 0%}
+									{% for template in templates %}
+										<option value="{{template.idPdftemplate}}">{{template.name}}</option>
 									{% endfor %}
 								{% endif %}	
 							</select>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="template" class="col-sm-3 control-label">Seleccionar plantilla(XSL)</label>
+						<label for="file" class="col-sm-3 control-label">Seleccionar archivo de excel</label>
 						<div class="col-sm-6">
-							<input type="file" id="template" name="template">
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="source" class="col-sm-3 control-label">Seleccionar codificador(PHP)</label>
-						<div class="col-sm-6">
-							<input type="file" id="source" name="source">
+							<input type="file" id="file" name="file">
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="col-sm-offset-3 col-sm-9">
 							<a href="{{url('pdf')}}" class="btn btn-sm btn-default">Cancelar</a>
-							<button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+							<button type="submit" class="btn btn-sm btn-primary">Procesar</button>
 						</div>
 					</div>
-				  </form>
+				</form>
 			</div>
 		</div>
-	</div>	
+	</div>
 {% endblock %}

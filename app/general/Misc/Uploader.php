@@ -51,7 +51,7 @@ class Uploader
 	}
 	
 	/*
-	* Esta función valida que el archivo que se intenta subir no sobrepase el tamaño máximo configurado
+	* Esta función valida que el archivo que se intenta subir no sobrepase el tamaño máximo configurado en kilobytes
 	*/
 	public function validateSize($size)
 	{

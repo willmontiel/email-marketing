@@ -182,6 +182,7 @@ class PermissionsDataBase
 			'pdf::readtemplate' => 96,
 			'pdf::deletetemplate' => 97,
 			'pdf::edittemplate' => 98,
+			'pdf::createbatch' => 99,
 		);
 	}
 	
@@ -309,6 +310,7 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::readtemplate'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::deletetemplate'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::edittemplate'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::createbatch'),
 			
 			
 //			----------//----------**ROLE_ADMIN**----------//----------

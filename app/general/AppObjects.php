@@ -365,6 +365,9 @@ class AppObjects
 	{
 		$pt = new \stdClass;
 		$pt->folder = $this->config->general->pdftemplatesfolder;
+		$pt->folderrelative = $this->config->general->pdftemplatesfolderrelative;
+		$pt->batchfolder = $this->config->general->pdfbatchfolder;
+		$pt->sourcefolder = $this->config->general->pdfsourcefolder;
 		$this->di->set('pdftemplates', $pt);
 	}
 	
@@ -470,6 +473,9 @@ class AppObjects
 		$sockets->mailrequest = $this->config->sockets->mailrequest;
 		$sockets->mailtochildren = $this->config->sockets->mailtochildren;
 		$sockets->mailfromchild = $this->config->sockets->mailfromchild;
+		$sockets->pdfcreatorrequest = $this->config->sockets->pdfcreatorrequest;
+		$sockets->pdfcreatortochildren = $this->config->sockets->pdfcreatortochildren;
+		$sockets->pdfcreatorfromchild = $this->config->sockets->pdfcreatorfromchild;
 		$this->di->set('sockets', $sockets);
 	}
 	
