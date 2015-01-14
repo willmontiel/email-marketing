@@ -73,10 +73,6 @@ abstract class ChildProcess
 								$response = sprintf("%s %s Process-Available", 'Child-'.$this->pid, $this->pid);
 								break;
 							
-							case 'Processing-Task':
-								$response = sprintf("%s %s %s", 'Child-'.$this->pid, 0, 'Work-Checked');
-								break;
-							
 							case 'Echo-Kill':
 								Phalcon\DI::getDefault()->get('logger')->log('Time To Die [ ' . $pid . ' ]');
 								exit(0);
