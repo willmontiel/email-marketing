@@ -534,8 +534,6 @@ class PdfmailController extends ControllerBase
 													   "id2" => $id));
 				$contact = $result->fetchAll();
 				
-				$this->logger->log("Contact: " . print_r($contact, true));
-				
 				if (count($contact) > 0) {
 					$mssg = new Swift_Message($mail->subject);
 					$mssg->setFrom(array($mail->fromEmail => $mail->fromName));
@@ -548,16 +546,18 @@ class PdfmailController extends ControllerBase
 					}
 
 					if ($mail->pdf == 1) {
-						$pdfmail = Pdfmail::findFirst(array(
-							'conditions' => 'idMail = ?1 AND idContact = ?2',
-							'bind' => array(1 => $mail->idMail,
-											2 => $contact[0]['idContact'])
-						));
-
-						if ($pdfmail) {
-							$name = "{$id}.pdf";
-							$dir = "{$this->asset->dir}{$account->idAccount}/pdf/{$mail->idMail}/{$pdfmail->name}";
-							$mssg->attach(Swift_Attachment::fromPath($dir)->setFilename($name));
+						foreach ($contact as $c) {
+							$pdfmail = Pdfmail::findFirst(array(
+								'conditions' => 'idMail = ?1 AND idContact = ?2',
+								'bind' => array(1 => $mail->idMail,
+												2 => $c['idContact'])
+							));
+							if ($pdfmail) {
+								$name = "{$id}.pdf";
+								$dir = "{$this->asset->dir}{$account->idAccount}/pdf/{$mail->idMail}/{$pdfmail->name}";
+								$mssg->attach(Swift_Attachment::fromPath($dir)->setFilename($name));
+								break;
+							}
 						}
 					}
 
