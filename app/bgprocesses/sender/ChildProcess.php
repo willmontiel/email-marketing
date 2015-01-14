@@ -67,7 +67,7 @@ abstract class ChildProcess
 								break;
 							
 							case 'Processing-Task':
-								Phalcon\DI::getDefault()->get('logger')->log('Soy el PID ' . $pid . ' Y me Llego Esto: ' . $data);
+								Phalcon\DI::getDefault()->get('logger')->log('Process with ID ' . $pid . ' and I got this: ' . $data);
 								$this->executeProcess($data);
 								Phalcon\DI::getDefault()->get('logger')->log(Phalcon\DI::getDefault()->get('timerObject'));
 								$response = sprintf("%s %s Process-Available", 'Child-'.$this->pid, $this->pid);
@@ -78,7 +78,7 @@ abstract class ChildProcess
 								break;
 							
 							case 'Echo-Kill':
-								Phalcon\DI::getDefault()->get('logger')->log($pid . ' Es hora de que muera');
+								Phalcon\DI::getDefault()->get('logger')->log('Time To Die [ ' . $pid . ' ]');
 								exit(0);
 								break;
 						}
@@ -118,7 +118,7 @@ abstract class ChildProcess
 					 * ================================================================
 					 */
 					
-					Phalcon\DI::getDefault()->get('logger')->log($pid . ' Estoy trabajando pero debo morir');
+					Phalcon\DI::getDefault()->get('logger')->log('I am working but I have to die [ ' . $pid . ' ]');
 					exit(0);
 					break;
 			}
