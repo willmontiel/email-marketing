@@ -9,11 +9,16 @@ class ChildExport extends ChildProcess
 {
 	public function executeProcess($data)
 	{
-		$this->pingDatabase();
-		$arrayDecode = json_decode($data);
-		$exporter = new ContactExporter();
-		$exporter->setData($arrayDecode);
-		$exporter->startExporting();
+		$log = \Phalcon\DI::getDefault()->get('logger');
+		try {
+			$this->pingDatabase();
+			$arrayDecode = json_decode($data);
+			$exporter = new ContactExporter();
+			$exporter->setData($arrayDecode);
+			$exporter->startExporting();
+		} catch (Exception $ex) {
+			$log->log('Error exporting contacts ' . $ex);
+		}
 	}
 	
 	public function publishToChildren()
