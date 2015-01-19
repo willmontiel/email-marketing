@@ -188,6 +188,19 @@ $sockets->pdfcreatorfromchild = $config->sockets->pdfcreatorfromchild;
 
 $di->set('sockets', $sockets);
 
+$pt = new \stdClass;
+$pt->templates = $config->pdf->templates;
+$pt->relativetemplatesfolder = $config->pdf->templatesrelative;
+$pt->explodedbatch = $config->pdf->explodedbatch;
+$pt->encryptedbatch = $config->pdf->encryptedbatch;
+$pt->sourcebatch = $config->pdf->sourcebatch;
+$pt->csvbatch = $config->pdf->csvbatch;
+$pt->relativecsvbatch = $config->pdf->csvbatchrelative;
+$pt->fop = $config->pdf->fop;
+$pt->foplog = $config->pdf->foplogs;
+$pt->config = $config->pdf->config;
+$this->di->set('pdf', $pt);
+
 /*
  * Log Object, utilizado para logging en general a archivo
  */
