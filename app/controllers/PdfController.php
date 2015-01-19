@@ -57,7 +57,6 @@ class PdfController extends ControllerBase
 			$data->size = $template['size'];
 			$data->type = $template['type'];
 			$data->tmp_dir = $template['tmp_name'];
-			$data->name = $this->extractName($name);
 			$ext = array('xsl');
 			
 			try {
@@ -76,7 +75,12 @@ class PdfController extends ControllerBase
 					throw new Exception("Ocurrió mientras se guardaba el template, por favor contacte al administrador");
 				}
 				
+				$data->name = "{$pdf->idPdftemplate}.xsl";
+				
 				$dir = "{$this->pdf->templates}/{$pdf->idPdftemplate}/";
+				
+				$this->logger->log("Data: " . print_r($dir, true));
+				$this->logger->log("Dir: {$dir}");
 				$uploader = new \EmailMarketing\General\Misc\Uploader();
 				$uploader->setData($data);
 				$uploader->validateExt($ext);
@@ -146,8 +150,7 @@ class PdfController extends ControllerBase
 					$data->size = $_FILES['file']['size'];
 					$data->type = $_FILES['file']['type'];
 					$data->tmp_dir = $_FILES['file']['tmp_name'];
-					$data->name = $this->extractName($name);
-
+					$data->name = "{$pdf->idPdftemplate}.xsl";
 					$ext = array('xsl');
 				}
 				
@@ -267,18 +270,12 @@ class PdfController extends ControllerBase
 				$data->size = $_FILES['file']['size'];
 				$data->type = $_FILES['file']['type'];
 				$data->tmp_dir = $_FILES['file']['tmp_name'];
-				$data->name = $this->extractName($name);
 
 				$ext = array('csv');
 				
 				try {
-					$dir = "{$this->pdf->relativecsvbatch}{$account->idAccount}/";
-					$uploader = new \EmailMarketing\General\Misc\Uploader();
-					$uploader->setData($data);
-					$uploader->validateExt($ext);
-					$uploader->validateSize(2000);
-					$uploader->uploadFile($dir);
-
+					$this->db->begin();
+					
 					$batch = new Pdfbatch();
 					$batch->idAccount = $account->idAccount;
 					$batch->idPdftemplate = $template;
@@ -295,6 +292,17 @@ class PdfController extends ControllerBase
 						}
 					}
 					
+					$dir = "{$this->pdf->relativecsvbatch}{$account->idAccount}/";
+					$data->name = "{$batch->idPdfbatch}.csv";
+					
+					$uploader = new \EmailMarketing\General\Misc\Uploader();
+					$uploader->setData($data);
+					$uploader->validateExt($ext);
+					$uploader->validateSize(2000);
+					$uploader->uploadFile($dir);
+
+					$this->db->commit();
+					
 					$d = array(
 						'idPdfbatch' => $batch->idPdfbatch,
 					);
@@ -306,6 +314,7 @@ class PdfController extends ControllerBase
 					return $this->response->redirect("process/pdfbatch/{$batch->idPdfbatch}");
 				}
 				catch (Exception $ex) {
+					$this->db->rollback();
 					$this->logger->log("Exception: {$ex}");
 					$this->flashSession->error("Ocurrió mientras se intentaba iniciar el proceso de creación de lotes de PDF, por favor contacte al administrador");
 					return $this->response->redirect('pdf');
