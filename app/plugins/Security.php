@@ -464,6 +464,9 @@ class Security extends Plugin
 				'pdf::edit' => array('pdf' => array('edittemplate')),
 				'pdf::delete' => array('pdf' => array('deletetemplate')),
 				'pdf::createbatch' => array('pdf' => array('createbatch')),
+				'process::pdfbatch' => array('pdf' => array('createbatch')),
+				'process::refreshpdfbatch' => array('pdf' => array('createbatch')),
+				'pdf::getbatch' => array('pdf' => array('createbatch')),
 				
 			);
 		}

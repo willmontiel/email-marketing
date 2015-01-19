@@ -66,6 +66,29 @@ class ProcessController extends ControllerBase
 		$this->view->setVar('criteria', $data->criteria);
 	}
 	
+	
+	public function pdfbatchAction($idBatch)
+	{
+		$account = $this->user->account;
+		
+		$batch = Pdfbatch::findFirst(array(
+			'conditions' => 'idPdfbatch = ?1 AND idAccount = ?2',
+			'bind' => array(1 => $idBatch,
+							2 => $account->idAccount)
+		));
+		
+		if (!$batch) {
+			return $this->response->redirect('error');
+		}
+		
+		$this->view->setVar('batch', $batch);
+	}
+	
+	public function refreshpdfbatchAction($idBatch)
+	{
+		
+	}
+	
 	public function resfreshexportAction($idExport)
 	{
 		$account = $this->user->account;

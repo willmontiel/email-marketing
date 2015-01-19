@@ -54,7 +54,7 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="file" class="col-sm-3 control-label">Seleccionar archivo de excel</label>
+						<label for="file" class="col-sm-3 control-label">Seleccionar archivo CSV</label>
 						<div class="col-sm-6">
 							<input type="file" id="file" name="file">
 						</div>

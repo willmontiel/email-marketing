@@ -60,12 +60,6 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="source" class="col-sm-3 control-label">Seleccionar codificador(PHP)</label>
-						<div class="col-sm-6">
-							<input type="file" id="source" name="source">
-						</div>
-					</div>
-					<div class="form-group">
 						<div class="col-sm-offset-3 col-sm-9">
 							<a href="{{url('pdf')}}" class="btn btn-sm btn-default">Cancelar</a>
 							<button type="submit" class="btn btn-sm btn-primary">Guardar</button>

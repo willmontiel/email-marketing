@@ -364,11 +364,17 @@ class AppObjects
 	private function setPdfTemplatesFolder()
 	{
 		$pt = new \stdClass;
-		$pt->folder = $this->config->general->pdftemplatesfolder;
-		$pt->folderrelative = $this->config->general->pdftemplatesfolderrelative;
-		$pt->batchfolder = $this->config->general->pdfbatchfolder;
-		$pt->sourcefolder = $this->config->general->pdfsourcefolder;
-		$this->di->set('pdftemplates', $pt);
+		$pt->templates = $this->config->pdf->templates;
+		$pt->relativetemplatesfolder = $this->config->pdf->templatesrelative;
+		$pt->explodedbatch = $this->config->pdf->explodedbatch;
+		$pt->encryptedbatch = $this->config->pdf->encryptedbatch;
+		$pt->sourcebatch = $this->config->pdf->sourcebatch;
+		$pt->csvbatch = $this->config->pdf->csvbatch;
+		$pt->relativecsvbatch = $this->config->pdf->csvbatchrelative;
+		$pt->fop = $this->config->pdf->fop;
+		$pt->foplog = $this->config->pdf->foplogs;
+		$pt->config = $this->config->pdf->config;
+		$this->di->set('pdf', $pt);
 	}
 	
 	/**
