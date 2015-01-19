@@ -199,7 +199,7 @@ $pt->relativecsvbatch = $config->pdf->csvbatchrelative;
 $pt->fop = $config->pdf->fop;
 $pt->foplog = $config->pdf->foplogs;
 $pt->config = $config->pdf->config;
-$this->di->set('pdf', $pt);
+$di->set('pdf', $pt);
 
 /*
  * Log Object, utilizado para logging en general a archivo
