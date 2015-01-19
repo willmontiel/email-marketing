@@ -161,7 +161,7 @@ class PdfCreator extends BaseWrapper
 	private function zipPdfFolder($encrypted)
 	{
 		$output = array();
-		$cmd = escapeshellcmd("zip {$this->name}.zip {$encrypted}");
+		$cmd = escapeshellcmd("zip {$encrypted}/{$this->name}.zip {$encrypted}");
 		exec($cmd, $output, $status);
 		
 		if (!$status) {
