@@ -12,7 +12,8 @@ class ChildSender extends ChildProcess
 	{
 		$log = \Phalcon\DI::getDefault()->get('logger');
 		try {
-			$log->log('Inicio proceso de envio');
+			$log->log('Inicio proceso de Envio');
+			$log->log('Recibi esto [ ' . $data . ' ]');
 			$log->log('***----------------------------***');
 			$log->log('***----------------------------***');
 			$log->log('Inicio Ping a la Base de Datos');
@@ -29,8 +30,8 @@ class ChildSender extends ChildProcess
 			$log->log('Finalizacion Proceso de Data');
 			$log->log('***----------------------------***');
 			$log->log('***----------------------------***');
-			$log->log('Finalizacion proceso de envio');
-		} catch (Exception $ex) {
+			$log->log('Finalizacion proceso de Envio');
+		} catch (\Exception $ex) {
 			$log->log('Error sending mailing ' . $ex);
 		}
 	}

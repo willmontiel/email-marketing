@@ -187,7 +187,6 @@ class AppObjects
 			$router->addResource('Apistatistics', '/apistatistics');
 			$router->addResource('Apiversionone', '/api/v1');
 			$router->addResource('Apimail', '/api/mails');
-			$router->addResource('Apipdfmail', '/api/mails');
 
 			return $router;
 		});

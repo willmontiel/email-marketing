@@ -11,12 +11,27 @@ class ChildExport extends ChildProcess
 	{
 		$log = \Phalcon\DI::getDefault()->get('logger');
 		try {
+			$log->log('Inicio proceso de Exportacion');
+			$log->log('Recibi esto [ ' . $data . ' ]');
+			$log->log('***----------------------------***');
+			$log->log('***----------------------------***');
+			$log->log('Inicio Ping a la Base de Datos');
 			$this->pingDatabase();
+			$log->log('Finalizacion Ping a la Base de Datos');
+			$log->log('Inicio Instancia a ContactExporter');
 			$arrayDecode = json_decode($data);
 			$exporter = new ContactExporter();
+			$log->log('Finalizacion Instancia a ContactExporter');
+			$log->log('Inicio Seteo de Data');
 			$exporter->setData($arrayDecode);
+			$log->log('Finalizacion Seteo de Data');
+			$log->log('Inicio Proceso de Data');
 			$exporter->startExporting();
-		} catch (Exception $ex) {
+			$log->log('Finalizacion Proceso de Data');
+			$log->log('***----------------------------***');
+			$log->log('***----------------------------***');
+			$log->log('Finalizacion proceso de Exportacion');
+		} catch (\Exception $ex) {
 			$log->log('Error exporting contacts ' . $ex);
 		}
 	}
