@@ -182,6 +182,10 @@ $sockets->exportfromchild = $config->sockets->exportfromchild;
 $sockets->mailrequest = $config->sockets->mailrequest;
 $sockets->mailtochildren = $config->sockets->mailtochildren;
 $sockets->mailfromchild = $config->sockets->mailfromchild;
+$sockets->pdfcreatorrequest = $config->sockets->pdfcreatorrequest;
+$sockets->pdfcreatortochildren = $config->sockets->pdfcreatortochildren;
+$sockets->pdfcreatorfromchild = $config->sockets->pdfcreatorfromchild;
+
 $di->set('sockets', $sockets);
 
 /*

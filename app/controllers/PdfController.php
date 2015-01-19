@@ -79,9 +79,6 @@ class PdfController extends ControllerBase
 				
 				$dir = "{$this->pdf->templates}/{$pdf->idPdftemplate}/";
 				
-				$this->logger->log("Data: " . print_r($data, true));
-				$this->logger->log("Dir: {$dir}");
-				
 				$uploader = new \EmailMarketing\General\Misc\Uploader();
 				$uploader->setData($data);
 				$uploader->validateExt($ext);
