@@ -20,7 +20,7 @@ class PdfCreatorProcess extends ProcessAbstract
 	{
 		$this->pool->setInitialChildren(2);
 		$this->pool->setMaxOfTmpChildren(0);
-		$this->pool->setChildProcess('PdfCreator.php');
+		$this->pool->setChildProcess('ChildPdfCreator.php');
 		$this->pool->createInitialChildren();
 	}
 }
