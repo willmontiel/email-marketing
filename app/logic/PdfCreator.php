@@ -50,49 +50,51 @@ class PdfCreator extends BaseWrapper
 		$dirBase = "{$this->appPath->path}";
 		$dir = "{$this->dir->csvbatch}/{$this->pdf->idAccount}/";
 		
-		$csvFile = "{$dirBase}{$dir}/{$this->name}.csv";
+		$csvFile = "{$dirBase}/{$dir}/{$this->pdf->idPdfbatch}.csv";
 		
 		//Validamos si existe el archivo CSV para obtener la estructura XML
-		if (file_exists($csvFile)) {
-			// Convertimos el archivo de csv con la informacion de los clientes a CSV
-			$fileCsv = new ProcessFile();
-
-			$xml = new CodificXml();
-			$fileCsv->addElementProcessor($xml);
-
-			$shell = new CodificShell();
-			$fileCsv->addElementProcessor($shell);
-
-			$fileCsv->setSourceFile($csvFile);
-
-			$result = $fileCsv->process();
-
-			//Si el procesamiento fue correcto guardamos la informacion
-			if (!$result) {
-				throw new Exception("Se encontró un error mientras se procesaba la solicitud, esto puede deberse a que el directorio o archivo en donde estan los recursos no existe o no tiene permisos");
-			}
-			
-			//$idenvioInter = str_pad($idenvio, 4, '0', STR_PAD_LEFT);
-			$this->toProcess = $shell->save($this->pdf);
-			$xml->save($this->pdf);
-			
-			$this->updateBatch();
+		if (!file_exists($csvFile)) {
+			throw new Exception("Se encontró un error mientras se procesaba la solicitud, esto puede deberse a que el directorio o archivo en donde estan los recursos no existe o no tiene permisos");
 		}
+		
+		// Convertimos el archivo de csv con la informacion de los clientes a CSV
+		$fileCsv = new ProcessFile();
+
+		$xml = new CodificXml();
+		$fileCsv->addElementProcessor($xml);
+
+		$shell = new CodificShell();
+		$fileCsv->addElementProcessor($shell);
+
+		$fileCsv->setSourceFile($csvFile);
+
+		$result = $fileCsv->process();
+
+		//Si el procesamiento fue correcto guardamos la informacion
+		if (!$result) {
+			throw new Exception("Se encontró un error mientras se procesaba la solicitud, esto puede deberse a que el directorio o archivo en donde estan los recursos no existe o no tiene permisos");
+		}
+
+		//$idenvioInter = str_pad($idenvio, 4, '0', STR_PAD_LEFT);
+		$this->toProcess = $shell->save($this->pdf);
+		$xml->save($this->pdf);
+
+		$this->updateBatch();
 	}
 	
 	private function createBatch()
 	{
-		$xml = "{$this->appPath->path}{$this->dir->sourcebatch}/{$this->pdf->idAccount}/{$this->pdf->idPdfbatch}.xml";
-		$xsl = "{$this->appPath->path}{$this->dir->relativetemplatesfolder}/{$this->pdf->idAccount}/{$this->pdf->idPdftemplate}.xsl";
-		$pdf = "{$this->appPath->path}{$this->dir->fop}/{$this->pdf->idAccount}/";
+		$xml = "{$this->appPath->path}/{$this->dir->sourcebatch}/{$this->pdf->idAccount}/{$this->pdf->idPdfbatch}.xml";
+		$xsl = "{$this->appPath->path}/{$this->dir->relativetemplatesfolder}/{$this->pdf->idAccount}/{$this->pdf->idPdftemplate}.xsl";
+		$pdf = "{$this->appPath->path}/{$this->dir->fop}/{$this->pdf->idAccount}/";
 		if (!file_exists($pdf)) {
 			mkdir($pdf, 0777, true);
 		}
 		$pdf .= "{$this->pdf->idPdfbatch}.pdf";
-		$log = "{$this->appPath->path}{$this->dir->foplog}/{$this->pdf->idAccount}/log_{$this->pdf->idPdfbatch}.log";
-		$fopConf = "{$this->appPath->path}{$this->dir->config}/fop.xconf";
-		$pdftk = "{$this->appPath->path}{$this->dir->sourcebatch}/{$this->pdf->idAccount}/source_{$this->pdf->idPdfbatch}.sh"; 
-		$encrypted = "{$this->appPath->path}{$this->dir->encryptedbatch}/{$this->pdf->idAccount}";
+		$log = "{$this->appPath->path}/{$this->dir->foplog}/{$this->pdf->idAccount}/log_{$this->pdf->idPdfbatch}.log";
+		$fopConf = "{$this->appPath->path}/{$this->dir->config}/fop.xconf";
+		$pdftk = "{$this->appPath->path}/{$this->dir->sourcebatch}/{$this->pdf->idAccount}/source_{$this->pdf->idPdfbatch}.sh"; 
+		$encrypted = "{$this->appPath->path}/{$this->dir->encryptedbatch}/{$this->pdf->idAccount}";
 		
 		$this->logger->log("Xml: {$xml}");
 		$this->logger->log("Xsl: {$xsl}");
