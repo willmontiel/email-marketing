@@ -67,7 +67,7 @@ class CodificXml implements IElementProcessorRow
 	
 	public function save($pdf)
 	{	
-		$source = "{$this->appPath->path}{$this->pdf->sourcebatch}/{$pdf->idAccount}/";
+		$source = "{$this->appPath->path}/{$this->pdf->sourcebatch}/{$pdf->idAccount}/";
 		if (!file_exists($source)) {
 			mkdir($source, 0777, true);
 		}

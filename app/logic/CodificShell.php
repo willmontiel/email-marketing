@@ -24,17 +24,17 @@ class CodificShell implements IElementProcessorRow
 	
 	public function save($pdf)
 	{	
-		$explode = "{$this->appPath->path}{$this->pdf->explodedbatch}/{$pdf->idAccount}/";
+		$explode = "{$this->appPath->path}/{$this->pdf->explodedbatch}/{$pdf->idAccount}/";
 		if (!file_exists($explode)) {
 			mkdir($explode, 0777, true);
 		}
 		
-		$encrypted = "{$this->appPath->path}{$this->pdf->encryptedbatch}/{$pdf->idAccount}/";
+		$encrypted = "{$this->appPath->path}/{$this->pdf->encryptedbatch}/{$pdf->idAccount}/";
 		if (!file_exists($encrypted)) {
 			mkdir($encrypted, 0777, true);
 		}
 		
-		$source = "{$this->appPath->path}{$this->pdf->sourcebatch}/{$pdf->idAccount}/";
+		$source = "{$this->appPath->path}/{$this->pdf->sourcebatch}/{$pdf->idAccount}/";
 		if (!file_exists($source)) {
 			mkdir($source, 0777, true);
 		}
