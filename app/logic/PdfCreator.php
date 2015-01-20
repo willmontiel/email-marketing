@@ -138,10 +138,10 @@ class PdfCreator extends BaseWrapper
 		$cmd = "fop -xml {$xml} -xsl {$xsl} -pdf {$pdf} -c {$fopConf} 2> {$log}";
 		exec($cmd, $output, $status);
 		
-		if (!$status) {
-			$error = implode(', ', $output);
-			throw new Exception("Se encontró un error mientras se creaba el PDF maestro: {$error}");
-		}
+//		if (!$status) {
+//			$error = implode(', ', $output);
+//			throw new Exception("Se encontró un error mientras se creaba el PDF maestro: {$error}");
+//		}
 	}
 	
 	private function burstPdf($pdf)
@@ -151,10 +151,10 @@ class PdfCreator extends BaseWrapper
 		$this->logger->log("pdftk: {$cmd}");
 		exec($cmd, $output, $status);
 		
-		if (!$status) {
-			$error = implode(', ', $output);
-			throw new Exception("Se encontró un error mientras se particionaba el pdf maestro: {$error}");
-		}
+//		if (!$status) {
+//			$error = implode(', ', $output);
+//			throw new Exception("Se encontró un error mientras se particionaba el pdf maestro: {$error}");
+//		}
 	}
 	
 	
@@ -164,10 +164,10 @@ class PdfCreator extends BaseWrapper
 		$cmd = escapeshellcmd($cmd);
 		exec($cmd, $output, $status);
 		
-		if (!$status) {
-			$error = implode(', ', $output);
-			throw new Exception("Se encontró un error mientras se encriptaban los archivos PDF: {$error}");
-		}
+//		if (!$status) {
+//			$error = implode(', ', $output);
+//			throw new Exception("Se encontró un error mientras se encriptaban los archivos PDF: {$error}");
+//		}
 	}
 	
 	
@@ -177,10 +177,10 @@ class PdfCreator extends BaseWrapper
 		$cmd = escapeshellcmd("zip {$encrypted}/{$this->name}.zip {$encrypted}");
 		exec($cmd, $output, $status);
 		
-		if (!$status) {
-			$error = implode(', ', $output);
-			throw new Exception("Se encontró un error mientras se comprimían los archivos PDF: {$error}");
-		}
+//		if (!$status) {
+//			$error = implode(', ', $output);
+//			throw new Exception("Se encontró un error mientras se comprimían los archivos PDF: {$error}");
+//		}
 	}
 	
 	private function updateProcessed()
