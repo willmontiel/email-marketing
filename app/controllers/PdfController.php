@@ -290,7 +290,7 @@ class PdfController extends ControllerBase
 						}
 					}
 					
-					$dir = "{$this->pdf->relativecsvbatch}{$account->idAccount}/";
+					$dir = "{$this->pdf->relativecsvbatch}/{$account->idAccount}/";
 					$data->name = "{$batch->idPdfbatch}.csv";
 					
 					$uploader = new \EmailMarketing\General\Misc\Uploader();

@@ -88,7 +88,7 @@ class PdfCreator extends BaseWrapper
 		if (!file_exists($pdf)) {
 			mkdir($pdf, 0777, true);
 		}
-		$pdf = "{$this->pdf->idPdfbatch}.pdf";
+		$pdf .= "{$this->pdf->idPdfbatch}.pdf";
 		$log = "{$this->appPath->path}{$this->dir->foplog}/{$this->pdf->idAccount}/log_{$this->pdf->idPdfbatch}.log";
 		$fopConf = "{$this->appPath->path}{$this->dir->config}/fop.xconf";
 		$pdftk = "{$this->appPath->path}{$this->dir->sourcebatch}/{$this->pdf->idAccount}/source_{$this->pdf->idPdfbatch}.sh"; 
