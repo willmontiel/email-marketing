@@ -46,6 +46,6 @@ class CodificShell implements IElementProcessorRow
 		// grabar archivo de ejecucion
 		file_put_contents("{$source}source_{$pdf->idPdfbatch}.sh", '#!/bin/bash' . PHP_EOL . implode(PHP_EOL, $cmdline) . PHP_EOL);
 		
-		return count($this->cmdline[]);
+		return count($this->cmdline);
 	}
 }
