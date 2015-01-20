@@ -93,7 +93,7 @@
 			<div class="header-background">
 				<div class="header">
 					<div class="title">
-						<a href="{{url('pdfbatch/getbatch')}}/{{batch.idPdfbatch}}" target="_blank">
+						<a href="{{url('pdf/getbatch')}}/{{batch.idPdfbatch}}" target="_blank">
 							Haga click aqui para descargar
 						</a>
 					</div>
