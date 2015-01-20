@@ -99,7 +99,8 @@ class PdfCreator extends BaseWrapper
 		}
 		$log .= "log_{$this->pdf->idPdfbatch}.log";
 		
-		$exploded = "{$this->appPath->path}/{$this->dir->explodedbatch}/{$this->pdf->idAccount}/page_%02d.pdf";
+		$exp = "{$this->appPath->path}/{$this->dir->explodedbatch}/{$this->pdf->idAccount}/{$this->pdf->idPdfbatch}/";
+		$exploded = "{$exp}page_%02d.pdf";
 		$fopConf = "{$this->appPath->path}/{$this->dir->config}/fop.xconf";
 		$pdftk = "{$this->appPath->path}/{$this->dir->sourcebatch}/{$this->pdf->idAccount}/source_{$this->pdf->idPdfbatch}.sh"; 
 		$encrypted = "{$this->appPath->path}/{$this->dir->encryptedbatch}/{$this->pdf->idAccount}";
@@ -127,7 +128,7 @@ class PdfCreator extends BaseWrapper
 		$this->processed += $i;
 		$this->updateProcessed();
 		
-		$this->zipPdfFolder($encrypted);
+		$this->zipPdfFolder($encrypted, $exp);
 	}
 	
 	private function createPdfMaster($xml, $xsl, $pdf, $fopConf, $log)
@@ -146,7 +147,6 @@ class PdfCreator extends BaseWrapper
 	{
 		$output = array();
 		$cmd = "pdftk {$pdf} burst output {$exploded}";
-		$this->logger->log("pdftk: {$cmd}");
 		exec($cmd, $output, $status);
 		
 //		if (!$status) {
@@ -169,10 +169,10 @@ class PdfCreator extends BaseWrapper
 	}
 	
 	
-	private function zipPdfFolder($encrypted)
+	private function zipPdfFolder($encrypted, $exploded)
 	{
 		$output = array();
-		$cmd = escapeshellcmd("zip {$encrypted}/{$this->name}.zip {$encrypted}");
+		$cmd = escapeshellcmd("zip {$encrypted}/{$this->name}.zip {$exploded}");
 		exec($cmd, $output, $status);
 		
 //		if (!$status) {

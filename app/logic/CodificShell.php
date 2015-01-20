@@ -24,7 +24,7 @@ class CodificShell implements IElementProcessorRow
 	
 	public function save($pdf)
 	{	
-		$explode = "{$this->appPath->path}/{$this->pdf->explodedbatch}/{$pdf->idAccount}/";
+		$explode = "{$this->appPath->path}/{$this->pdf->explodedbatch}/{$pdf->idAccount}/{$pdf->idPdfbatch}/";
 		if (!file_exists($explode)) {
 			mkdir($explode, 0777, true);
 		}
