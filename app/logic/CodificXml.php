@@ -12,7 +12,7 @@ class CodificXml implements IElementProcessorRow
 	{
 		$this->xmldoc = new DomDocument();
 		$this->xmldoc->formatOutput = true;
-		$this->root = $this->xmldoc->createElement('documentos');
+		$this->root = $this->xmldoc->createElement('documents');
 		$this->root = $this->xmldoc->appendChild($this->root);
 		$this->appPath = Phalcon\DI::getDefault()->get('appPath');
 		$this->pdf = Phalcon\DI::getDefault()->get('pdf');
@@ -31,9 +31,9 @@ class CodificXml implements IElementProcessorRow
 		$row[2] = $this->convertirMayusculaSinTilde($row[2]);
 		
 		// Guardamos la informacion en un array para generar el XML
-		$extracto = $this->crearelemento($this->xmldoc, $this->root, 'documento');
+		$doc = $this->crearelemento($this->xmldoc, $this->root, 'document');
 
-		$primary = $this->crearelemento($this->xmldoc, $extracto, 'primarydata');
+		$primary = $this->crearelemento($this->xmldoc, $doc, 'primarydata');
 		
 		$this->createTextNode($this->xmldoc, $primary, 'id', $row[0]);
 		$this->createTextNode($this->xmldoc, $primary, 'name', $row[1]);
@@ -48,7 +48,7 @@ class CodificXml implements IElementProcessorRow
 		$this->createTextNode($this->xmldoc, $primary, 'password', $row[8]);
 
 
-		$secondarydata = $this->crearelemento($this->xmldoc, $extracto, 'secondarydata');
+		$secondarydata = $this->crearelemento($this->xmldoc, $doc, 'secondarydata');
 		
 		$total = count($row);
 		if ($total > 9) {
