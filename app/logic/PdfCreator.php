@@ -116,6 +116,7 @@ class PdfCreator extends BaseWrapper
 		$this->logger->log("procceses: {$this->processed}");
 		while(!feof($file)) {
 			$row = fgets($file);
+			$this->logger->log("Row: {$row}");
 			$this->encryptePdf($row);
 			$i++;
 			
