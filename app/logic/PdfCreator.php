@@ -86,28 +86,25 @@ class PdfCreator extends BaseWrapper
 	{
 		$xml = "{$this->appPath->path}/{$this->dir->sourcebatch}/{$this->pdf->idAccount}/{$this->pdf->idPdfbatch}.xml";
 		$xsl = "{$this->appPath->path}/{$this->dir->relativetemplatesfolder}/{$this->pdf->idPdftemplate}/{$this->pdf->idPdftemplate}.xsl";
+		
 		$pdf = "{$this->appPath->path}/{$this->dir->fop}/{$this->pdf->idAccount}/";
 		if (!file_exists($pdf)) {
 			mkdir($pdf, 0777, true);
 		}
 		$pdf .= "{$this->pdf->idPdfbatch}.pdf";
+		
 		$log = "{$this->appPath->path}/{$this->dir->foplog}/{$this->pdf->idAccount}/";
 		if (!file_exists($log)) {
 			mkdir($log, 0777, true);
 		}
 		$log .= "log_{$this->pdf->idPdfbatch}.log";
+		
 		$fopConf = "{$this->appPath->path}/{$this->dir->config}/fop.xconf";
 		$pdftk = "{$this->appPath->path}/{$this->dir->sourcebatch}/{$this->pdf->idAccount}/source_{$this->pdf->idPdfbatch}.sh"; 
 		$encrypted = "{$this->appPath->path}/{$this->dir->encryptedbatch}/{$this->pdf->idAccount}";
 		
-		$this->logger->log("Xml: {$xml}");
-		$this->logger->log("Xsl: {$xsl}");
-		$this->logger->log("Pdf: {$pdf}");
-		$this->logger->log("Log: {$log}");
-		$this->logger->log("Conf: {$fopConf}");
 		$this->logger->log("Pdftk: {$pdftk}");
 		$this->logger->log("Encrypted: {$encrypted}");
-		
 		
 		$this->createPdfMaster($xml, $xsl, $pdf, $fopConf, $log);
 		$this->burstPdf($pdf);
@@ -139,7 +136,6 @@ class PdfCreator extends BaseWrapper
 	{
 		$output = array();
 		$cmd = "fop -xml {$xml} -xsl {$xsl} -pdf {$pdf} -c {$fopConf} 2> {$log}";
-		$this->logger->log("fop: {$cmd}");
 		exec($cmd, $output, $status);
 		
 		if (!$status) {

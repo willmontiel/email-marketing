@@ -337,14 +337,10 @@ class PdfController extends ControllerBase
 			return $this->response->redirect('error');
 		}
 		
-		$name = str_replace(' ', '_', $batch->name);
-		$name = strtolower($name);
-		$name = "{$name}.zip";
-		
 		$this->view->disable();
-		$file = "{$this->appPath->path}{$this->pdf->encryptedbatch}/{$this->pdf->idAccount}/{$name}.zip";
+		$file = "{$this->appPath->path}/{$this->pdf->encryptedbatch}/{$account->idAccount}/{$batch->idPdfbatch}.zip";
 		header('Content-type: application/zip');
-		header("Content-Disposition: attachment; filename={$name}.zip");
+		header("Content-Disposition: attachment; filename={$batch->idPdfbatch}.zip");
 		header('Content-Length: ' . filesize($file));
 		readfile($file);
 	}
