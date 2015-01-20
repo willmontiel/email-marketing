@@ -44,7 +44,4 @@ class ProcessFile
 		
 		return true;
 	}
-	
-	
-
 }
