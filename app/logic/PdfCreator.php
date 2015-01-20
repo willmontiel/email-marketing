@@ -94,6 +94,15 @@ class PdfCreator extends BaseWrapper
 		$pdftk = "{$this->appPath->path}{$this->dir->sourcebatch}/{$this->pdf->idAccount}/source_{$this->pdf->idPdfbatch}.sh"; 
 		$encrypted = "{$this->appPath->path}{$this->dir->encryptedbatch}/{$this->pdf->idAccount}";
 		
+		$this->logger->log("Xml: {$xml}");
+		$this->logger->log("Xsl: {$xsl}");
+		$this->logger->log("Pdf: {$pdf}");
+		$this->logger->log("Log: {$log}");
+		$this->logger->log("Conf: {$fopConf}");
+		$this->logger->log("Pdftk: {$pdftk}");
+		$this->logger->log("Encrypted: {$encrypted}");
+		
+		
 		$this->createPdfMaster($xml, $xsl, $pdf, $fopConf, $log);
 		$this->burstPdf($pdf);
 		
@@ -124,6 +133,7 @@ class PdfCreator extends BaseWrapper
 	{
 		$output = array();
 		$cmd = escapeshellcmd("fop -xml {$xml} -xsl {$xsl} -pdf {$pdf} -c {$fopConf} 2> {$log}");
+		$this->logger->log("fop: {$cmd}");
 		exec($cmd, $output, $status);
 		
 		if (!$status) {
@@ -136,6 +146,7 @@ class PdfCreator extends BaseWrapper
 	{
 		$output = array();
 		$cmd = escapeshellcmd("pdftk {$pdf} burst");
+		$this->logger->log("pdftk: {$cmd}");
 		exec($cmd, $output, $status);
 		
 		if (!$status) {
