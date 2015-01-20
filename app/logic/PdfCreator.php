@@ -99,15 +99,13 @@ class PdfCreator extends BaseWrapper
 		}
 		$log .= "log_{$this->pdf->idPdfbatch}.log";
 		
+		$exploded = "{$this->appPath->path}/{$this->dir->explodedbatch}/{$this->pdf->idAccount}/page_%02d.pdf";
 		$fopConf = "{$this->appPath->path}/{$this->dir->config}/fop.xconf";
 		$pdftk = "{$this->appPath->path}/{$this->dir->sourcebatch}/{$this->pdf->idAccount}/source_{$this->pdf->idPdfbatch}.sh"; 
 		$encrypted = "{$this->appPath->path}/{$this->dir->encryptedbatch}/{$this->pdf->idAccount}";
 		
-		$this->logger->log("Pdftk: {$pdftk}");
-		$this->logger->log("Encrypted: {$encrypted}");
-		
 		$this->createPdfMaster($xml, $xsl, $pdf, $fopConf, $log);
-		$this->burstPdf($pdf);
+		$this->burstPdf($pdf, $exploded);
 		
 		$file = fopen($pdftk, "r");
 		//Output a line of the file until the end is reached
@@ -144,10 +142,10 @@ class PdfCreator extends BaseWrapper
 //		}
 	}
 	
-	private function burstPdf($pdf)
+	private function burstPdf($pdf, $exploded)
 	{
 		$output = array();
-		$cmd = escapeshellcmd("pdftk {$pdf} burst");
+		$cmd = "pdftk {$pdf} burst output {$exploded}";
 		$this->logger->log("pdftk: {$cmd}");
 		exec($cmd, $output, $status);
 		
