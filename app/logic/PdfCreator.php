@@ -111,14 +111,10 @@ class PdfCreator extends BaseWrapper
 		$file = fopen($pdftk, "r");
 		//Output a line of the file until the end is reached
 		
-		$i = 1;
-		$this->logger->log("i: {$i}");
-		$this->logger->log("procceses: {$this->processed}");
+		$i = 0;
 		while(!feof($file)) {
 			$row = fgets($file);
-			$this->logger->log("Row: {$row}");
 			if (!empty($row)) {
-				$this->logger->log("Row2: {$row}");
 				$this->encryptePdf($row);
 				$i++;
 				
@@ -127,17 +123,11 @@ class PdfCreator extends BaseWrapper
 					$this->updateProcessed();
 				}
 			}
-			
-			$this->logger->log("i: {$i}");
-			$this->logger->log("procceses: {$this->processed}");
 		}
 		
-		$this->logger->log("i: {$i}");
-		$this->logger->log("procceses: {$this->processed}");
 		fclose($file);
 		
 		$this->processed += $i;
-		$this->logger->log("procceses+: {$this->processed}");
 		$this->updateProcessed();
 		
 		$this->zipPdfFolder($encrypted, $exp);
