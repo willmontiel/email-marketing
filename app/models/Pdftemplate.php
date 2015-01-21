@@ -6,6 +6,5 @@ class Pdftemplate extends Modelbase
 	public function initialize()
     {
         $this->hasMany("idPdftemplate", "Pdfbatch", "idPdftemplate");
-		
 	}
 }

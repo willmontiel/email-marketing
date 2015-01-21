@@ -6,19 +6,19 @@ class PdfController extends ControllerBase
 	{
 		$pdfs = Pdftemplate::find();
 		$a = array();
-		if (count($pdfs) > 0) {
-			foreach ($pdfs as $pdf) {
-				$ids = json_decode($pdf->idAccounts);
-				$ids = implode(',', $ids);
-				
-				$query = $this->db->query("SELECT * FROM account WHERE idAccount IN ({$ids})");
-				$accounts = $query->fetchAll();
-				
-				if (count($accounts) > 0) {
-					$a[$pdf->idPdftemplate] = $accounts;
-				}
-			}
-		}
+//		if (count($pdfs) > 0) {
+//			foreach ($pdfs as $pdf) {
+//				$ids = json_decode($pdf->idAccounts);
+//				$ids = implode(',', $ids);
+//				
+//				$query = $this->db->query("SELECT * FROM account WHERE idAccount IN ({$ids})");
+//				$accounts = $query->fetchAll();
+//				
+//				if (count($accounts) > 0) {
+//					$a[$pdf->idPdftemplate] = $accounts;
+//				}
+//			}
+//		}
 		
 		$this->view->setVar('pdfs', $pdfs);
 		$this->view->setVar('accounts', $a);
@@ -29,6 +29,7 @@ class PdfController extends ControllerBase
 		if ($this->request->isPost()) {
 			$name = $this->request->getPost('name');
 			$accounts = $this->request->getPost('accounts');
+			
 			
 			if (empty($name)) {
 				$this->flashSession->error('Debe envíar un nombre para la plantilla, por favor verifique la información');
@@ -58,7 +59,6 @@ class PdfController extends ControllerBase
 			$data->type = $template['type'];
 			$data->tmp_dir = $template['tmp_name'];
 			$ext = array('xsl');
-			
 			try {
 				$this->db->begin();
 				
