@@ -5,20 +5,23 @@ class PdfController extends ControllerBase
 	public function indexAction()
 	{
 		$pdfs = Pdftemplate::find();
+		$this->logger->log("1");
 		$a = array();
-//		if (count($pdfs) > 0) {
-//			foreach ($pdfs as $pdf) {
-//				$ids = json_decode($pdf->idAccounts);
-//				$ids = implode(',', $ids);
-//				
-//				$query = $this->db->query("SELECT * FROM account WHERE idAccount IN ({$ids})");
-//				$accounts = $query->fetchAll();
-//				
-//				if (count($accounts) > 0) {
-//					$a[$pdf->idPdftemplate] = $accounts;
-//				}
-//			}
-//		}
+		if (count($pdfs) > 0) {
+			$this->logger->log("2");
+			foreach ($pdfs as $pdf) {
+				$this->logger->log("x");
+				$ids = json_decode($pdf->idAccounts);
+				$ids = implode(',', $ids);
+				
+				$query = $this->db->query("SELECT * FROM account WHERE idAccount IN ({$ids})");
+				$accounts = $query->fetchAll();
+				
+				if (count($accounts) > 0) {
+					$a[$pdf->idPdftemplate] = $accounts;
+				}
+			}
+		}
 		
 		$this->view->setVar('pdfs', $pdfs);
 		$this->view->setVar('accounts', $a);
