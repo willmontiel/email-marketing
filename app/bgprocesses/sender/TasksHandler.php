@@ -3,12 +3,14 @@ class TasksHandler extends Handler
 {
 	protected $readyTasks;
 	protected $scheduledTasks;
+	protected $sendChild;
 	protected $publisher;
 	protected $pool;
-	
+			
 	function __construct($registry) {
 		parent::__construct($registry);
 		
+		$this->sendChild = 'ChildSender.php';
 		$this->readyTasks = array();
 		$this->scheduledTasks = array();
 		$this->publisher = $this->di['publisher'];
@@ -30,7 +32,9 @@ class TasksHandler extends Handler
 	{
 		switch ($event->type) {
 			case 'Idle':
-				$this->taskScheduling();
+				if( $this->pool->getChildProcess() == $this->sendChild ) { 
+					$this->taskScheduling();
+				}
 				if($this->checkReadyTasks()) {
 					$this->SendReadyTasks();
 				}

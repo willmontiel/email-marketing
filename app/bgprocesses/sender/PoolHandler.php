@@ -22,6 +22,11 @@ class PoolHandler extends Handler
 		$this->childProcess = $child;
 	}
 	
+	public function getChildProcess()
+	{
+		return $this->childProcess;
+	}
+	
 	public function getEvents()
 	{
 		$events = array('Idle', 'WP', 'Response-From-Child');
