@@ -181,9 +181,9 @@ class PdfCreator extends BaseWrapper
 		$cmd = "fop -xml {$xml} -xsl {$xsl} -pdf {$pdf} -c {$fopConf} 2> {$log}";
 		exec($cmd, $output, $status);
 		
-		$this->logger->log("createPdfMaster");
-		$this->logger->log("Out: " . print_r($output, true));
-		$this->logger->log("Sta: {$status}");
+//		$this->logger->log("createPdfMaster");
+//		$this->logger->log("Out: " . print_r($output, true));
+//		$this->logger->log("Sta: {$status}");
 		
 //		if (!$status) {
 //			$error = implode(', ', $output);
@@ -197,9 +197,9 @@ class PdfCreator extends BaseWrapper
 		$cmd = "pdftk {$pdf} burst output {$exploded}";
 		exec($cmd, $output, $status);
 		
-		$this->logger->log("burstPdf");
-		$this->logger->log("Out: " . print_r($output, true));
-		$this->logger->log("Sta: {$status}");
+//		$this->logger->log("burstPdf");
+//		$this->logger->log("Out: " . print_r($output, true));
+//		$this->logger->log("Sta: {$status}");
 		
 //		if (!$status) {
 //			$error = implode(', ', $output);
@@ -214,9 +214,9 @@ class PdfCreator extends BaseWrapper
 		$cmd = escapeshellcmd($cmd);
 		exec($cmd, $output, $status);
 		
-		$this->logger->log("encryptePdf");
-		$this->logger->log("Out: " . print_r($output, true));
-		$this->logger->log("Sta: {$status}");
+//		$this->logger->log("encryptePdf");
+//		$this->logger->log("Out: " . print_r($output, true));
+//		$this->logger->log("Sta: {$status}");
 		
 //		if (!$status) {
 //			$error = implode(', ', $output);
@@ -228,12 +228,12 @@ class PdfCreator extends BaseWrapper
 	private function zipPdfFolder($source, $destiny)
 	{
 		$output = array();
-		$cmd = escapeshellcmd("zip -rm {$destiny} {$source}");
+		$cmd = escapeshellcmd("zip -rmj {$destiny} {$source}");
 		exec($cmd, $output, $status);
 	
-		$this->logger->log("zipPdfFolder");
-		$this->logger->log("Out: " . print_r($output));
-		$this->logger->log("Sta: {$status}");
+//		$this->logger->log("zipPdfFolder");
+//		$this->logger->log("Out: " . print_r($output));
+//		$this->logger->log("Sta: {$status}");
 		
 //		if (!$status) {
 //			$error = implode(', ', $output);
