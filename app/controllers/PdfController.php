@@ -127,7 +127,7 @@ class PdfController extends ControllerBase
 		}
 	
 		if ($this->request->isPost()) {
-			$dir = "{$this->pdf->templates}";
+			$dir = "{$this->pdf->templates}/{$pdf->idPdftemplate}";
 			
 			$name = $this->request->getPost('name');
 			$accounts = $this->request->getPost('accounts');
@@ -159,7 +159,7 @@ class PdfController extends ControllerBase
 				try {
 					if ($editfile == 1) {
 						$uploader = new \EmailMarketing\General\Misc\Uploader();
-						$uploader->deleteFileFromServer("{$dir}{$pdf->idPdftemplate}.xsl");
+						$uploader->deleteFileFromServer("{$dir}/{$pdf->idPdftemplate}.xsl");
 						
 						$uploader->setData($data);
 						$uploader->validateExt($ext);
@@ -167,8 +167,8 @@ class PdfController extends ControllerBase
 						$uploader->uploadFile($dir);
 						
 						$uploader->decompressFile("{$dir}{$data->name}", $dir);
-						$uploader->changeNameOfFile("{$dir}template.xsl", "{$dir}{$pdf->idPdftemplate}.xsl");
-						$uploader->deleteFileFromServer("{$dir}{$data->name}");
+						$uploader->changeNameOfFile("{$dir}/template.xsl", "{$dir}/{$pdf->idPdftemplate}.xsl");
+						$uploader->deleteFileFromServer("{$dir}/{$pdf->idPdftemplate}.zip");
 					}
 					
 					$pdf->name = $name;

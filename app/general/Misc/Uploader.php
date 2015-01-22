@@ -109,9 +109,7 @@ class Uploader
 	*/
 	public function deleteFileFromServer($dir)
 	{
-		if (!unlink($dir)) {
-			throw new \Exception('File could not delete from server!');
-		}
+		unlink($dir);
 	}
 	
 	public function getSource()
