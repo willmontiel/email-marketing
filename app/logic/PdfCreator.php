@@ -164,10 +164,12 @@ class PdfCreator extends BaseWrapper
 		$cmd = escapeshellcmd($cmd);
 		exec($cmd, $output, $status);
 		
-//		if (!$status) {
-//			$error = implode(', ', $output);
-//			throw new Exception("Se encontró un error mientras se encriptaban los archivos PDF: {$error}");
-//		}
+		$this->logger->log("Status: {$status}");
+		
+		if (!$status) {
+			$error = implode(', ', $output);
+			throw new Exception("Se encontró un error mientras se encriptaban los archivos PDF: {$error}");
+		}
 	}
 	
 	
