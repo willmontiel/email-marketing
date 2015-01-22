@@ -119,6 +119,10 @@ class PdfCreator extends BaseWrapper
 		$this->updateProcessed();
 		
 		$this->zipPdfFolder($encrypted, "{$encrypted}/{$this->pdf->idPdfbatch}.zip");
+		
+		$this->removeFiles("{$this->appPath->path}/{$this->dir->fop}/{$this->pdf->idAccount}/");
+		$this->removeFiles("{$this->appPath->path}/{$this->dir->explodedbatch}/{$this->pdf->idAccount}/{$this->pdf->idPdfbatch}/");
+		
 	}
 	
 	private function getXmlFolder()
@@ -273,6 +277,15 @@ class PdfCreator extends BaseWrapper
 		$name = strtolower($name);
 		
 		return $name;
+	}
+	
+	private function removeFiles($dir)
+	{
+		$files = glob($dir . '*', GLOB_MARK);
+		
+		foreach ($files as $file) {
+			unlink($file);
+		}
 	}
 	
 	private function searchPdfRecord()
