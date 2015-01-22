@@ -40,11 +40,7 @@ class CodificShell implements IElementProcessorRow
 		}
 		
 		foreach ($this->cmdline as $row) {
-			$this->logger->log("Row:_{$row['pagenum']}");
-			$page = trim($row['pagenum']);
-			
-			$this->logger->log("Page:_{$page}");
-			$cmdline[] = "pdftk {$explode}page_{$page}.pdf output {$encrypted}{$row['id']}.pdf user_pw {$row['password']} allow printing";
+			$cmdline[] = "pdftk {$explode}page_{$row['pagenum']}.pdf output {$encrypted}{$row['id']}.pdf user_pw {$row['password']} allow printing";
 		}
 		
 		// grabar archivo de ejecucion
