@@ -18,7 +18,7 @@ class CodificShell implements IElementProcessorRow
 		// Guardamos la informacion en un array para generar el shell
 		$this->cmdline[] = array('pagenum'=> $numRow,
 									 'id' => $row[0],
-									 'password'=> $row[8]
+									 'password'=> $row[9]
 								);
 	}
 	
