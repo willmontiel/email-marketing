@@ -20,7 +20,7 @@
 {% block content %}
 	<div class="row">
 		<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
-			<h1 class="sectiontitle">Editar plantilla <strong>{{pdf.name}}</strong></h1>
+			<h1 class="sectiontitle">Editar plantilla <strong>{{ obj.name }}</strong></h1>
 			<div class="bs-callout bs-callout-info" style="font-size: 1.1em;">
 				<p>
 				Aqui se cargan los archivos <strong>PDF:</strong>
@@ -38,11 +38,11 @@
 	<div class="row">
 		<div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
 			<div class="header-background">
-				<form method="POST" action="{{url('pdf/edit')}}/{{pdf.idPdftemplate}}" class="form-horizontal" enctype="multipart/form-data">
+				<form method="POST" action="{{url('pdf/edit')}}/{{ obj.idPdftemplate }}" class="form-horizontal" enctype="multipart/form-data">
 					<div class="form-group">
 						<label for="name" class="col-sm-2 control-label">Nombre</label>
 						<div class="col-sm-6">
-							<input type="text" value="{{pdf.name}}" autofocus required class="form-control" id="name" name="name" placeholder="Nombre">
+							<input type="text" value="{{ obj.name }}" autofocus required class="form-control" id="name" name="name" placeholder="Nombre">
 							<input type="hidden" value="0"  id="edit-file" name="edit-file">
 						</div>
 					</div>
@@ -60,9 +60,9 @@
 					</div>		
 						
 					<div class="form-group">
-						<span class="mail-detail">Recuerde que si carga otro archivo el anterior se sobreescribirá.</span>
 						<label for="file" class="col-sm-2 control-label">Seleccionar archivo</label>
 						<div class="col-sm-6">
+							<span class="mail-detail">Recuerde que si carga otro archivo el anterior se sobreescribirá.</span>
 							<input type="file" id="file" name="file">
 						</div>
 					</div>

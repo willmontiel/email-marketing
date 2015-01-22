@@ -192,11 +192,17 @@ class PdfController extends ControllerBase
 			}
 		}
 		
-		
 		$accounts = Account::find();
 		$ids = json_decode($pdf->idAccounts);
 		
-		$this->view->setVar('pdf', $pdf);
+		$obj = new stdClass();
+		$obj->idPdftemplate = $pdf->idPdftemplate;
+		$obj->idAccounts = $pdf->idAccounts;
+		$obj->name = $pdf->name;
+		$obj->createdon = $pdf->createdon;
+		$obj->updatedon = $pdf->createdon;
+		
+		$this->view->setVar('obj', $obj);
 		$this->view->setVar('accounts', $accounts);
 		$this->view->setVar('ids', $ids);
 	}
