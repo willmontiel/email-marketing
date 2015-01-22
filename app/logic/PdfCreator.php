@@ -84,26 +84,14 @@ class PdfCreator extends BaseWrapper
 	
 	private function createBatch()
 	{
-		$xml = "{$this->appPath->path}/{$this->dir->sourcebatch}/{$this->pdf->idAccount}/{$this->pdf->idPdfbatch}.xml";
-		$xsl = "{$this->appPath->path}/{$this->dir->relativetemplatesfolder}/{$this->pdf->idPdftemplate}/{$this->pdf->idPdftemplate}.xsl";
-		
-		$pdf = "{$this->appPath->path}/{$this->dir->fop}/{$this->pdf->idAccount}/";
-		if (!file_exists($pdf)) {
-			mkdir($pdf, 0777, true);
-		}
-		$pdf .= "{$this->pdf->idPdfbatch}.pdf";
-		
-		$log = "{$this->appPath->path}/{$this->dir->foplog}/{$this->pdf->idAccount}/";
-		if (!file_exists($log)) {
-			mkdir($log, 0777, true);
-		}
-		$log .= "log_{$this->pdf->idPdfbatch}.log";
-		
-		$exp = "{$this->appPath->path}/{$this->dir->explodedbatch}/{$this->pdf->idAccount}/{$this->pdf->idPdfbatch}";
-		$exploded = "{$exp}/page_%02d.pdf";
-		$fopConf = "{$this->appPath->path}/{$this->dir->config}/fop.xconf";
-		$pdftk = "{$this->appPath->path}/{$this->dir->sourcebatch}/{$this->pdf->idAccount}/source_{$this->pdf->idPdfbatch}.sh"; 
-		$encrypted = "{$this->appPath->path}/{$this->dir->encryptedbatch}/{$this->pdf->idAccount}";
+		$xml = $this->getXmlFolder();
+		$xsl = $this->getXslFolder();
+		$pdf = $this->getPdfFile();
+		$log = $this->getFopLogFile();
+		$fopConf = $this->getFopConf();
+		$pdftk = $this->getShellFile(); 
+		$encrypted = $this->getEncryptedFolder();
+		$exploded = $this->getExplodedFolder();
 		
 		$this->createPdfMaster($xml, $xsl, $pdf, $fopConf, $log);
 		$this->burstPdf($pdf, $exploded);
@@ -130,7 +118,61 @@ class PdfCreator extends BaseWrapper
 		$this->processed += $i;
 		$this->updateProcessed();
 		
-		$this->zipPdfFolder($encrypted, $exp);
+		$this->zipPdfFolder($encrypted, "{$encrypted}/{$this->pdf->idPdfbatch}.zip");
+	}
+	
+	private function getXmlFolder()
+	{
+		return "{$this->appPath->path}/{$this->dir->sourcebatch}/{$this->pdf->idAccount}/{$this->pdf->idPdfbatch}.xml";
+	}
+	
+	private function getXslFolder()
+	{
+		return "{$this->appPath->path}/{$this->dir->relativetemplatesfolder}/{$this->pdf->idPdftemplate}/{$this->pdf->idPdftemplate}.xsl";
+	}
+	
+	private function getPdfFile()
+	{
+		$pdf = "{$this->appPath->path}/{$this->dir->fop}/{$this->pdf->idAccount}/";
+		if (!file_exists($pdf)) {
+			mkdir($pdf, 0777, true);
+		}
+		
+		$pdf .= "{$this->pdf->idPdfbatch}.pdf";
+		
+		return $pdf;
+	}
+	
+	private function getFopLogFile()
+	{
+		$log = "{$this->appPath->path}/{$this->dir->foplog}/{$this->pdf->idAccount}/";
+		if (!file_exists($log)) {
+			mkdir($log, 0777, true);
+		}
+		
+		$log .= "log_{$this->pdf->idPdfbatch}.log";
+		
+		return $log;
+	}
+	
+	private function getFopConf()
+	{
+		return "{$this->appPath->path}/{$this->dir->config}/fop.xconf";
+	}
+	
+	private function getShellFile()
+	{
+		return "{$this->appPath->path}/{$this->dir->sourcebatch}/{$this->pdf->idAccount}/source_{$this->pdf->idPdfbatch}.sh"; 
+	}
+	
+	private function getEncryptedFolder()
+	{
+		return "{$this->appPath->path}/{$this->dir->encryptedbatch}/{$this->pdf->idAccount}/{$this->pdf->idPdfbatch}";
+	}
+	
+	private function getExplodedFolder()
+	{
+		return "{$this->appPath->path}/{$this->dir->explodedbatch}/{$this->pdf->idAccount}/{$this->pdf->idPdfbatch}/page_%02d.pdf";
 	}
 	
 	private function createPdfMaster($xml, $xsl, $pdf, $fopConf, $log)
@@ -183,10 +225,10 @@ class PdfCreator extends BaseWrapper
 	}
 	
 	
-	private function zipPdfFolder($encrypted, $exploded)
+	private function zipPdfFolder($source, $destiny)
 	{
 		$output = array();
-		$cmd = escapeshellcmd("zip -r {$encrypted}/{$this->pdf->idPdfbatch}.zip {$exploded}");
+		$cmd = escapeshellcmd("zip -r {$destiny} {$source}");
 		exec($cmd, $output, $status);
 	
 		$this->logger->log("zipPdfFolder");

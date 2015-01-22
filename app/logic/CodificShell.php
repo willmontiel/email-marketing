@@ -29,7 +29,7 @@ class CodificShell implements IElementProcessorRow
 			mkdir($explode, 0777, true);
 		}
 		
-		$encrypted = "{$this->appPath->path}/{$this->pdf->encryptedbatch}/{$pdf->idAccount}/";
+		$encrypted = "{$this->appPath->path}/{$this->pdf->encryptedbatch}/{$pdf->idAccount}/{$pdf->idPdfbatch}/";
 		if (!file_exists($encrypted)) {
 			mkdir($encrypted, 0777, true);
 		}
