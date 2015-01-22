@@ -82,14 +82,16 @@
 								</tr>
 							</thead>
 							<tbody>
-								{#
-								{% for account in accounts%}
-									<tr>
-										<td>{{account['idAccount']}}</td>
-										<td>{{account['companyName']}}</td>
-									</tr>
+								{% for idAccount in item.idAccounts|json_decode%}
+									{% for account in accounts %}
+										{% if idAccount == account.idAccount %}
+											<tr>
+												<td>{{account.idAccount}}</td>
+												<td>{{account.companyName}}</td>
+											</tr>
+										{% endif %}
+									{% endfor %}	
 								{% endfor %}
-								#}
 							</tbody>
 						</table>
 					</div>

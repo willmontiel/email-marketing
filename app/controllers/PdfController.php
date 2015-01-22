@@ -22,6 +22,7 @@ class PdfController extends ControllerBase
 		
 		$accounts = Account::find();
 		$this->view->setVar('accounts', $accounts);
+		
 	}
 	
 	public function loadtemplateAction()
