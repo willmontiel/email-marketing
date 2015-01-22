@@ -42,7 +42,6 @@
 					<div class="form-group">
 						<label for="name" class="col-sm-2 control-label">Nombre</label>
 						<div class="col-sm-6">
-							<span class="mail-detail">Recuerde que si cambia el nombre, deberá cambiar el archivo de nuevo.</span>
 							<input type="text" value="{{pdf.name}}" autofocus required class="form-control" id="name" name="name" placeholder="Nombre">
 							<input type="hidden" value="0"  id="edit-file" name="edit-file">
 						</div>
@@ -58,21 +57,10 @@
 								{% endif %}	
 							</select>
 						</div>
-					</div>
-						
-					<div class="form-group">
-						<div class="col-sm-2 control-label"></div>
-						<div class="col-sm-6">
-							{% if file == 1 %}
-								<strong>Archivos encontrados:</strong> {{name}} <br />
-								<span class="mail-detail">Recuerde que si carga otro archivo el anterior se sobreescribirá.</span>
-							{% else %}
-								No se encontró el archivo de template, por favor cargue uno
-							{% endif %}
-						</div>
 					</div>		
 						
 					<div class="form-group">
+						<span class="mail-detail">Recuerde que si carga otro archivo el anterior se sobreescribirá.</span>
 						<label for="file" class="col-sm-2 control-label">Seleccionar archivo</label>
 						<div class="col-sm-6">
 							<input type="file" id="file" name="file">

@@ -78,8 +78,34 @@ class Uploader
 		$this->source = $dir;
 	}
 
+	
+	public function decompressFile($source, $destination)
+	{
+		//Creamos un objeto de la clase ZipArchive()
+		$enzip = new \ZipArchive();
+		
+		//Abrimos el archivo a descomprimir
+		$enzip->open($source);
+		
+		//Extraemos el contenido del archivo dentro de la carpeta especificada
+		$extracted = $enzip->extractTo($destination);
+
+		/* Si el archivo se extrajo correctamente listamos los nombres de los
+		 * archivos que contenia de lo contrario mostramos un mensaje de error
+		*/
+		if(!$extracted) {
+			throw new Exception("Error while unziping file!");
+		}
+	}
+
+	
+	public function changeNameOfFile($source, $destination)
+	{
+		rename($source, $destination);
+	}
+
 	/**
-	* Esta función elimina la imagen cargada en caso de que haya ocurrido un error
+	* Esta función elimina un archivo cargado en caso de que haya ocurrido un error
 	*/
 	public function deleteFileFromServer($dir)
 	{

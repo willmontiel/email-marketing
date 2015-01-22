@@ -100,7 +100,7 @@ class PdfCreator extends BaseWrapper
 		$log .= "log_{$this->pdf->idPdfbatch}.log";
 		
 		$exp = "{$this->appPath->path}/{$this->dir->explodedbatch}/{$this->pdf->idAccount}/{$this->pdf->idPdfbatch}";
-		$exploded = "{$exp}/page_%02d.pdf";
+		$exploded = "{$exp}/page_%0002d.pdf";
 		$fopConf = "{$this->appPath->path}/{$this->dir->config}/fop.xconf";
 		$pdftk = "{$this->appPath->path}/{$this->dir->sourcebatch}/{$this->pdf->idAccount}/source_{$this->pdf->idPdfbatch}.sh"; 
 		$encrypted = "{$this->appPath->path}/{$this->dir->encryptedbatch}/{$this->pdf->idAccount}";

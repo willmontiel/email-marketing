@@ -5,12 +5,10 @@ class PdfController extends ControllerBase
 	public function indexAction()
 	{
 		$pdfs = Pdftemplate::find();
-		$this->logger->log("1");
+		
 		$a = array();
 		if (count($pdfs) > 0) {
-			$this->logger->log("2");
 			foreach ($pdfs as $pdf) {
-				$this->logger->log("x");
 				$ids = json_decode($pdf->idAccounts);
 				$ids = implode(',', $ids);
 				
@@ -61,7 +59,7 @@ class PdfController extends ControllerBase
 			$data->size = $template['size'];
 			$data->type = $template['type'];
 			$data->tmp_dir = $template['tmp_name'];
-			$ext = array('xsl');
+			$ext = array('zip');
 			try {
 				$this->db->begin();
 				
@@ -78,7 +76,7 @@ class PdfController extends ControllerBase
 					throw new Exception("Ocurrió mientras se guardaba el template, por favor contacte al administrador");
 				}
 				
-				$data->name = "{$pdf->idPdftemplate}.xsl";
+				$data->name = "{$pdf->idPdftemplate}.zip";
 				
 				$dir = "{$this->pdf->templates}/{$pdf->idPdftemplate}/";
 				
@@ -87,6 +85,9 @@ class PdfController extends ControllerBase
 				$uploader->validateExt($ext);
 				$uploader->validateSize(2000);
 				$uploader->uploadFile($dir);
+				$uploader->decompressFile("{$dir}{$data->name}", $dir);
+				$uploader->changeNameOfFile("{$dir}template.xsl", "{$dir}{$pdf->idPdftemplate}.xsl");
+				$uploader->deleteFileFromServer("{$dir}{$data->name}");
 				
 				$this->db->commit();
 				
@@ -120,6 +121,7 @@ class PdfController extends ControllerBase
 			'bind' => array(1 => $id)
 		));
 		
+		$this->logger->log("PDF: {$pdf->name}");
 		if (!$pdf) {
 			$this->flashSession->error("El template que desea editar no se encuentra, por favor valide la información");
 			return $this->response->redirect('pdf');
@@ -151,17 +153,23 @@ class PdfController extends ControllerBase
 					$data->size = $_FILES['file']['size'];
 					$data->type = $_FILES['file']['type'];
 					$data->tmp_dir = $_FILES['file']['tmp_name'];
-					$data->name = "{$pdf->idPdftemplate}.xsl";
-					$ext = array('xsl');
+					$data->name = "{$pdf->idPdftemplate}.zip";
+					$ext = array('zip');
 				}
 				
 				try {
 					if ($editfile == 1) {
 						$uploader = new \EmailMarketing\General\Misc\Uploader();
+						$uploader->deleteFileFromServer("{$dir}{$pdf->idPdftemplate}.xsl");
+						
 						$uploader->setData($data);
 						$uploader->validateExt($ext);
 						$uploader->validateSize(2000);
 						$uploader->uploadFile($dir);
+						
+						$uploader->decompressFile("{$dir}{$data->name}", $dir);
+						$uploader->changeNameOfFile("{$dir}template.xsl", "{$dir}{$pdf->idPdftemplate}.xsl");
+						$uploader->deleteFileFromServer("{$dir}{$data->name}");
 					}
 					
 					$pdf->name = $name;
@@ -185,20 +193,8 @@ class PdfController extends ControllerBase
 				}
 			}
 		}
-		$file = 0;
-		$files = glob($dir . "{*.xsl}",GLOB_BRACE);
-		$name = str_replace(" ", '_', $pdf->name);
-		$name = strtolower($name);
-		$name = "{$name}.xsl";
-		$dir = "{$dir}{$name}";
-		
-		if (in_array($dir, $files)) {
-			$file = 1;
-		}
 		
 		$this->view->setVar('pdf', $pdf);
-		$this->view->setVar('file', $file);
-		$this->view->setVar('name', $name);
 		$accounts = Account::find();
 		$this->view->setVar('accounts', $accounts);
 		$ids = json_decode($pdf->idAccounts);
