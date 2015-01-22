@@ -4,25 +4,24 @@ class PdfController extends ControllerBase
 {
 	public function indexAction()
 	{
-		$pdfs = Pdftemplate::find();
+		$currentPage = $this->request->getQuery('page', null, 1); // GET
 		
-		$a = array();
-		if (count($pdfs) > 0) {
-			foreach ($pdfs as $pdf) {
-				$ids = json_decode($pdf->idAccounts);
-				$ids = implode(',', $ids);
-				
-				$query = $this->db->query("SELECT * FROM account WHERE idAccount IN ({$ids})");
-				$accounts = $query->fetchAll();
-				
-				if (count($accounts) > 0) {
-					$a[$pdf->idPdftemplate] = $accounts;
-				}
-			}
-		}
+		$builder = $this->modelsManager->createBuilder()
+			->from('Pdftemplate')
+			->orderBy('createdon DESC');
+
+		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
+			"builder"  => $builder,
+			"limit"=> PaginationDecorator::DEFAULT_LIMIT,
+			"page"  => $currentPage
+		));
 		
-		$this->view->setVar('pdfs', $pdfs);
-		$this->view->setVar('accounts', $a);
+		$page = $paginator->getPaginate();
+		
+		$this->view->setVar("page", $page);
+		
+		$accounts = Account::find();
+		$this->view->setVar('accounts', $accounts);
 	}
 	
 	public function loadtemplateAction()
@@ -66,8 +65,8 @@ class PdfController extends ControllerBase
 				$pdf = new Pdftemplate();
 				$pdf->name = $name;
 				$pdf->idAccounts = json_encode($accounts);
-				$pdf->created = time();
-				$pdf->updated = time();
+				$pdf->createdon = time();
+				$pdf->updatedon = time();
 				
 				if (!$pdf->save()) {
 					foreach ($pdf->getMessages() as $m) {
@@ -121,15 +120,14 @@ class PdfController extends ControllerBase
 			'bind' => array(1 => $id)
 		));
 		
-		$this->logger->log("PDF: {$pdf->name}");
 		if (!$pdf) {
 			$this->flashSession->error("El template que desea editar no se encuentra, por favor valide la información");
 			return $this->response->redirect('pdf');
 		}
-		
-		$dir = "{$this->pdftemplates->folder}";
-		
+	
 		if ($this->request->isPost()) {
+			$dir = "{$this->pdf->templates}";
+			
 			$name = $this->request->getPost('name');
 			$accounts = $this->request->getPost('accounts');
 			$editfile = $this->request->getPost('edit-file');
@@ -174,8 +172,7 @@ class PdfController extends ControllerBase
 					
 					$pdf->name = $name;
 					$pdf->idAccounts = json_encode($accounts);
-					$pdf->created = time();
-					$pdf->updated = time();
+					$pdf->updatedon = time();
 					
 					if (!$pdf->save()) {
 						foreach ($pdf->getMessages() as $m) {
@@ -194,10 +191,12 @@ class PdfController extends ControllerBase
 			}
 		}
 		
-		$this->view->setVar('pdf', $pdf);
+		
 		$accounts = Account::find();
-		$this->view->setVar('accounts', $accounts);
 		$ids = json_decode($pdf->idAccounts);
+		
+		$this->view->setVar('pdf', $pdf);
+		$this->view->setVar('accounts', $accounts);
 		$this->view->setVar('ids', $ids);
 	}
 	

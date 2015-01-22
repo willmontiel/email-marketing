@@ -25,15 +25,18 @@
 		</div>
 	</div>
 	<!-- Lista de mis correos -->
-	{% if pdfs|length != 0%}
-		{% for pdf in pdfs %}
+	{% if page.items|length != 0%}
+		{#   parcial paginacion   #}	
+		{{ partial('partials/pagination_static_partial', ['pagination_url': 'pdf/index']) }}
+	
+		{% for item in page.items %}
 			<div class="mail-block">
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
 						<div class="hexagon hexagon-sm hexagon-primary">
 							<div class="hexagon-wrap">
 								<a href="javascript: void(0);" class="hexagon-inner toolTip" style="cursor: none;text-decoration: none; text-align: center;">
-									<i>{{pdf.idPdftemplate}}</i>
+									<i>{{item.idPdftemplate}}</i>
 								</a>
 							</div>
 						</div>
@@ -42,32 +45,32 @@
 					<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
 						<div class="mail-info">
 							<div class="mail-name">
-								{{pdf.name}}
+								{{item.name}}
 							</div>
 							<div class="mail-detail">
-								Creado el {{date('d/M/Y g:i a', pdf.created)}} 
+								Creado el {{date('d/M/Y g:i a', item.createdon)}} 
 							</div>
 							<div class="mail-detail" style="color: #777;">
-								Actualizado el {{date('d/M/Y g:i a', pdf.created)}}
+								Actualizado el {{date('d/M/Y g:i a', item.createdon)}}
 							</div>
 						</div>
 					</div>
 						
 					<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 text-right">
-						<button class="btn btn-sm btn btn-info tooltip-b3" data-toggle="collapse" data-target="#preview{{pdf.idPdftemplate}}" data-placement="top" title="Detalles">
+						<button class="btn btn-sm btn btn-info tooltip-b3" data-toggle="collapse" data-target="#preview{{item.idPdftemplate}}" data-placement="top" title="Detalles">
 							<span class="glyphicon glyphicon-collapse-down"></span>
 						</button>
 							
-						<a class="btn btn-sm btn btn-primary tooltip-b3" href="{{url('pdf/edit')}}/{{pdf.idPdftemplate}}" data-placement="top" title="Editar">
+						<a class="btn btn-sm btn btn-primary tooltip-b3" href="{{url('pdf/edit')}}/{{item.idPdftemplate}}" data-placement="top" title="Editar">
 							<span class="glyphicon glyphicon-edit"></span>
 						</a>
 
-						<button class="ShowDialog btn btn-sm btn btn-danger tooltip-b3" data-toggle="modal" href="#modal-simple" data-id="{{ url('pdf/delete') }}/{{pdf.idPdftemplate}}" data-placement="top" title="Eliminar">
+						<button class="ShowDialog btn btn-sm btn btn-danger tooltip-b3" data-toggle="modal" href="#modal-simple" data-id="{{ url('pdf/delete') }}/{{item.idPdftemplate}}" data-placement="top" title="Eliminar">
 							<span class="glyphicon glyphicon-trash"></span>
 						</button>
 					</div>
 				</div>
-				<div id="preview{{pdf.idPdftemplate}}" class="collapse row">
+				<div id="preview{{item.idPdftemplate}}" class="collapse row">
 					<hr>	
 					<div style="font-size: 1.8em; text-align: center; color: #777;">Detalles</div><br />
 					<div class="col-xs-12 col-sm-12 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8">
@@ -79,12 +82,14 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% for account in accounts[pdf.idPdftemplate]%}
+								{#
+								{% for account in accounts%}
 									<tr>
 										<td>{{account['idAccount']}}</td>
 										<td>{{account['companyName']}}</td>
 									</tr>
 								{% endfor %}
+								#}
 							</tbody>
 						</table>
 					</div>
@@ -92,6 +97,9 @@
 			</div>
 			<div class="small-space"></div>
 		{% endfor %}
+			
+		{#   parcial paginacion   #}	
+		{{ partial('partials/pagination_static_partial', ['pagination_url': 'pdf/index']) }}	
 	{% else %}
 		<div class="row">
 			<div class="bs-callout bs-callout-warning">
