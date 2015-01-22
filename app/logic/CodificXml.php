@@ -42,17 +42,17 @@ class CodificXml implements IElementProcessorRow
 		$this->createTextNode($this->xmldoc, $primary, 'phone', $row[4]);
 		$this->createTextNode($this->xmldoc, $primary, 'address', $row[5]);
 		$this->createTextNode($this->xmldoc, $primary, 'city', $row[6]);
-		$this->createTextNode($this->xmldoc, $primary, 'state', $row[6]);
+		$this->createTextNode($this->xmldoc, $primary, 'state', $row[7]);
 //		$this->createTextNode($this->xmldoc, $primary, 'barcode', $this->crearBarcode($row[7]));
-		$this->createTextNode($this->xmldoc, $primary, 'barcode', $row[7]);
-		$this->createTextNode($this->xmldoc, $primary, 'password', $row[8]);
+		$this->createTextNode($this->xmldoc, $primary, 'barcode', $row[8]);
+		$this->createTextNode($this->xmldoc, $primary, 'password', $row[9]);
 
 
 		$secondarydata = $this->crearelemento($this->xmldoc, $doc, 'secondarydata');
 		
 		$total = count($row);
-		if ($total > 9) {
-			for ($i = 9; $i < $total; $i++) {
+		if ($total > 10) {
+			for ($i = 1; $i < $total; $i++) {
 				$this->createTextNode($this->xmldoc, $secondarydata, "field{$i}", $row[$i]);
 			}
 		}
