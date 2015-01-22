@@ -727,6 +727,8 @@ class TrackingObject
 			if($this->contact->unsubscribed == 0) {
 				$this->startTransaction();
 
+				$this->idEmail = $this->contact->email->idEmail;
+				
 				$this->contact->unsubscribed = $date;
 				$this->addDirtyObject($this->contact);
 
