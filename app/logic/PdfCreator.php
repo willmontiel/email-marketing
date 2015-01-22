@@ -139,6 +139,10 @@ class PdfCreator extends BaseWrapper
 		$cmd = "fop -xml {$xml} -xsl {$xsl} -pdf {$pdf} -c {$fopConf} 2> {$log}";
 		exec($cmd, $output, $status);
 		
+		$this->logger->log("createPdfMaster");
+		$this->logger->log("Out: " . print_r($output));
+		$this->logger->log("Sta: {$status}");
+		
 //		if (!$status) {
 //			$error = implode(', ', $output);
 //			throw new Exception("Se encontró un error mientras se creaba el PDF maestro: {$error}");
@@ -150,6 +154,10 @@ class PdfCreator extends BaseWrapper
 		$output = array();
 		$cmd = "pdftk {$pdf} burst output {$exploded}";
 		exec($cmd, $output, $status);
+		
+		$this->logger->log("burstPdf");
+		$this->logger->log("Out: " . print_r($output));
+		$this->logger->log("Sta: {$status}");
 		
 //		if (!$status) {
 //			$error = implode(', ', $output);
@@ -164,6 +172,10 @@ class PdfCreator extends BaseWrapper
 		$cmd = escapeshellcmd($cmd);
 		exec($cmd, $output, $status);
 		
+		$this->logger->log("encryptePdf");
+		$this->logger->log("Out: " . print_r($output));
+		$this->logger->log("Sta: {$status}");
+		
 		if (!$status) {
 			$error = implode(', ', $output);
 			throw new Exception("Se encontró un error mientras se encriptaban los archivos PDF: {$error}");
@@ -176,6 +188,10 @@ class PdfCreator extends BaseWrapper
 		$output = array();
 		$cmd = escapeshellcmd("zip -r {$encrypted}/{$this->pdf->idPdfbatch}.zip {$exploded}");
 		exec($cmd, $output, $status);
+	
+		$this->logger->log("zipPdfFolder");
+		$this->logger->log("Out: " . print_r($output));
+		$this->logger->log("Sta: {$status}");
 		
 //		if (!$status) {
 //			$error = implode(', ', $output);
