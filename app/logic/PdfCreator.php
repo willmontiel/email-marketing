@@ -228,7 +228,7 @@ class PdfCreator extends BaseWrapper
 	private function zipPdfFolder($source, $destiny)
 	{
 		$output = array();
-		$cmd = escapeshellcmd("zip -r {$destiny} {$source}");
+		$cmd = escapeshellcmd("zip -rm {$destiny} {$source}");
 		exec($cmd, $output, $status);
 	
 		$this->logger->log("zipPdfFolder");

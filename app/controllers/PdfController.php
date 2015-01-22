@@ -337,7 +337,7 @@ class PdfController extends ControllerBase
 		}
 		
 		$this->view->disable();
-		$file = "{$this->appPath->path}/{$this->pdf->encryptedbatch}/{$account->idAccount}/{$batch->idPdfbatch}.zip";
+		$file = "{$this->appPath->path}/{$this->pdf->encryptedbatch}/{$account->idAccount}/{$batch->idPdfbatch}/{$batch->idPdfbatch}.zip";
 		header('Content-type: application/zip');
 		header("Content-Disposition: attachment; filename={$batch->idPdfbatch}.zip");
 		header('Content-Length: ' . filesize($file));
