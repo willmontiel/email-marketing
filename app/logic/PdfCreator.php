@@ -189,10 +189,10 @@ class PdfCreator extends BaseWrapper
 		$this->logger->log("Out: " . print_r($output, true));
 		$this->logger->log("Sta: {$status}");
 		
-//		if (!$status) {
-//			$error = implode(', ', $output);
-//			throw new Exception("Se encontró un error mientras se creaba el PDF maestro: {$error}");
-//		}
+		if ($status) {
+			$error = implode(', ', $output);
+			throw new Exception("Se encontró un error mientras se creaba el PDF maestro: {$error}");
+		}
 	}
 	
 	private function burstPdf($pdf, $exploded)
@@ -205,10 +205,10 @@ class PdfCreator extends BaseWrapper
 		$this->logger->log("Out: " . print_r($output, true));
 		$this->logger->log("Sta: {$status}");
 		
-//		if (!$status) {
-//			$error = implode(', ', $output);
-//			throw new Exception("Se encontró un error mientras se particionaba el pdf maestro: {$error}");
-//		}
+		if ($status) {
+			$error = implode(', ', $output);
+			throw new Exception("Se encontró un error mientras se particionaba el pdf maestro: {$error}");
+		}
 	}
 	
 	
@@ -222,10 +222,10 @@ class PdfCreator extends BaseWrapper
 		$this->logger->log("Out: " . print_r($output, true));
 		$this->logger->log("Sta: {$status}");
 		
-//		if (!$status) {
-//			$error = implode(', ', $output);
-//			throw new Exception("Se encontró un error mientras se encriptaban los archivos PDF: {$error}");
-//		}
+		if ($status) {
+			$error = implode(', ', $output);
+			throw new Exception("Se encontró un error mientras se encriptaban los archivos PDF: {$error}");
+		}
 	}
 	
 	
@@ -235,14 +235,14 @@ class PdfCreator extends BaseWrapper
 		$cmd = escapeshellcmd("zip -rmj {$destiny} {$source}");
 		exec($cmd, $output, $status);
 	
-//		$this->logger->log("zipPdfFolder");
-//		$this->logger->log("Out: " . print_r($output));
-//		$this->logger->log("Sta: {$status}");
+		$this->logger->log("zipPdfFolder");
+		$this->logger->log("Out: " . print_r($output));
+		$this->logger->log("Sta: {$status}");
 		
-//		if (!$status) {
-//			$error = implode(', ', $output);
-//			throw new Exception("Se encontró un error mientras se comprimían los archivos PDF: {$error}");
-//		}
+		if ($status) {
+			$error = implode(', ', $output);
+			throw new Exception("Se encontró un error mientras se comprimían los archivos PDF: {$error}");
+		}
 	}
 	
 	private function updateProcessed()
