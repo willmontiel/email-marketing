@@ -52,7 +52,7 @@ class TestMail
 		$this->createBody();
 		$this->createPlaintext();
 		$this->replaceCustomFields();
-		$this->replaceUrlImages();
+		$this->replaceUrlImages(false);
 	}
 	
 	protected function createBody()
