@@ -35,7 +35,7 @@ class ProcessFile
 		while (($row = fgetcsv($inputFile)) !== FALSE) {
 
 			foreach ($this->lineprocessors as $obj) {
-				$pagenum = str_pad($numRow, 1, '0', STR_PAD_LEFT);
+				$pagenum = str_pad($numRow, 1, '1', STR_PAD_LEFT);
 				$obj->processline($pagenum, $row);
 			}
 			
