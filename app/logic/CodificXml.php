@@ -52,8 +52,10 @@ class CodificXml implements IElementProcessorRow
 		
 		$total = count($row);
 		if ($total > 10) {
-			for ($i = 1; $i < $total; $i++) {
-				$this->createTextNode($this->xmldoc, $secondarydata, "field{$i}", $row[$i]);
+			$j = 1;
+			for ($i = 10; $i < $total; $i++) {
+				$this->createTextNode($this->xmldoc, $secondarydata, "field{$j}", $row[$i]);
+				$j++;
 			}
 		}
 	}
