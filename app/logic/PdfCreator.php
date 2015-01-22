@@ -140,7 +140,7 @@ class PdfCreator extends BaseWrapper
 		exec($cmd, $output, $status);
 		
 		$this->logger->log("createPdfMaster");
-		$this->logger->log("Out: " . print_r($output));
+		$this->logger->log("Out: " . print_r($output, true));
 		$this->logger->log("Sta: {$status}");
 		
 //		if (!$status) {
@@ -156,7 +156,7 @@ class PdfCreator extends BaseWrapper
 		exec($cmd, $output, $status);
 		
 		$this->logger->log("burstPdf");
-		$this->logger->log("Out: " . print_r($output));
+		$this->logger->log("Out: " . print_r($output, true));
 		$this->logger->log("Sta: {$status}");
 		
 //		if (!$status) {
@@ -173,13 +173,13 @@ class PdfCreator extends BaseWrapper
 		exec($cmd, $output, $status);
 		
 		$this->logger->log("encryptePdf");
-		$this->logger->log("Out: " . print_r($output));
+		$this->logger->log("Out: " . print_r($output, true));
 		$this->logger->log("Sta: {$status}");
 		
-		if (!$status) {
-			$error = implode(', ', $output);
-			throw new Exception("Se encontró un error mientras se encriptaban los archivos PDF: {$error}");
-		}
+//		if (!$status) {
+//			$error = implode(', ', $output);
+//			throw new Exception("Se encontró un error mientras se encriptaban los archivos PDF: {$error}");
+//		}
 	}
 	
 	
