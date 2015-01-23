@@ -61,7 +61,7 @@
 					</div>
 					<div class="form-group">
 						<div class="col-sm-offset-3 col-sm-9">
-							<a href="{{url('pdf')}}" class="btn btn-sm btn-default">Cancelar</a>
+							<a href="{{url('tools')}}" class="btn btn-sm btn-default">Cancelar</a>
 							<button type="submit" class="btn btn-sm btn-primary">Procesar</button>
 						</div>
 					</div>
