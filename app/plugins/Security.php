@@ -459,6 +459,14 @@ class Security extends Plugin
 				'pdfmail::terminate' => array('pdf' => array('create','update')),
 				'pdfmail::delete' => array('pdf' => array('delete')),
 				'pdfmail::sendtest' => array('pdf' => array('send')),
+				'pdf::loadtemplate' => array('pdf' => array('loadtemplate')),
+				'pdf::index' => array('pdf' => array('readtemplate')),
+				'pdf::edit' => array('pdf' => array('edittemplate')),
+				'pdf::delete' => array('pdf' => array('deletetemplate')),
+				'pdf::createbatch' => array('pdf' => array('createbatch')),
+				'process::pdfbatch' => array('pdf' => array('createbatch')),
+				'process::refreshpdfbatch' => array('pdf' => array('createbatch')),
+				'pdf::getbatch' => array('pdf' => array('createbatch')),
 				
 			);
 		}

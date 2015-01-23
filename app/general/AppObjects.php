@@ -76,6 +76,7 @@ class AppObjects
 			$this->setDb();
 			$this->setModelsManager();
 			
+			$this->setPdfTemplatesFolder();
 			$this->setPrivateAssetsFolder();
 			$this->setPublicAssetsFolder();
 			$this->setTmpFolder();
@@ -356,7 +357,25 @@ class AppObjects
 		});
 	}
 
-
+	/**
+	 * Directorio de assets privados
+	 */
+	private function setPdfTemplatesFolder()
+	{
+		$pt = new \stdClass;
+		$pt->templates = $this->config->pdf->templates;
+		$pt->relativetemplatesfolder = $this->config->pdf->templatesrelative;
+		$pt->explodedbatch = $this->config->pdf->explodedbatch;
+		$pt->encryptedbatch = $this->config->pdf->encryptedbatch;
+		$pt->sourcebatch = $this->config->pdf->sourcebatch;
+		$pt->csvbatch = $this->config->pdf->csvbatch;
+		$pt->relativecsvbatch = $this->config->pdf->csvbatchrelative;
+		$pt->fop = $this->config->pdf->fop;
+		$pt->foplog = $this->config->pdf->foplogs;
+		$pt->config = $this->config->pdf->config;
+		$this->di->set('pdf', $pt);
+	}
+	
 	/**
 	 * Directorio de assets privados
 	 */
@@ -459,6 +478,9 @@ class AppObjects
 		$sockets->mailrequest = $this->config->sockets->mailrequest;
 		$sockets->mailtochildren = $this->config->sockets->mailtochildren;
 		$sockets->mailfromchild = $this->config->sockets->mailfromchild;
+		$sockets->pdfcreatorrequest = $this->config->sockets->pdfcreatorrequest;
+		$sockets->pdfcreatortochildren = $this->config->sockets->pdfcreatortochildren;
+		$sockets->pdfcreatorfromchild = $this->config->sockets->pdfcreatorfromchild;
 		$this->di->set('sockets', $sockets);
 	}
 	

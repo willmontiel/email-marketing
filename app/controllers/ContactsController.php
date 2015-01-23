@@ -624,7 +624,7 @@ class ContactsController extends ControllerBase
 				'fields' => $fields
 			);
 			
-			$this->logger->log(print_r($data, true));
+//			$this->logger->log(print_r($data, true));
 			try {
 				$toSend = json_encode($data);
 				$objcomm = new Communication(SocketConstants::getExportRequestsEndPointPeer());

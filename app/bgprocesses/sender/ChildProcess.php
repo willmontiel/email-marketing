@@ -27,6 +27,11 @@ abstract class ChildProcess
 		return new ChildSender();
 	}
 	
+	public function getPdfCreatorChild()
+	{
+		return new ChildPdfCreator();
+	}
+	
 	public function startProcess()
 	{
 		try{

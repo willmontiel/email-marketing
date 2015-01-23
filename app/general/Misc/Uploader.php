@@ -44,14 +44,14 @@ class Uploader
 	{
 		$e = implode('|', $ext);
 		$expr = "%\.({$e})$%i";
-		$isValid = preg_match($expr, $this->data->name);
+		$isValid = preg_match($expr, $this->data->originalName);
 		if (!$isValid) {
 			throw new \InvalidArgumentException('Extensión de archivo invalida, por favor valide la información');
 		}
 	}
 	
 	/*
-	* Esta función valida que el archivo que se intenta subir no sobrepase el tamaño máximo configurado
+	* Esta función valida que el archivo que se intenta subir no sobrepase el tamaño máximo configurado en kilobytes
 	*/
 	public function validateSize($size)
 	{
@@ -62,10 +62,8 @@ class Uploader
 		}
 	}
 	
-	public function uploadFile()
+	public function uploadFile($dir)
 	{
-		$dir = "{$this->dir->dir}{$this->account->idAccount}/pdf/{$this->mail->idMail}/";
-		
 		if (!file_exists($dir)) {
 			mkdir($dir, 0777, true);
 		}
@@ -80,14 +78,38 @@ class Uploader
 		$this->source = $dir;
 	}
 
+	
+	public function decompressFile($source, $destination)
+	{
+		//Creamos un objeto de la clase ZipArchive()
+		$enzip = new \ZipArchive();
+		
+		//Abrimos el archivo a descomprimir
+		$enzip->open($source);
+		
+		//Extraemos el contenido del archivo dentro de la carpeta especificada
+		$extracted = $enzip->extractTo($destination);
+
+		/* Si el archivo se extrajo correctamente listamos los nombres de los
+		 * archivos que contenia de lo contrario mostramos un mensaje de error
+		*/
+		if(!$extracted) {
+			throw new Exception("Error while unziping file!");
+		}
+	}
+
+	
+	public function changeNameOfFile($source, $destination)
+	{
+		rename($source, $destination);
+	}
+
 	/**
-	* Esta función elimina la imagen cargada en caso de que haya ocurrido un error
+	* Esta función elimina un archivo cargado en caso de que haya ocurrido un error
 	*/
 	public function deleteFileFromServer($dir)
 	{
-		if (!unlink($dir)) {
-			throw new \Exception('File could not delete from server!');
-		}
+		unlink($dir);
 	}
 	
 	public function getSource()

@@ -182,7 +182,24 @@ $sockets->exportfromchild = $config->sockets->exportfromchild;
 $sockets->mailrequest = $config->sockets->mailrequest;
 $sockets->mailtochildren = $config->sockets->mailtochildren;
 $sockets->mailfromchild = $config->sockets->mailfromchild;
+$sockets->pdfcreatorrequest = $config->sockets->pdfcreatorrequest;
+$sockets->pdfcreatortochildren = $config->sockets->pdfcreatortochildren;
+$sockets->pdfcreatorfromchild = $config->sockets->pdfcreatorfromchild;
+
 $di->set('sockets', $sockets);
+
+$pt = new \stdClass;
+$pt->templates = $config->pdf->templates;
+$pt->relativetemplatesfolder = $config->pdf->templatesrelative;
+$pt->explodedbatch = $config->pdf->explodedbatch;
+$pt->encryptedbatch = $config->pdf->encryptedbatch;
+$pt->sourcebatch = $config->pdf->sourcebatch;
+$pt->csvbatch = $config->pdf->csvbatch;
+$pt->relativecsvbatch = $config->pdf->csvbatchrelative;
+$pt->fop = $config->pdf->fop;
+$pt->foplog = $config->pdf->foplogs;
+$pt->config = $config->pdf->config;
+$di->set('pdf', $pt);
 
 /*
  * Log Object, utilizado para logging en general a archivo

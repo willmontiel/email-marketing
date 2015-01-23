@@ -67,4 +67,27 @@ class SocketConstants
 	{
 		return Phalcon\DI::getDefault()->get('sockets')->exportfromchild;
 	}
+	
+	
+// ************** - Pdf Creator Sockets - **************
+	
+	public static function getPdfCreatorPub2ChildrenEndPoint()
+	{
+		return Phalcon\DI::getDefault()->get('sockets')->pdfcreatortochildren;
+	}
+	
+	public static function getPdfCreatorRequestsEndPoint()
+	{
+		return Phalcon\DI::getDefault()->get('sockets')->pdfcreatorrequest;
+	}
+	
+	public static function getPdfCreatorRequestsEndPointPeer()
+	{
+		return Phalcon\DI::getDefault()->get('sockets')->pdfcreatorrequest;
+	}
+	
+	public static function getPdfCreatorPullFromChildEndPoint()
+	{
+		return Phalcon\DI::getDefault()->get('sockets')->pdfcreatorfromchild;
+	}
 }
