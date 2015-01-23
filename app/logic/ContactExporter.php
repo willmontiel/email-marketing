@@ -248,7 +248,7 @@ class ContactExporter extends BaseWrapper
 		$insert = "INSERT INTO {$this->tablename} (idContact, status, email, name, lastName, birthDate, createdon {$customFields})
 				   VALUES {$values}";
 		
-//		$this->logger->log("insert: {$insert}");		   
+		$this->logger->log("insert: {$insert}");		   
 						  
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->execute($insert);
