@@ -93,7 +93,7 @@
 				<a href="{{ url('pdf/createbatch') }}"  class="shortcuts"><span class="sm-button-large-socialnet"></span></a>
 			</div>
 			<div class="w-190 center">
-				<a href="{{ url('pdf/createbatch') }}" class="btn-actn">Crear lote de PDF's</a>
+				<a href="{{ url('pdf/createbatch') }}" class="btn-actn">Crear lote de archivos PDF</a>
 			</div>
 		</div>
 	</div>
