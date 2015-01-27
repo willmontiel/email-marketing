@@ -16,7 +16,9 @@ RedactorPlugins.fontcolor = {
 
 			this.pickerBuild($dropdown, name, colors);
 			$(this.$toolbar).append($dropdown);
-
+			
+			this.colorpicker(name, (name === 'backcolor') ? 'background-color' : 'color');
+			
 			this.buttonAdd(name, this.opts.curLang[name], $.proxy(function(btnName, $button, btnObject, e)
 			{
 				this.dropdownShow(e, btnName);
@@ -49,7 +51,10 @@ RedactorPlugins.fontcolor = {
 			$dropdown.append($swatch);
 			$swatch.on('click', onSwatch);
 		}
-
+		
+		var pickerCol = $("<input type='text' id='redactor-text-color-picker-" + name + "' class='pick-a-color'>");
+		$dropdown.append(pickerCol);
+		
 		var $elNone = $('<a href="#" style="display: block; clear: both; padding: 4px 0; font-size: 11px; line-height: 1;"></a>')
 		.html(this.opts.curLang.none)
 		.on('click', function(e)
@@ -59,6 +64,22 @@ RedactorPlugins.fontcolor = {
 		});
 
 		$dropdown.append($elNone);
+	},
+	colorpicker: function(name, rule)
+	{
+		var _self = this;
+		
+		$('#redactor-text-color-picker-' + name).spectrum({
+		flat: false,
+		showInput: true,
+		className: "full-spectrum",
+		showInitial: true,
+		preferredFormat: "hex",
+		change: function(color) {
+			_self.pickerSet(rule, color.toHexString());
+			$('.redactor_dropdown_box_' + name).hide();
+		}
+		});
 	},
 	pickerSet: function(rule, type)
 	{
