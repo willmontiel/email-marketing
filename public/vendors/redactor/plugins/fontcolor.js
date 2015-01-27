@@ -71,7 +71,6 @@ RedactorPlugins.fontcolor = {
 		
 		$('#redactor-text-color-picker-' + name).spectrum({
 		flat: false,
-		showInput: true,
 		className: "full-spectrum",
 		showInitial: true,
 		preferredFormat: "hex",
