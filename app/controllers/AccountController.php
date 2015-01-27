@@ -717,9 +717,12 @@ class AccountController extends ControllerBase
 	
 	public function gethistoryAction()
 	{
+		$year = date('Y', time());
+		$now = strtotime("01/01/{$year}");
 		$history = Scorehistory::find(array(
-			'conditions' => 'idAccount = ?1',
-			'bind' => array(1 => $this->user->account->idAccount)
+			'conditions' => 'idAccount = ?1 AND createdon >= ?2',
+			'bind' => array(1 => $this->user->account->idAccount,
+							2 => $now)
 		));
 		
 		$months = array(

@@ -333,6 +333,28 @@ class SmartmanagmentController extends ControllerBase
 	
 	public function behaviorAction()
 	{
+		$account = $this->user->account;
 		
+		$currentPage = $this->request->getQuery('page', null, 1); // GET
+
+		$builder = $this->modelsManager->createBuilder()
+			->from('Scorehistory')
+			->leftJoin('Smartmanagment', 'Scorehistory.idSmartmanagment = Smartmanagment.idSmartmanagment')
+			->leftJoin('Mail', 'Scorehistory.idMail = Mail.idMail')	
+			->where("Scorehistory.idAccount = {$account->idAccount}")
+			->orderBy('Scorehistory.createdon');
+
+		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
+			"builder" => $builder,
+			"limit"=> PaginationDecorator::DEFAULT_LIMIT,
+			"page" => $currentPage
+		));
+		
+		$page = $paginator->getPaginate();
+		$score = Score::findFirstByIdAccount($account->idAccount);
+		
+		$this->view->setVar("page", $page);
+		$this->view->setVar("account", $account);
+		$this->view->setVar("score", $score);
 	}
 }
