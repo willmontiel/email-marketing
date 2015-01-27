@@ -150,9 +150,9 @@ class TotalContactIterator implements Iterator
 			if (count($this->contacts) == 0) {
 				$c = array(
 					'idContact' => $m['idContact'],
-					'email' => $m['email'],
-					'name' => $m['name'],
-					'lastName' => $m['lastName'],
+					'email' => $this->cleanSpaces($m['email']),
+					'name' => $this->cleanSpaces($m['name']),
+					'lastName' => $this->cleanSpaces($m['lastName']),
 					'birthDate' => (empty($m['birthDate']) ? null : $m['birthDate']),
 					'status' => $m['status'],
 					'createdon' => $m['createdon']
@@ -167,9 +167,9 @@ class TotalContactIterator implements Iterator
 			else {
 				$c = array(
 					'idContact' => $m['idContact'],
-					'email' => $m['email'],
-					'name' => $m['name'],
-					'lastName' => $m['lastName'],
+					'email' => $this->cleanSpaces($m['email']),
+					'name' => $this->cleanSpaces($m['name']),
+					'lastName' => $this->cleanSpaces($m['lastName']),
 					'birthDate' => (empty($m['birthDate']) ? null : $m['birthDate']),
 					'status' => $m['status'],
 					'createdon' => $m['createdon']
@@ -206,9 +206,9 @@ class TotalContactIterator implements Iterator
 			if (count($this->contacts) == 0) {
 				$c = array(
 					'idContact' => $m['idContact'],
-					'email' => $m['email'],
-					'name' => $m['name'],
-					'lastName' => $m['lastName'],
+					'email' => $this->cleanSpaces($m['email']),
+					'name' => $this->cleanSpaces($m['name']),
+					'lastName' => $this->cleanSpaces($m['lastName']),
 					'birthDate' => $m['birthDate'],
 					'status' => $m['status'],
 					'createdon' => $m['createdon']
@@ -216,7 +216,7 @@ class TotalContactIterator implements Iterator
 				
 				if (isset($m['field']) && !empty($m['field'])) {
 					$name = $this->cleanSpaces($m['field']);
-					$c[$name] = (!empty($m['value']) ? $m['value'] : null);
+					$c[$name] = (!empty($m['value']) ? $this->cleanSpaces($m['value']) : null);
 				}
 				else {
 					$c[$name] = null;
@@ -229,7 +229,7 @@ class TotalContactIterator implements Iterator
 			else if (isset($this->contacts[$i]) && $this->contacts[$i]['idContact'] == $m['idContact']) {
 				if (isset($m['field']) && !empty($m['field'])) {
 					$name = $this->cleanSpaces($m['field']);
-					$this->contacts[$i][$name] = (!empty($m['value']) ? $m['value'] : null);
+					$this->contacts[$i][$name] = (!empty($m['value']) ? $this->cleanSpaces($m['value']) : null);
 				}
 //				$this->logger->log(print_r($this->contacts[$i], true));
 				$i--;
@@ -238,9 +238,9 @@ class TotalContactIterator implements Iterator
 			else {
 				$c = array(
 					'idContact' => $m['idContact'],
-					'email' => $m['email'],
-					'name' => $m['name'],
-					'lastName' => $m['lastName'],
+					'email' => $this->cleanSpaces($m['email']),
+					'name' => $this->cleanSpaces($m['name']),
+					'lastName' => $this->cleanSpaces($m['lastName']),
 					'birthDate' => $m['birthDate'],
 					'status' => $m['status'],
 					'createdon' => $m['createdon']
@@ -248,7 +248,7 @@ class TotalContactIterator implements Iterator
 
 				if (isset($m['field']) && !empty($m['field'])) {
 					$name = $this->cleanSpaces($m['field']);
-					$c[$name] = (!empty($m['value']) ? $m['value'] : null);
+					$c[$name] = (!empty($m['value']) ? $this->cleanSpaces($m['value']) : null);
 				}
 				else {
 					$c[$name] = null;
