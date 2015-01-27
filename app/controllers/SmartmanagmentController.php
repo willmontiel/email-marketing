@@ -330,4 +330,9 @@ class SmartmanagmentController extends ControllerBase
 		
 		return $this->setJsonResponse(array('preview' => $response));
 	}
+	
+	public function behaviorAction()
+	{
+		
+	}
 }

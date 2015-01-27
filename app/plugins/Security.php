@@ -131,10 +131,11 @@ class Security extends Plugin
 				'apistatistics::mailpublicbounced' => array(),
 				'apiversionone::echo' => array(),
 				
-				
 				//Dashboard
 				'index::index' => array('dashboard' => array('read')),
 				'account::loadindicator' => array('dashboard' => array('read')),
+				'smartmanagment::behavior' => array('dashboard' => array('read')),
+				
 				//Account controller
 				'account::index' => array('account' => array('read')),
 				'account::scorehistory' => array('account' => array('read')),
@@ -457,7 +458,6 @@ class Security extends Plugin
 				'smartmanagment::createpreview' => array('smartmanagment' => array('create')),
 				'smartmanagment::previewdata' => array('smartmanagment' => array('create')),
 				'smartmanagment::preview' => array('smartmanagment' => array('read')),
-				
 			);
 		}
 		$this->cache->save('controllermap-cache', $map);

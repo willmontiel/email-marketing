@@ -72,7 +72,7 @@
 					<!-- END OLARK CHAT LINK -->
 				{% endif %}
 					<li>
-						<a href="javascript: void(0);" style="cursor: default;">
+						<a href="{{url('smartmanagment/behavior')}}">
 							<div class="orange-sigma text-with-shadow" style="display: inline;"><span class="glyphicon glyphicon-star"></span> Puntuación:</div> <div class="score-in-bar" id="score"></div>
 						</a>
 					</li>
