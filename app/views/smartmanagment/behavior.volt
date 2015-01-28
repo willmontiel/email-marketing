@@ -118,17 +118,17 @@
 				<table class="table table-bordered">
 					<thead>
 						<tr>
-							<th>id</th>
+							<th>Fecha</th>
 							<th>Gestión inteligente</th>
 							<th>Correo</th>
-							<th>Fecha</th>
 							<th class="orange-sigma star-shadow"><span class="glyphicon glyphicon-star"></span> Puntuación</th>
+							<th>Acumulado</th>
 						</tr>
 					</thead>
 					<tbody>
 						{% for item in page.items %}
 							<tr>
-								<td>{{item.idScorehistory}}</td>
+								<td>{{date('d/M/Y H:i', item.createdon)}}</td>
 								<td>
 									<div class="">
 										<div class="title" style="font-size: 1em !important;">
@@ -165,8 +165,18 @@
 										</div>
 									</div>
 								</td>
-								<td>{{date('d/M/Y H:i', item.createdon)}}</td>
-								<td>{{item.score}}</td>
+								<td>
+									<div style="display: inline;">{{item.score}}</div>
+									<div style="display: inline;float: right;">
+										{% if item.score > 0 %}
+											<img src="{{url('')}}vendors/bootstrap_v3/images/smile.png" height="30" width="30">
+										{% elseif item.score < 0%}
+											<img src="{{url('')}}vendors/bootstrap_v3/images/sad.png" height="30" width="30">
+										{% endif %}
+									</div>
+								</td>
+								<td>
+								</td>
 							</tr>
 						{% endfor %}
 					</tbody>

@@ -34,6 +34,7 @@ class SmartManagmentManager
 	
 	public function startManagment()
 	{
+		$this->logger->log("Executing smart managment");
 		$this->searchSmartManagment();
 		if (count($this->smarts) > 0) {
 			foreach ($this->smarts as $smart) {
@@ -47,6 +48,7 @@ class SmartManagmentManager
 				unset($this->smart);
 			}
 		}
+		$this->logger->log("Finish");
 	}
 	
 	private function executeQuerys()
@@ -69,7 +71,7 @@ class SmartManagmentManager
 
 	private function searchSmartManagment()
 	{
-		$this->smarts = Smartmanagment::find(array(
+		$this->smarts = \Smartmanagment::find(array(
 			'conditions' => 'status = 1'
 		));
 	}
@@ -174,7 +176,7 @@ class SmartManagmentManager
 					AND finishedon <= {$this->time}
 				{$this->SQLRules}";
 			
-//		$this->logger->log("SQL: {$sql}");
+		$this->logger->log("SQL: {$sql}");
 				
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
