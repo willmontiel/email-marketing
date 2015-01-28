@@ -35,6 +35,15 @@ class BlockSocialFollow extends HtmlAbstract
 					case 'Google Plus':
 						$this->children[] = '<a href="' . $content->link . '"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_google_plus_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
 						break;
+					case 'Youtube':
+						$this->children[] = '<a href="' . $content->link . '"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_youtube_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
+						break;
+					case 'Instagram':
+						$this->children[] = '<a href="' . $content->link . '"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_instagram_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
+						break;
+					case 'Pinterest':
+						$this->children[] = '<a href="' . $content->link . '"><img src="' . $domain->imageUrl . '/images/socials/follow/theme_' . $data->theme . '/follow_pinterest_image_' . $data->size . '.png" style="margin-right: 8px;"></a>';
+						break;
 				}	
 			}
 		}
