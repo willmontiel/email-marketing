@@ -21,7 +21,7 @@ class SmartManagmentManager
 	protected $conditions = array();
 	protected $SQLRules = "";
 	protected $SQLRulesArray = array();
-	protected $points = 0;
+	protected $points;
 	protected $accounts;
 	protected $account = null;
 	protected $comm = false;
@@ -38,6 +38,7 @@ class SmartManagmentManager
 		$this->searchSmartManagment();
 		if (count($this->smarts) > 0) {
 			foreach ($this->smarts as $smart) {
+				$this->points = 0;
 				$this->smart = $smart;
 				$this->time = strtotime("-{$smart->time}");
 				$this->validateAccount();
@@ -66,6 +67,8 @@ class SmartManagmentManager
 				$this->scoreAccounts();
 			}
 		}
+		
+		unset($this->conditions);
 	}
 
 
@@ -115,7 +118,9 @@ class SmartManagmentManager
 							
 							case 'points-rule':
 								if ($d->points == 'true') {
-									$this->points += $d->value;
+									$this->logger->log("Points " . $d->value);
+									$this->logger->log("Points " . $this->points);
+									$this->points += intval($d->value);
 								}
 								break;
 							
@@ -207,7 +212,8 @@ class SmartManagmentManager
 					$score->score = 0;
 					$score->createdon = time();
 				}
-
+				
+			$this->logger->log("Points " . $this->points);
 				$score->score += $this->points;
 				$score->updatedon = time();
 
