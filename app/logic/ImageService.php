@@ -29,7 +29,6 @@ class ImageService
 	
 	private function validateSrcImg($imageSrc)
 	{
-		$this->logger->log("Link: {$imageSrc}");
 		if (preg_match('/asset/i', $imageSrc)) {
 //			$this->logger->log("Imágenes por asset");
 			$idAsset = filter_var($imageSrc, FILTER_SANITIZE_NUMBER_INT);

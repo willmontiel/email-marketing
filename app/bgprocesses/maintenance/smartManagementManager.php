@@ -118,8 +118,6 @@ class SmartManagmentManager
 							
 							case 'points-rule':
 								if ($d->points == 'true') {
-									$this->logger->log("Points " . $d->value);
-									$this->logger->log("Points " . $this->points);
 									$this->points += intval($d->value);
 								}
 								break;
