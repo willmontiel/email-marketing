@@ -141,17 +141,31 @@ SFollowBlock.prototype.unpersist = function(obj) {
 	this.content_tw.selected = obj.contentData[1].selected;
 	this.content_li.selected = obj.contentData[2].selected;
 	this.content_gp.selected = obj.contentData[3].selected;
-	this.content_yt.selected = obj.contentData[4].selected;
-	this.content_in.selected = obj.contentData[5].selected;
-	this.content_pi.selected = obj.contentData[6].selected;
+	this.content_yt.selected = this.content_in.selected = this.content_pi.selected = false;
+	if(obj.contentData[4]) {
+		this.content_yt.selected = obj.contentData[4].selected;
+	}
+	if(obj.contentData[5]) {
+		this.content_in.selected = obj.contentData[5].selected;
+	}
+	if(obj.contentData[6]) {
+		this.content_pi.selected = obj.contentData[6].selected;
+	}
 	
 	this.content_fb.link = obj.contentData[0].link;
 	this.content_tw.link = obj.contentData[1].link;
 	this.content_li.link = obj.contentData[2].link;
 	this.content_gp.link = obj.contentData[3].link;
-	this.content_yt.link = obj.contentData[4].link;
-	this.content_in.link = obj.contentData[5].link;
-	this.content_pi.link = obj.contentData[6].link;
+	
+	if(obj.contentData[4]) {
+		this.content_yt.link = obj.contentData[4].link;
+	}
+	if(obj.contentData[5]) {
+		this.content_in.link = obj.contentData[5].link;
+	}
+	if(obj.contentData[6]) {
+		this.content_pi.link = obj.contentData[6].link;
+	}
 	
 	for(var i=0; i < obj.contentData.length; i++) {
 		switch (obj.contentData[i].socialname) {
