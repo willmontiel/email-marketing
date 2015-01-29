@@ -9,6 +9,7 @@ class MailField
 	public $idDbases;
 	public $idFields;
 	public $fieldsInDbase = array();
+	public $cleanFields = array();
 	
 	/**
 	 * El constructor recibe el html, el texto plano, el asunto y los identificadores de las bases de datos
@@ -120,12 +121,11 @@ class MailField
 	{
 		//1.Tomamos la primera parte(Los que estan entre %%) del arreglo de posibles campos personalizados 
 		// y quitamos los repetidos
-		$f = array_unique($fields);
-		
+		$this->cleanFields = array_unique($fields);
 		//2.Recorremos el arreglo con valores únicos y tomamos los campos que no sean primarios (Nombre, apellido, email)
 		// para insertarlos en la variable global fields
 		$this->customFields = array();
-		foreach ($f as $x) {
+		foreach ($this->cleanFields as $x) {
 			if ($x == '%%EMAIL%%' || $x == '%%NOMBRE%%' || $x == '%%APELLIDO%%' || $x == '%%FECHA_DE_NACIMIENTO%%') {
 			}
 			else {
@@ -215,6 +215,32 @@ class MailField
 		$newSubject = str_replace($search, $replace, $this->subject);
 		
 		//6.Creamos el arreglo a retornar
+		$content = array(
+			'html' => $newHtml,
+			'text' => $newText,
+			'subject' => $newSubject
+		);
+		
+		//7.Hacemos unset de los arreglos para liberar la posible memoria utilizada
+		unset($newHtml);
+		unset($newText);
+		unset($newSubject);
+		
+		return $content;
+	}
+	
+	public function cleanMarks($c)
+	{
+		$replace = array();
+		
+		for ($i = 0; $i < count($this->cleanFields); $i++) {
+			$replace[] = " ";
+		}
+		
+		$newHtml = str_replace($this->cleanFields, $replace, $c['html']);
+		$newText = str_replace($this->cleanFields, $replace, $c['text']);
+		$newSubject = str_replace($this->cleanFields, $replace, $c['subject']);
+		
 		$content = array(
 			'html' => $newHtml,
 			'text' => $newText,

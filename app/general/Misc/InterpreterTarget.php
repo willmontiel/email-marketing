@@ -15,7 +15,7 @@ class InterpreterTarget
 	protected $account;
 	protected $logger;
 	protected $mail;
-	protected $data;
+	protected $data = array();
 	protected $ids;
 	protected $idsArray;
 	protected $SQLForContacts = "";
