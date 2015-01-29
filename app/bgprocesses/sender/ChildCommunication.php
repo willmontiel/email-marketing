@@ -458,7 +458,20 @@ class ChildCommunication extends BaseWrapper
 				$timer->endTimer('prepare-msg');
 
 				$timer->startTimer('send-msg', 'Sending message (swift)...');
-				$recipients = $swift->send($message, $failures);
+				
+//				**//*******//*******//*******//*******//*******//*******//*******//*******//*******//*******//*******//**
+//				En caso de presentar fallo con el SWIFT_MAILER, atrapa la excepción e intenta el envio 3 veces mas
+//				Si no tiene exito en el envio, termina los intentos y continua el proceso
+//				**//*******//*******//*******//*******//*******//*******//*******//*******//*******//*******//*******//**
+				
+				try {
+					$recipients = $swift->send($message, $failures);
+				} catch (Exception $e) {
+					$log->log('Error sending mail to contact [ ' . $contact['contact']['idContact'] . ' ] with email [ ' . $contact['email']['idEmail'] . ' ]');
+					$log->log('Exception: [' . $e . ']');
+					$recipients = $this->sendMailAgain($swift, $message, $contact, 0, $log);
+				}
+				
 				$timer->endTimer('send-msg');
 				
 				if ($recipients) {
@@ -611,7 +624,7 @@ class ChildCommunication extends BaseWrapper
 		catch (Exception $e) {
 			$log->log('Exception: [' . $e . ']');
 			$mail->status = 'Cancelled';
-			$sent = $this->sent + $this->massagesSent;
+			$sent = $this->sent + $this->messagesSent;
 			$mail->messagesSent = $sent;
 			$mail->finishedon = time();
 			if(!$mail->save()) {
@@ -636,6 +649,25 @@ class ChildCommunication extends BaseWrapper
 		
 	}
 	
+	protected function sendMailAgain($swift, $message, $contact, $tries, $log)
+	{
+		try {
+			$recipients = $swift->send($message, $failures);
+		} catch (Exception $e) {
+			$log->log('Error sending mail to contact [ ' . $contact['contact']['idContact'] . ' ] with email [ ' . $contact['email']['idEmail'] . ' ]');
+			$log->log('Exception: [' . $e . ']');
+			$tries++;
+			if($tries < 3){
+				$recipients = $this->sendMailAgain($swift, $message, $contact, $tries + 1, $log);
+			}
+			else {
+				$recipients = false;
+			}
+		}
+		
+		return $recipients;
+	}
+
 	protected function checkMailStatus($mail)
 	{
 		if($mail->status != 'Paused' && $mail->status != 'Scheduled' && $mail->status != 'Birthday') {
