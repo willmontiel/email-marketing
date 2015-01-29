@@ -354,9 +354,10 @@ class ChildCommunication extends BaseWrapper
 				
 				if ($fields) {
 					$c = $mailField->processCustomFields($contact);
-					$subject = $c['subject'];
-					$html = $c['html'];
-					$text = $c['text'];
+					$cc = $mailField->cleanFields($c);
+					$subject = $cc['subject'];
+					$html = $cc['html'];
+					$text = $cc['text'];
 				}
 				else {
 					$subject = $mail->subject;
