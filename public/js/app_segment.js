@@ -164,7 +164,7 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 		aConditionMore: function() {
 			var newobj = {};
 			this.criteria.pushObject(newobj);
-			if ( this.criteria.length > 5 ) {
+			if ( this.criteria.length > 15 ) {
 				this.set('limitCriteria', true);
 			} else {
 				this.set('limitCriteria', false);
@@ -176,7 +176,7 @@ App.SegmentsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin
 
 		aConditionLess: function(data) {
 			this.criteria.removeObject(data);
-			if ( this.criteria.length < 6 ) {
+			if ( this.criteria.length < 16 ) {
 				this.set('limitCriteria', false);
 			} else {
 				this.set('limitCriteria', true);
@@ -274,7 +274,7 @@ App.SegmentsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 		aConditionMore: function() {
 			var newobj = {};
 			this.criteria.pushObject(newobj);
-			if ( this.criteria.length > 5 ) {
+			if ( this.criteria.length > 15 ) {
 				this.set('limitCriteria', true);
 			} else {
 				this.set('limitCriteria', false);
@@ -286,7 +286,7 @@ App.SegmentsEditController = Ember.ObjectController.extend(Ember.SaveHandlerMixi
 
 		aConditionLess: function(data) {
 			this.criteria.removeObject(data);
-			if ( this.criteria.length < 6 ) {
+			if ( this.criteria.length < 16 ) {
 				this.set('limitCriteria', false);
 			} else {
 				this.set('limitCriteria', true);

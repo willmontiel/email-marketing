@@ -11,6 +11,8 @@
 	{{ javascript_include('vendors/redactor/plugins/fullscreen.js') }}
 	{{ javascript_include('vendors/redactor/plugins/textdirection.js') }}
 	{{ javascript_include('js/editor/forms_text_editor.js') }}
+	{{ javascript_include('vendors/bootstrap_v2/spectrum/js/spectrum.js') }}
+	{{ stylesheet_link('vendors/bootstrap_v2/spectrum/css/spectrum.css') }}
 
 	<script type="text/javascript">
 		var idMail = {{mail.idMail}};
