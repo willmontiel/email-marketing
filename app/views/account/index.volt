@@ -67,7 +67,9 @@
 					<th>MTA</th>
 					<th>Registrada</th>
 					<th>Actualizada</th>
-					<th class="orange-sigma star-shadow"><span class="glyphicon glyphicon-star"></span> Puntuación</th>
+					<th class="orange-sigma star-shadow" style="font-size: 0.9em !important;">
+						<span class="glyphicon glyphicon-star"></span> Puntuación
+					</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -85,9 +87,9 @@
 					<td>{{item.virtualMta}}</td>
 					<td>{{date('d/M/Y', item.createdon)}}</td>
 					<td>{{date('d/M/Y', item.updatedon)}}</td>
-					<td>
-						{% if item.score.score is defined AND item.score.score is not null%}
-							{{item.score.score}}
+					<td class="text-right">
+						{% if scores[item.idAccount] is defined %}
+							{{scores[item.idAccount]}}
 						{% else %}
 							0
 						{% endif %}
