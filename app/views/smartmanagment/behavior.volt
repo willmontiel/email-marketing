@@ -121,7 +121,9 @@
 							<th>Fecha</th>
 							<th>Gestión inteligente</th>
 							<th>Correo</th>
-							<th class="orange-sigma star-shadow"><span class="glyphicon glyphicon-star"></span> Puntuación</th>
+							<th class="orange-sigma star-shadow">
+								<span class="glyphicon glyphicon-star"></span> Puntuación
+							</th>
 							<th>Acumulado</th>
 						</tr>
 					</thead>

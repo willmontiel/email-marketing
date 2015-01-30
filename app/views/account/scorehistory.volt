@@ -68,11 +68,16 @@
 				<table class="table table-bordered">
 					<thead>
 						<tr>
-							<th>id</th>
-							<th>Gestión inteligente</th>
-							<th>Correo</th>
-							<th>Fecha</th>
-							<th class="orange-sigma star-shadow"><span class="glyphicon glyphicon-star"></span> Puntuación</th>
+							<th class="col-xs-1 col-sm-1 col-md-1 col-lg-1">id</th>
+							<th class="col-xs-4 col-sm-4 col-md-4 col-lg-4">Gestión inteligente</th>
+							<th class="col-xs-3 col-sm-3 col-md-3 col-lg-3">Correo</th>
+							<th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Fecha</th>
+							<th class="col-xs-1 col-sm-1 col-md-1 col-lg-1 orange-sigma star-shadow" style="font-size: 0.9em !important;">
+								<span class="glyphicon glyphicon-star"></span> Puntuación
+							</th>
+							<th class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+								Acumulado
+							</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -117,6 +122,9 @@
 								</td>
 								<td>{{date('d/M/Y H:i', item.createdon)}}</td>
 								<td>{{item.score}}</td>
+								<td>
+									{{accumulated[item.idScorehistory]}}
+								</td>
 							</tr>
 						{% endfor %}
 					</tbody>

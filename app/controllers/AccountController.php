@@ -79,8 +79,7 @@ class AccountController extends ControllerBase
 		$currentPage = $this->request->getQuery('page', null, 1); // GET
 
 		$builder = $this->modelsManager->createBuilder()
-			->from('Account')
-			->leftJoin('Score', 'Account.idAccount = Score.idAccount')	
+			->from('Account')	
 			->orderBy('Account.idAccount');
 
 		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
@@ -95,7 +94,14 @@ class AccountController extends ControllerBase
 			$this->logger->log("S: {$p->Score->idScore} {$p->idAccount}");
 		}
 		
+		$s = Score::find();
+		$scores = array();
+		foreach ($s as $value) {
+			$scores[$value->idAccount] = $value->score;
+		}
+		
 		$this->view->setVar("page", $page);
+		$this->view->setVar("scores", $scores);
 	}
 	
 	/*
@@ -699,7 +705,7 @@ class AccountController extends ControllerBase
 			->leftJoin('Smartmanagment', 'Scorehistory.idSmartmanagment = Smartmanagment.idSmartmanagment')
 			->leftJoin('Mail', 'Scorehistory.idMail = Mail.idMail')	
 			->where("Scorehistory.idAccount = {$id}")
-			->orderBy('Scorehistory.createdon');
+			->orderBy('Scorehistory.idScorehistory DESC');
 
 		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
 			"builder" => $builder,
@@ -710,9 +716,33 @@ class AccountController extends ControllerBase
 		$page = $paginator->getPaginate();
 		$score = Score::findFirstByIdAccount($account->idAccount);
 		
+		$array1 = array();
+		$array2 = array();
+		$i = 0;
+		
+		$history = Scorehistory::find(array(
+			'conditions' => 'idAccount = ?1',
+			'bind' => array(1 => $account->idAccount)
+		));
+		
+		foreach ($history as $value) {
+			if ($i == 0) {
+				$array1[] = $value->score;
+				$array2[$value->idScorehistory] = $value->score;
+			}
+			else {
+				$array1[] = $value->score + $array1[$i - 1];
+				$array2[$value->idScorehistory] = $value->score + $array1[$i - 1];
+			}
+			$i++;
+		}
+		
+		unset($array1);
+		
 		$this->view->setVar("page", $page);
 		$this->view->setVar("account", $account);
 		$this->view->setVar("score", $score);
+		$this->view->setVar("accumulated", $array2);
 	}
 	
 	public function gethistoryAction()
