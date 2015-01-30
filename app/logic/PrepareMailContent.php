@@ -4,7 +4,7 @@ class PrepareMailContent
 	protected $linkService;
 	protected $imageService;
 
-	public function __construct(LinkService $linkService, ImageService $imageService, $mark = TRUE) 
+	public function __construct($linkService, $imageService, $mark = TRUE) 
 	{
 		$this->linkService = $linkService;
 		$this->imageService = $imageService;

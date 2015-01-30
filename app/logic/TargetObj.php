@@ -148,7 +148,7 @@ class TargetObj
 		
 		$destinationJson->filter = $filter->filter;
 		
-		$this->logger->log("PHQL: {$phql}");
+//		$this->logger->log("PHQL: {$phql}");
 		$targetInfo = array('destinationJson' => $destinationJson, 'type' => $type, 'phql' => $phql);
 		
 		return $targetInfo;

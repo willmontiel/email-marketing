@@ -27,6 +27,11 @@ class TestMail
 		$this->mailContent = $mailContent;
 	}
 	
+	public function setContent($content)
+	{
+		$this->content = $content;
+	}
+	
 	public function setPersonalMessage($message = null)
 	{
 		$this->message = $message;
@@ -55,6 +60,23 @@ class TestMail
 		$this->replaceUrlImages(false);
 	}
 	
+	public function transformContent()
+	{
+		$editorObj = new HtmlObj();
+		$editorObj->setAccount($this->account);
+		$editorObj->assignContent(json_decode($this->content));
+		$content =  $editorObj->replacespecialchars($editorObj->render());
+		$this->body = utf8_decode($content);
+		
+		$text = new PlainText();
+		$this->plainText = $text->getPlainText($this->body);
+		
+		$imageService = new ImageService($this->account, $this->domain, $this->urlManager);
+		$linkService = new LinkService($this->account, null);
+		$prepareMail = new PrepareMailContent($linkService, $imageService, false);
+		list($this->body, $links) = $prepareMail->processContent($this->body, false);
+	}
+
 	protected function createBody()
 	{
 		if ($this->mail->type == 'Editor') {

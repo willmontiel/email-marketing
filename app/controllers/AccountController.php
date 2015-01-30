@@ -47,6 +47,28 @@ class AccountController extends ControllerBase
 		return $this->setJsonResponse($object);
 	}
 	
+	public function getscoreAction()
+	{
+		$account = $this->user->account;
+		
+		$score = Score::findFirst(array(
+			'conditions' => 'idAccount = ?1',
+			'bind' => array(1 => $account->idAccount)
+		));
+		
+		$value = 0;
+		
+		if ($score) {
+			$value = $score->score;
+		}
+		
+		
+		$object = array();
+		$object['score'] = (empty($value) ? 0 : $value);
+		
+		return $this->setJsonResponse($object);
+	}
+	
 	
 	/**
 	 * 
@@ -58,7 +80,8 @@ class AccountController extends ControllerBase
 
 		$builder = $this->modelsManager->createBuilder()
 			->from('Account')
-			->orderBy('idAccount');
+			->leftJoin('Score', 'Account.idAccount = Score.idAccount')	
+			->orderBy('Account.idAccount');
 
 		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
 			"builder" => $builder,
@@ -67,6 +90,10 @@ class AccountController extends ControllerBase
 		));
 		
 		$page = $paginator->getPaginate();
+		
+		foreach ($page->items as $p) {
+			$this->logger->log("S: {$p->Score->idScore} {$p->idAccount}");
+		}
 		
 		$this->view->setVar("page", $page);
 	}
@@ -653,4 +680,74 @@ class AccountController extends ControllerBase
 		return $this->setJsonResponse(array($response->type => $response->msg), $response->status);
 	}
 	
+	public function scorehistoryAction($id)
+	{
+		$account = Account::findFirst(array(
+			'conditions' => 'idAccount = ?1',
+			'bind' => array(1 => $id)
+		));
+		
+		if (!$account) {
+			$this->flashSession->error("Cuenta no encontrada!");
+			return $this->response->redirect('account');
+		}
+		
+		$currentPage = $this->request->getQuery('page', null, 1); // GET
+
+		$builder = $this->modelsManager->createBuilder()
+			->from('Scorehistory')
+			->leftJoin('Smartmanagment', 'Scorehistory.idSmartmanagment = Smartmanagment.idSmartmanagment')
+			->leftJoin('Mail', 'Scorehistory.idMail = Mail.idMail')	
+			->where("Scorehistory.idAccount = {$id}")
+			->orderBy('Scorehistory.createdon');
+
+		$paginator = new Phalcon\Paginator\Adapter\QueryBuilder(array(
+			"builder" => $builder,
+			"limit"=> PaginationDecorator::DEFAULT_LIMIT,
+			"page" => $currentPage
+		));
+		
+		$page = $paginator->getPaginate();
+		$score = Score::findFirstByIdAccount($account->idAccount);
+		
+		$this->view->setVar("page", $page);
+		$this->view->setVar("account", $account);
+		$this->view->setVar("score", $score);
+	}
+	
+	public function gethistoryAction()
+	{
+		$year = date('Y', time());
+		$now = strtotime("01/01/{$year}");
+		$history = Scorehistory::find(array(
+			'conditions' => 'idAccount = ?1 AND createdon >= ?2',
+			'bind' => array(1 => $this->user->account->idAccount,
+							2 => $now)
+		));
+		
+		$months = array(
+			'Jan' => 0,
+			'Feb' => 0,
+			'Mar' => 0,
+			'Apr' => 0,
+			'May' => 0,
+			'Jun' => 0,
+			'Jul' => 0,
+			'Aug' => 0,
+			'Sep' => 0,
+			'Oct' => 0,
+			'Nov' => 0,
+			'Dec' => 0
+		);
+		
+		if (count($history) > 0) {
+			foreach ($history as $h) {
+				$d = date('M', $h->createdon);
+				$months[$d] += $h->score;
+			}
+		}
+		
+		return $this->setJsonResponse($months);
+		
+	}
  }  

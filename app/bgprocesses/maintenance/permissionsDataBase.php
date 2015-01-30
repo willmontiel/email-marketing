@@ -56,6 +56,7 @@ class PermissionsDataBase
 			'api' => 21,
 			'campaign' => 22,
 			'pdf' => 23,
+			'smartmanagment' => 24,
 		);
 	}
 	
@@ -183,6 +184,11 @@ class PermissionsDataBase
 			'pdf::deletetemplate' => 97,
 			'pdf::edittemplate' => 98,
 			'pdf::createbatch' => 99,
+			
+			'smartmanagment::create' => 100,
+			'smartmanagment::read' => 101,
+			'smartmanagment::update' => 102,
+			'smartmanagment::delete' => 103,
 		);
 	}
 	
@@ -311,6 +317,11 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::deletetemplate'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::edittemplate'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'pdf::createbatch'),
+			
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'smartmanagment::create'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'smartmanagment::read'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'smartmanagment::update'),
+			array( 'Role' => 'ROLE_SUDO', 'Action' => 'smartmanagment::delete'),
 			
 			
 //			----------//----------**ROLE_ADMIN**----------//----------

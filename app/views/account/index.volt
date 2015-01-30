@@ -67,7 +67,7 @@
 					<th>MTA</th>
 					<th>Registrada</th>
 					<th>Actualizada</th>
-					<th>Estado</th>
+					<th class="orange-sigma star-shadow"><span class="glyphicon glyphicon-star"></span> Puntuación</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -86,9 +86,16 @@
 					<td>{{date('d/M/Y', item.createdon)}}</td>
 					<td>{{date('d/M/Y', item.updatedon)}}</td>
 					<td>
-						<input type="checkbox" data-id="{{item.idAccount}}" class="switch" {% if item.status == 1%} checked {% endif %}>
+						{% if item.score.score is defined AND item.score.score is not null%}
+							{{item.score.score}}
+						{% else %}
+							0
+						{% endif %}
+						<br />
+						<a href="{{url('account/scorehistory')}}/{{item.idAccount}}">Ver historial</a>
 					</td>
-					<td>
+					<td class="text-right">
+						<input type="checkbox" data-id="{{item.idAccount}}" class="switch" {% if item.status == 1%} checked {% endif %}>
 						<a href="{{ url('account/edit') }}/{{item.idAccount}}" class="btn btn-sm btn-default" ><span class="glyphicon glyphicon-pencil"></span></a>
 						<a href="{{ url('account/show') }}/{{item.idAccount}}" class="btn btn-sm btn-default" ><span class="glyphicon glyphicon-zoom-in"></span></a>
 					</td>
