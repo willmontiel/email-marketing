@@ -94,19 +94,19 @@
 				 <div class="text-center">
 					<ul class="pagination">
 						<li class="{{ (page.current == 1)?'disabled':'enabled' }}">
-							<a href="{{ url('account/scorehistory') }}/{{account.idAccount}}"><i class="glyphicon glyphicon-fast-backward"></i></a>
+							<a href="{{ url('smartmanagment/behavior') }}/{{account.idAccount}}"><i class="glyphicon glyphicon-fast-backward"></i></a>
 						</li>
 						<li class="{{ (page.current == 1)?'disabled':'enabled' }}">
-							<a href="{{ url('account/scorehistory') }}/{{account.idAccount}}?page={{ page.before }}"><i class="glyphicon glyphicon-step-backward"></i></a>
+							<a href="{{ url('smartmanagment/behavior') }}/{{account.idAccount}}?page={{ page.before }}"><i class="glyphicon glyphicon-step-backward"></i></a>
 						</li>
 						<li>
 							<span><b>{{page.total_items}}</b> registros </span><span>Página <b>{{page.current}}</b> de <b>{{page.total_pages}}</b></span>
 						</li>
 						<li class="{{ (page.current >= page.total_pages)?'disabled':'enabled' }}">
-							<a href="{{ url('account/scorehistory') }}/{{account.idAccount}}?page={{page.next}}"><i class="glyphicon glyphicon-step-forward"></i></a>
+							<a href="{{ url('smartmanagment/behavior') }}/{{account.idAccount}}?page={{page.next}}"><i class="glyphicon glyphicon-step-forward"></i></a>
 						</li>
 						<li class="{{ (page.current >= page.total_pages)?'disabled':'enabled' }}">
-							<a href="{{ url('account/scorehistory') }}/{{account.idAccount}}?page={{page.last}}"><i class="glyphicon glyphicon-fast-forward"></i></a>
+							<a href="{{ url('smartmanagment/behavior') }}/{{account.idAccount}}?page={{page.last}}"><i class="glyphicon glyphicon-fast-forward"></i></a>
 						</li>
 					</ul>
 				</div>
@@ -176,6 +176,7 @@
 									</div>
 								</td>
 								<td>
+									{{accumulated[item.idScorehistory]}}
 								</td>
 							</tr>
 						{% endfor %}
@@ -189,19 +190,19 @@
 				 <div class="text-center">
 					<ul class="pagination">
 						<li class="{{ (page.current == 1)?'disabled':'enabled' }}">
-							<a href="{{ url('account/scorehistory') }}/{{account.idAccount}}"><i class="glyphicon glyphicon-fast-backward"></i></a>
+							<a href="{{ url('smartmanagment/behavior') }}/{{account.idAccount}}"><i class="glyphicon glyphicon-fast-backward"></i></a>
 						</li>
 						<li class="{{ (page.current == 1)?'disabled':'enabled' }}">
-							<a href="{{ url('account/scorehistory') }}/{{account.idAccount}}?page={{ page.before }}"><i class="glyphicon glyphicon-step-backward"></i></a>
+							<a href="{{ url('smartmanagment/behavior') }}/{{account.idAccount}}?page={{ page.before }}"><i class="glyphicon glyphicon-step-backward"></i></a>
 						</li>
 						<li>
 							<span><b>{{page.total_items}}</b> registros </span><span>Página <b>{{page.current}}</b> de <b>{{page.total_pages}}</b></span>
 						</li>
 						<li class="{{ (page.current >= page.total_pages)?'disabled':'enabled' }}">
-							<a href="{{ url('account/scorehistory') }}/{{account.idAccount}}?page={{page.next}}"><i class="glyphicon glyphicon-step-forward"></i></a>
+							<a href="{{ url('smartmanagment/behavior') }}/{{account.idAccount}}?page={{page.next}}"><i class="glyphicon glyphicon-step-forward"></i></a>
 						</li>
 						<li class="{{ (page.current >= page.total_pages)?'disabled':'enabled' }}">
-							<a href="{{ url('account/scorehistory') }}/{{account.idAccount}}?page={{page.last}}"><i class="glyphicon glyphicon-fast-forward"></i></a>
+							<a href="{{ url('smartmanagment/behavior') }}/{{account.idAccount}}?page={{page.last}}"><i class="glyphicon glyphicon-fast-forward"></i></a>
 						</li>
 					</ul>
 				</div>
