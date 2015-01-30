@@ -1,12 +1,12 @@
 function SFollowBlock(row) {
 	this.row = row;
-	this.content_fb = {html: $('<img class="soc_net_follow button_facebook" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_facebook_image_md.png" alt="64x64" />'), selected: true, link: 'https://www.facebook.com/'};
-	this.content_tw = {html: $('<img class="soc_net_follow button_twitter" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_twitter_image_md.png" alt="64x64" />'), selected: true, link: 'https://www.twitter.com/'};
-	this.content_li = {html: $('<img class="soc_net_follow button_linkedin" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_linkedin_image_md.png" alt="64x64" />'), selected: true, link: 'https://www.linkedin.com/'};
-	this.content_gp = {html: $('<img class="soc_net_follow button_google_plus" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_google_plus_image_md.png" alt="64x64" />'), selected: true, link: 'https://plus.google.com/'};
-	this.content_yt = {html: $('<img class="soc_net_follow button_youtube" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_youtube_image_md.png" alt="64x64" />'), selected: true, link: 'http://www.youtube.com'};
-	this.content_in = {html: $('<img class="soc_net_follow button_instagram" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_instagram_image_md.png" alt="64x64" />'), selected: true, link: 'https://instagram.com/'};
-	this.content_pi = {html: $('<img class="soc_net_follow button_pinterest" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_pinterest_image_md.png" alt="64x64" />'), selected: true, link: 'https://www.pinterest.com/'};
+	this.content_fb = {html: $('<img class="soc_net_follow button_facebook" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_facebook_image_md.png" alt="64x64" style="display: inline;" />'), selected: true, link: 'https://www.facebook.com/'};
+	this.content_tw = {html: $('<img class="soc_net_follow button_twitter" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_twitter_image_md.png" alt="64x64" style="display: inline;" />'), selected: true, link: 'https://www.twitter.com/'};
+	this.content_li = {html: $('<img class="soc_net_follow button_linkedin" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_linkedin_image_md.png" alt="64x64" style="display: inline;" />'), selected: true, link: 'https://www.linkedin.com/'};
+	this.content_gp = {html: $('<img class="soc_net_follow button_google_plus" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_google_plus_image_md.png" alt="64x64" style="display: inline;" />'), selected: true, link: 'https://plus.google.com/'};
+	this.content_yt = {html: $('<img class="soc_net_follow button_youtube" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_youtube_image_md.png" alt="64x64" style="display: inline;" />'), selected: true, link: 'http://www.youtube.com'};
+	this.content_in = {html: $('<img class="soc_net_follow button_instagram" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_instagram_image_md.png" alt="64x64" style="display: inline;" />'), selected: true, link: 'https://instagram.com/'};
+	this.content_pi = {html: $('<img class="soc_net_follow button_pinterest" src="' + config.imagesUrl + '/socials/follow/theme_1/follow_pinterest_image_md.png" alt="64x64" style="display: inline;" />'), selected: true, link: 'https://www.pinterest.com/'};
 	this.align = 'left';
 	this.size = 'md';
 	this.theme = 1;
