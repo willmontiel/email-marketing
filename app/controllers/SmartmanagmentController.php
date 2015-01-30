@@ -376,8 +376,6 @@ class SmartmanagmentController extends ControllerBase
 		
 		unset($array1);
 		
-//		$this->logger->log(print_r($array2, true));
-		
 		$this->view->setVar("page", $page);
 		$this->view->setVar("account", $account);
 		$this->view->setVar("score", $score);
