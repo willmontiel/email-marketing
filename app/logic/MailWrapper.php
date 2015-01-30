@@ -177,6 +177,12 @@ class MailWrapper extends BaseWrapper
 			$this->mail->socialnetworks = $socialnet->saveSocialsIds($this->fbaccounts, $this->twaccounts);
 		}
 		
+		$this->mail->uniqueOpens = 0;
+		$this->mail->clicks = 0;
+		$this->mail->bounced = 0;
+		$this->mail->spam = 0;
+		$this->mail->unsubscribed = 0;
+		
 		if (!$this->mail->save()) {
 			$e = array();
 			foreach ($this->mail->getMessages() as $msg) {

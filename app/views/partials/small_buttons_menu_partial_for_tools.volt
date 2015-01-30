@@ -49,6 +49,12 @@
 				<span class="sm-button-small-social"></span>
 				</a>
 			</li>
+			
+			<li class="small-btn-nav sm-btn-blue {{ activelnk=='smartmanagent'?'active':'' }}">
+				<a href="{{ url('smartmanagent') }}" data-toggle="tooltip" data-placement="bottom" title="Gestión inteligente">
+				<span class="sm-button-small-social"></span>
+				</a>
+			</li>
 		</ul>
 	</div>
 </div>

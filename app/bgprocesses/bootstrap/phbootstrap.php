@@ -14,6 +14,7 @@ $loader->registerDirs(array(
 	'../../library/',
 	'../../library/facebook/',
 	'../../library/twitter/',
+	'../../library/swiftmailer/',
 	'../../logic/',
 	'../../editorlogic/',
 ))->register();

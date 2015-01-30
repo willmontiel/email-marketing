@@ -1,6 +1,12 @@
 {% extends "templates/index_b3.volt" %}
 {% block content %}
-{{flashSession.output()}}
+	{#<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			{{flashSession.output()}}
+		</div>
+	</div>
+	#}
+
 	<div class="container-fluid">
 		{#<h1 class="sectiontitle">Interacciones de los últimos quince días</h1>#}
 		<h1 class="sectiontitle">Interacción de la última campaña enviada</h1>	
@@ -53,7 +59,7 @@
 		</div>
 		{%endfor%}
 	</div>
-
+	
 	<div class="clearfix space"></div>
 	
 	<div class="row">

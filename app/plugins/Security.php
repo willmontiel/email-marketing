@@ -131,12 +131,16 @@ class Security extends Plugin
 				'apistatistics::mailpublicbounced' => array(),
 				'apiversionone::echo' => array(),
 				
-				
 				//Dashboard
 				'index::index' => array('dashboard' => array('read')),
 				'account::loadindicator' => array('dashboard' => array('read')),
+//				'smartmanagment::behavior' => array('dashboard' => array('read')),
+				
 				//Account controller
 				'account::index' => array('account' => array('read')),
+				'account::scorehistory' => array('account' => array('read')),
+				'account::gethistory' => array('account' => array('read')),
+				'account::getscore' => array('account' => array('read')),
 				'account::accounting' => array('account' => array('billing')),
 				'account::new' => array('account' => array('create', 'read')),
 				'account::edit' => array('account' => array ('read', 'update')),
@@ -467,6 +471,17 @@ class Security extends Plugin
 				'process::pdfbatch' => array('pdf' => array('createbatch')),
 				'process::refreshpdfbatch' => array('pdf' => array('createbatch')),
 				'pdf::getbatch' => array('pdf' => array('createbatch')),
+				
+				'smartmanagment::index' => array('smartmanagment' => array('read')),
+				'smartmanagment::new' => array('smartmanagment' => array('create')),
+				'smartmanagment::edit' => array('smartmanagment' => array('update')),
+				'smartmanagment::delete' => array('smartmanagment' => array('delete')),
+				'smartmanagment::content' => array('smartmanagment' => array('create')),
+				'smartmanagment::previewcontent' => array('smartmanagment' => array('create')),
+				'smartmanagment::createpreview' => array('smartmanagment' => array('create')),
+				'smartmanagment::previewdata' => array('smartmanagment' => array('create')),
+				'smartmanagment::preview' => array('smartmanagment' => array('read')),
+				'smartmanagment::behavior' => array('smartmanagment' => array('read')),
 				
 			);
 		}

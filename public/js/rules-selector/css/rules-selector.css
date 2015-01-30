@@ -1,0 +1,73 @@
+/* 
+    Document   : rules-selector
+    Created on : 27/10/2014, 04:36:48 PM
+    Author     : Will
+    Description:
+        Purpose of the stylesheet follows.
+*/
+.base {
+/*	margin-bottom: 5px;
+	margin-top: 5px;*/
+}
+
+.action-buttons {
+	display: inline-flex;
+	padding-right: 0 !important; 
+	padding-left: 0 !important; 
+}
+
+.add-rule {
+	cursor: pointer;
+	background-color: #449d44;
+	padding: 3px 8px 3px 8px;
+	margin-right: 5px;
+	border-color: #398439;
+	color: white;
+}
+
+.add-rule:hover {
+	background-color: #398439;
+}
+
+.remove-rule {
+	cursor: pointer;
+	background-color: #d9534f;
+	padding: 3px 10px 3px 10px;
+	margin-right: 5px;
+	border-color: #d43f3a;
+	color: white;
+}
+
+.remove-rule:hover {
+	background-color: #d43f3a;
+}
+
+.space-row {
+	margin-bottom: 15px;
+	/*margin-top: 15px;*/
+}
+
+.panel-body2 {
+	padding: 0 15px 0px 15px;
+	background-color: #f5f5f5;
+}
+
+.hr-rules {
+	margin-top: 0px;
+	margin-bottom: 20px;
+	border: 0;
+	border-top: 1px solid #ddd;
+}
+
+.res-space {
+	margin-top: 3px;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.logic-operator {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

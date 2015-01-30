@@ -18,6 +18,7 @@ class Mail extends Modelbase
 		$this->hasMany("idMail", "Statdbase", "idMail");
 		$this->hasMany("idMail", "Statcontactlist", "idMail");
 		$this->hasMany("idMail", "Pdfmail", "idMail");
+		$this->hasMany("idMail", "Scorehistory", "idMail");
 		
 		$this->useDynamicUpdate(true);
 	}

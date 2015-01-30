@@ -1056,3 +1056,111 @@ body {
 .btn-no-rc {
 	border-radius: 0 !important;
 }
+
+.yellow {
+	color: rgb(255, 255, 81);
+}
+
+.orange-sigma {
+	color: #fbaf22;
+}
+
+.text-with-shadow {
+	text-shadow: 0px 0 0.2em #000000;
+}
+
+.block {
+	padding: 20px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	border-radius: 8px;
+}
+
+.block-orange-sigma {
+	background-color: rgba(255,110,0,0.2);
+	border: 1px solid #7F3700;
+}
+
+.block-orange-sigma:hover {
+	background-color: rgba(255,110,0,0.1);
+}
+
+.block-gray {
+	background-color: rgba(173,173,173,0.6);
+	border: 1px solid #7F7F7F;
+}
+
+.block-simple {
+	margin: 25px 0 0 0;
+	border-radius: 8px;
+}
+
+.block-simple-gray {
+	background-color: rgba(173,173,173,0.1);
+	border: 1px solid #7F7F7F;
+}
+
+.block-gray:hover {
+	background-color: rgba(173,173,173,0.1);
+}
+
+.score-title {
+	display: inline;
+	font-size: 2em;
+}
+
+.score {
+	display: inline;
+	font-size: 2.8em;
+	font-weight: lighter;
+	color: white;
+}
+
+.score-container {
+	float: right;
+	position: relative;
+	height: 150px;
+	width: 150px;
+}
+
+.score-star {
+	color: rgb(255, 255, 81);
+	position: absolute;
+	left: 10px;
+	top: -6px;
+	font-size: 10.5em;
+}
+
+.score-image {
+	width: 150px;
+	height: 150px;
+	z-index: -1;
+	position: absolute;
+	background-image: url("../images/score-image.png");
+}
+
+.star-shadow {
+	text-shadow: 0px 0 -0.9em #000000;
+}
+
+.score-description {
+	color: white;
+	position: absolute;
+	bottom: 58px;
+	left: 58px;
+	font-size: 0.8em;
+}
+
+.score-detail {
+	color: white;
+	position: absolute;
+	top: 52px;
+	font-size: 1.7em;
+	text-align: center;
+	width: 100%;
+}
+
+.score-in-bar {
+	display: inline;
+	font-size: 1.2em;
+}

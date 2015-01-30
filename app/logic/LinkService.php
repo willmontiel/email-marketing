@@ -7,7 +7,7 @@ class LinkService
 
 	protected $mappings;
 			
-	public function __construct(Account $account, Mail $mail) 
+	public function __construct(Account $account, $mail) 
 	{
 		$this->account = $account;
 		$this->mail = $mail;

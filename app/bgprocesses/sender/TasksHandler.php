@@ -18,7 +18,7 @@ class TasksHandler extends Handler
 	
 	public function getEvents()
 	{
-		$events = array('Idle');
+		$events = array('Idle', 'Jobless');
 		
 		return $events;
 	}
