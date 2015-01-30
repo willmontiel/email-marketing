@@ -50,18 +50,18 @@
 		{% for item in page.items %}
 			<div class="mail-block">
 				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 						<div class="mail-info">
 							<div class="mail-name">
 								<a href="{{url('smartmanagment/edit')}}/{{item.idSmartmanagment}}">{{item.name}}</a>
 							</div>
-							<div class="mail-detail" style="color: #777;">
+							<div class="mail-detail" style="color: #000;">
+								{{item.description}}
+							</div>
+							<div class="mail-detail" style="color: #777; padding-top: 8px;">
 								Creado el {{date('d/M/Y g:i a', item.createdon)}} 
 							</div>
 						</div>
-					</div>
-						
-					<div class="col-xs-12 col-sm-12 col-md-3 col-lg-4">
 					</div>
 						
 					<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 text-right">
@@ -84,11 +84,13 @@
 		{{ partial('partials/pagination_static_partial', ['pagination_url': 'smartmanagment/index']) }}
 	{% else %}
 		<div class="row">
-			<div class="bs-callout bs-callout-warning">
-				<h4>No hay ninguna gestión inteligente creada</h4>
-				<p>
-					Para empezar la creación de una nueva gestión inteligente <strong><a href="{{url('smartmanagment/new')}}">haga clic aqui</a></strong>
-				</p>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="bs-callout bs-callout-warning">
+					<h4>No hay ninguna gestión inteligente creada</h4>
+					<p>
+						Para empezar la creación de una nueva gestión inteligente <strong><a href="{{url('smartmanagment/new')}}">haga clic aqui</a></strong>
+					</p>
+				</div>
 			</div>
 		</div>
 	{% endif %}
