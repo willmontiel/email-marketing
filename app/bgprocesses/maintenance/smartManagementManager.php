@@ -34,7 +34,7 @@ class SmartManagmentManager
 	
 	public function startManagment()
 	{
-		$this->logger->log("Executing smart managment");
+		$this->logger->log("Executing smartManagment.php");
 		$this->searchSmartManagment();
 		if (count($this->smarts) > 0) {
 			foreach ($this->smarts as $smart) {
@@ -49,7 +49,7 @@ class SmartManagmentManager
 				unset($this->smart);
 			}
 		}
-		$this->logger->log("Finish");
+		$this->logger->log("Finish smartManagment.php");
 	}
 	
 	private function executeQuerys()
@@ -179,11 +179,12 @@ class SmartManagmentManager
 					AND finishedon <= {$this->time}
 				{$this->SQLRules}";
 			
-		$this->logger->log("SQL: {$sql}");
+//		$this->logger->log("SQL: {$sql}");
 				
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
 		$this->accounts = $result->fetchAll();
+		$this->logger->log("Matches: " . print_r($this->accounts));
 	}
 	
 	private function scoreAccounts()
@@ -211,7 +212,6 @@ class SmartManagmentManager
 					$score->createdon = time();
 				}
 				
-			$this->logger->log("Points " . $this->points);
 				$score->score += $this->points;
 				$score->updatedon = time();
 
