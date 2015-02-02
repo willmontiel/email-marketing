@@ -184,6 +184,7 @@ class SmartManagmentManager
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
 		$this->accounts = $result->fetchAll();
+		$this->logger->log("Matches: " . print_r($this->accounts));
 	}
 	
 	private function scoreAccounts()
