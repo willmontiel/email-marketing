@@ -14,11 +14,13 @@ FilterSentContent.prototype.createContent = function() {
 
 FilterSentContent.prototype.createSelect = function() {
 	var self = this;
+	this.loader.append('Un momento por favor... <div class="sgm-loading-image" style="float: right;"></div>');
 	return $.Deferred(function(dfd){
 		var DataSource = self.model.getDataSource();
 		DataSource.find('/getmailfilter').then(function() { 
 			var ds = DataSource.getData();
 			self.initializeSelect2(ds);
+			self.loader.empty();
 			dfd.resolve();
 		});
 	});
