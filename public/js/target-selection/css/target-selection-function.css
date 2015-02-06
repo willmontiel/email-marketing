@@ -75,6 +75,15 @@
 	margin-right: auto;
 }
 
+.sgm-box-loader {
+	position: relative;
+	width: 90%;
+	height: 30px;
+	margin-top: 8px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .sgm-content-add-filter {
 	position: absolute;
 	width: 50%;

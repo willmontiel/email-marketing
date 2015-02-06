@@ -14,6 +14,7 @@ FilterClickContent.prototype.createContent = function() {
 
 FilterClickContent.prototype.createSelectForMails = function() {
 	var self = this;
+	this.loader.append('Un momento por favor... <div class="sgm-loading-image" style="float: right;"></div>');
 	return $.Deferred(function(dfd){
 		var DataSource = self.model.getDataSource();
 		DataSource.find('/getclicksmailfilter').then(function() { 
@@ -24,6 +25,7 @@ FilterClickContent.prototype.createSelectForMails = function() {
 			select2.setSelectObject(self.content);
 			select2.createSelectWithPreview();
 			self.select = select2.getSelect2Object();
+			self.loader.empty();
 			dfd.resolve();
 		});
 	});
@@ -31,9 +33,10 @@ FilterClickContent.prototype.createSelectForMails = function() {
 
 FilterClickContent.prototype.createSelect = function() {
 	var self = this;
+	this.loader.append('Un momento por favor... <div class="sgm-loading-image" style="float: right;"></div>');
+	
 	return $.Deferred(function(dfd){
-		var obj = {idMail: self.idMail};
-		
+		var obj = {idMail: self.idMail};	
 		var DataSource = self.model.getDataSource();
 		DataSource.setObject(obj);
 		DataSource.find('/getclicksfilter').then(function() { 
@@ -44,6 +47,7 @@ FilterClickContent.prototype.createSelect = function() {
 			select2.setSelectObject(self.content);
 			select2.createBasicSelect();
 			self.select = select2.getSelect2Object();
+			self.loader.empty();
 			dfd.resolve();
 		});
 	});
