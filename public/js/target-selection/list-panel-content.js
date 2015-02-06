@@ -44,11 +44,13 @@ ListPanelContent.prototype.initialize = function(panel) {
 		self.sd = $.extend(true, [], self.ds);
 		self.initializeSelect2(self.sd);
 		self.serialize();
+		self.content.find('.sgm-box-loader').empty();
 	});
 	
 	panel.find('.sgm-panel-content').append(this.content);
+	this.content.find();
 	
-	this.initializeTooltip();
+	this.content.find('.sgm-box-loader').append('Un momento por favor... <div class="sgm-loading-image" style="float: right;"></div>');
 };
 
 ListPanelContent.prototype.createContent = function () {
@@ -63,6 +65,7 @@ ListPanelContent.prototype.createContent = function () {
 						</div>\n\
 						<div class="sgm-box-content"></div>\n\
 						<div class="sgm-box-footer-content"></div>\n\
+						<div class="sgm-box-loader"></div>\n\
 					 </div>');
 };
 

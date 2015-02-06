@@ -33,11 +33,12 @@ FilterPanelContent.prototype.setValues = function(type, himself) {
 
 FilterPanelContent.prototype.initialize = function(panel) {
 	var self = this;
+	var loader = this.content.find('.sgm-box-loader');
 	
 	this.content.find('.smg-add-sent-filter').on('click', function (e) {
 		var container = self.setValues('mail-sent', this);
 		var filter = new FilterMailContent();
-		self.createFilter(filter, container);
+		self.createFilter(filter, container, loader);
 		
 		self.content.find('.smg-add-open-filter').remove();
 		self.content.find('.smg-add-click-filter').remove();
@@ -46,7 +47,7 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	this.content.find('.smg-add-open-filter').on('click', function (e) {
 		var container = self.setValues('mail-open', this);
 		var filter = new FilterMailContent();
-		self.createFilter(filter, container);
+		self.createFilter(filter, container, loader);
 		
 		self.content.find('.smg-add-sent-filter').remove();
 		self.content.find('.smg-add-click-filter').remove();
@@ -55,7 +56,7 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	this.content.find('.smg-add-click-filter').on('click', function (e) {
 		var container = self.setValues('click', this);
 		var filter = new FilterClickContent();
-		self.createClickFilter(filter, container);
+		self.createClickFilter(filter, container, loader);
 		
 		self.content.find('.smg-add-sent-filter').remove();
 		self.content.find('.smg-add-open-filter').remove();
@@ -71,12 +72,13 @@ FilterPanelContent.prototype.initialize = function(panel) {
 	this.serialize();
 };
 
-FilterPanelContent.prototype.createFilter = function(obj, container) {
+FilterPanelContent.prototype.createFilter = function(obj, container, loader) {
 	var self = this; 
 	
 	obj.setModel(this.model);
 	obj.setMailSelected(this.mailSelected);
 	obj.setContainer(container);
+	obj.setLoaderContainer(loader);
 	obj.createContent();
 
 	obj.createSelect().then(function() { 
@@ -139,12 +141,13 @@ FilterPanelContent.prototype.updateNegationValue = function() {
 	});
 };
 
-FilterPanelContent.prototype.createClickFilter = function(obj, container) {
+FilterPanelContent.prototype.createClickFilter = function(obj, container, loader) {
 	var self = this; 
 //	this.mailSelected = null;
 	
 	obj.setModel(this.model);
 	obj.setContainer(container);
+	obj.setLoaderContainer(loader);
 	obj.createContent();
 
 	obj.createSelectForMails().then(function() { 
@@ -199,6 +202,7 @@ FilterPanelContent.prototype.createContent = function() {
 							   <div class="sgm-content-add-filter"></div>\n\
 							   <div class="sgm-content-negation-filter"></div>\n\
 						  </div>\n\
+						  <div class="sgm-box-loader"></div>\n\
 					  </div>');
 };
 
