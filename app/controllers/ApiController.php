@@ -1539,7 +1539,7 @@ class ApiController extends ControllerBase
 		$contentsraw = $this->getRequestContent();
 		$contentsT = json_decode($contentsraw);
 		
-		$this->logger->log('Contact: ' . print_r($contentsT, true));
+//		$this->logger->log('Contact: ' . print_r($contentsT, true));
 		// Tomar el objeto dentro de la raiz
 		$contents = $contentsT->contact;
 		
@@ -1692,7 +1692,7 @@ class ApiController extends ControllerBase
 		$data = $this->request->getPost("data");
 		$data = json_encode($data);
 		$data = json_decode($data);
-		$this->logger->log("DATA: " . print_r($data, true));
+//		$this->logger->log("DATA: " . print_r($data, true));
 		
 		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
 		
@@ -1703,7 +1703,7 @@ class ApiController extends ControllerBase
 			$interpreter->searchMailFilter();
 			$sql = $interpreter->getSQL();
 			
-			$this->logger->log("SQL: {$sql}");
+//			$this->logger->log("SQL: {$sql}");
 			
 			if ($sql != false) {
 				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
@@ -1831,7 +1831,7 @@ class ApiController extends ControllerBase
 			$wrapper->searchTotalContacts();
 			$sql = $wrapper->getSQL();
 			
-			$this->logger->log("SQL FOR TOTAL: {$sql}");
+//			$this->logger->log("SQL FOR TOTAL: {$sql}");
 			
 			if ($sql != false) {
 				$executer = new \EmailMarketing\General\Misc\SQLExecuter();
