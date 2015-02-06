@@ -34,7 +34,6 @@ FilterClickContent.prototype.createSelectForMails = function() {
 FilterClickContent.prototype.createSelect = function() {
 	var self = this;
 	this.loader.append('Un momento por favor... <div class="sgm-loading-image" style="float: right;"></div>');
-	
 	return $.Deferred(function(dfd){
 		var obj = {idMail: self.idMail};	
 		var DataSource = self.model.getDataSource();

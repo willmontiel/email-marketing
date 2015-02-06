@@ -164,7 +164,7 @@ FilterPanelContent.prototype.createClickFilter = function(obj, container, loader
 			var container = self.content.find('.sgm-filter-content-select-click');
 			container.empty();
 			var filter = new FilterClickContent();
-			self.createFilter(filter, container);
+			self.createFilter(filter, container, loader);
 		});
 	});
 };
