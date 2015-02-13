@@ -178,7 +178,9 @@ class SmartManagmentManager
 					{$targetSQL}
 					AND finishedon <= {$this->time}
 				{$this->SQLRules}";
-			
+				
+		$this->logger->log("SQL: {$sql}");	
+				
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
 		$this->accounts = $result->fetchAll();
@@ -254,58 +256,67 @@ class SmartManagmentManager
 	private function sendCommunications()
 	{
 		if ($this->comm) {
-
-			if (count($this->accounts) > 0) {
-				foreach ($this->accounts as $account) {
-					$users = User::find(array(
-						'conditions' => 'idAccount = ?1',
-						'bind' => array(1 => $account['idAccount'])
-					));
-
-					if (count($users) > 0) {
-						$transport = Swift_SendmailTransport::newInstance();
-						$swift = Swift_Mailer::newInstance($transport);
-
-						$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
-
-						$mail = new TestMail();
-						$mail->setAccount($this->account);
-						$mail->setDomain($domain);
-						$mail->setUrlManager($this->urlManager);
-						$mail->setContent($this->smart->content);
-
-						$mail->transformContent();
-
-						$subject = $this->smart->subject;
-						$from = array($this->smart->fromEmail => $this->smart->fromName);
-						$replyTo = $this->smart->replyTo;
-
-						$content = $mail->getBody();
-						$text = $mail->getPlainText();
-
-						foreach ($users as $user) {
-							$to = array($user->email => "{$user->firstName} {$user->lastName}");
-
-							$message = new Swift_Message($subject);
-							$message->setFrom($from);
-							$message->setTo($to);
-							$message->setBody($content, 'text/html');
-							$message->addPart($text, 'text/plain');
-
-							if (!empty($replyTo) && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
-								$message->setReplyTo($replyTo);
-							}
-
-							$sendMail = $swift->send($message, $failures);
-
-							if (!$sendMail){
-								$this->logger->log("Error while sending test mail: " . print_r($failures));
-							}
-							else {
-								$this->logger->log("Smartmanagment communication {$this->smart->idSmartmanagment}, user {$user->idUser} sent");
-							}
-						}
-					}
+			$accounts = array();
+			
+			foreach ($this->accounts as $account) {
+				if (!in_array($account['idAccount'], $accounts)) {
+					$accounts[] = $account['idAccount'];
+				}
+			}
+			
+			$this->logger->log("Finally Accounts: " . print_r($accounts, true));
+			
+			if (count($account) > 0) {
+				foreach ($accounts as $account) {
+//					$users = User::find(array(
+//						'conditions' => 'idAccount = ?1',
+//						'bind' => array(1 => $account)
+//					));
+//
+//					if (count($users) > 0) {
+//						$transport = Swift_SendmailTransport::newInstance();
+//						$swift = Swift_Mailer::newInstance($transport);
+//
+//						$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
+//
+//						$mail = new TestMail();
+//						$mail->setAccount($this->account);
+//						$mail->setDomain($domain);
+//						$mail->setUrlManager($this->urlManager);
+//						$mail->setContent($this->smart->content);
+//
+//						$mail->transformContent();
+//
+//						$subject = $this->smart->subject;
+//						$from = array($this->smart->fromEmail => $this->smart->fromName);
+//						$replyTo = $this->smart->replyTo;
+//
+//						$content = $mail->getBody();
+//						$text = $mail->getPlainText();
+//
+//						foreach ($users as $user) {
+//							$to = array($user->email => "{$user->firstName} {$user->lastName}");
+//
+//							$message = new Swift_Message($subject);
+//							$message->setFrom($from);
+//							$message->setTo($to);
+//							$message->setBody($content, 'text/html');
+//							$message->addPart($text, 'text/plain');
+//
+//							if (!empty($replyTo) && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
+//								$message->setReplyTo($replyTo);
+//							}
+//
+//							$sendMail = $swift->send($message, $failures);
+//
+//							if (!$sendMail){
+//								$this->logger->log("Error while sending test mail: " . print_r($failures));
+//							}
+//							else {
+//								$this->logger->log("Smartmanagment communication {$this->smart->idSmartmanagment}, user {$user->idUser} sent");
+//							}
+//						}
+//					}
 				}
 			}
 		}
