@@ -179,12 +179,10 @@ class SmartManagmentManager
 					AND finishedon <= {$this->time}
 				{$this->SQLRules}";
 			
-//		$this->logger->log("SQL: {$sql}");
-				
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
 		$this->accounts = $result->fetchAll();
-		$this->logger->log("Matches: " . print_r($this->accounts));
+		$this->logger->log("Matches: " . print_r($this->accounts, true));
 	}
 	
 	private function scoreAccounts()
@@ -256,19 +254,12 @@ class SmartManagmentManager
 	private function sendCommunications()
 	{
 		if ($this->comm) {
-			$accounts = array();
-		
-			foreach ($this->accounts as $account) {
-				if (!in_array($account['idAccount'], $accounts)) {
-					$accounts[] = $account['idAccount'];
-				}
-			}
 
-			if (count($accounts) > 0) {
-				foreach ($accounts as $id) {
+			if (count($this->accounts) > 0) {
+				foreach ($this->accounts as $account) {
 					$users = User::find(array(
 						'conditions' => 'idAccount = ?1',
-						'bind' => array(1 => $id)
+						'bind' => array(1 => $account['idAccount'])
 					));
 
 					if (count($users) > 0) {
