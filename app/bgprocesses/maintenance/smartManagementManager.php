@@ -111,7 +111,7 @@ class SmartManagmentManager
 							
 							case 'condition-rule':
 								if ($d->class == "%") {
-									$part1 = "(({$part1}*100)/messagesSent)";
+									$part1 = "(({$part1}*100)/m.messagesSent)";
 								}
 								$part3 = $d->value;
 								break;
@@ -139,19 +139,19 @@ class SmartManagmentManager
 		$part1 = "";
 		switch ($index) {
 			case 'opens':
-				$part1 = "uniqueOpens";
+				$part1 = "m.uniqueOpens";
 				break;
 			
 			case 'bounced':
-				$part1 = "bounced";
+				$part1 = "m.bounced";
 				break;
 			
 			case 'unsubscribed':
-				$part1 = "unsubscribed";
+				$part1 = "m.unsubscribed";
 				break;
 			
 			case 'spam':
-				$part1 = "spam";
+				$part1 = "m.spam";
 				break;
 
 			default:
@@ -168,7 +168,7 @@ class SmartManagmentManager
 		if ($accounts->type == 'certain-accounts') {
 			if (count($accounts->target) > 0) {
 				$ids = implode(',', $accounts->target);
-				$targetSQL = " AND idAccount in ({$ids})";
+				$targetSQL = " AND m.idAccount in ({$ids})";
 			}
 		}
 				
