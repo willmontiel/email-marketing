@@ -992,7 +992,7 @@ class ContactWrapper extends BaseWrapper
 					JOIN dbase AS d ON(d.idDbase = c.idDbase)
 				WHERE c.idContact IN (" . $idsContact . ")";
 		
-			Phalcon\DI::getDefault()->get('logger')->log("Sql: " . $sql);
+//			Phalcon\DI::getDefault()->get('logger')->log("Sql: " . $sql);
 			$r = $this->db->query($sql);
 			$allContacts = $r->fetchAll();
 			$count = count($allContacts);
@@ -1063,7 +1063,7 @@ class ContactWrapper extends BaseWrapper
 		$search->domain = $domains;
 		$search->text = $texts;
 		
-		Phalcon\DI::getDefault()->get('logger')->log("Search: " . print_r($search, true));
+//		Phalcon\DI::getDefault()->get('logger')->log("Search: " . print_r($search, true));
 		return $search;
 	}
 	
@@ -1103,7 +1103,7 @@ class ContactWrapper extends BaseWrapper
 			}
 		}
 		else {
-			Phalcon\DI::getDefault()->get('logger')->log("Hay memcache");
+//			Phalcon\DI::getDefault()->get('logger')->log("Hay memcache");
 			$contacts = $memContacts;
 			$cache->delete($this->md5);
 		}
@@ -1173,7 +1173,7 @@ class ContactWrapper extends BaseWrapper
 						MATCH(c.name, c.lastname) AGAINST ('" . $criteria . "' IN BOOLEAN MODE) 
 						AND b.idAccount = " . $this->account->idAccount;
 		}
-		Phalcon\DI::getDefault()->get('logger')->log("Sql: " . $sql);
+//		Phalcon\DI::getDefault()->get('logger')->log("Sql: " . $sql);
 		return $sql;
 	}
 	
@@ -1189,7 +1189,7 @@ class ContactWrapper extends BaseWrapper
 			$sql = "SELECT idContact FROM (" . $c1 . ") AS c1 JOIN (" . $c2 . ") AS c2 ON (c1.idEmail = c2.idEmail) LIMIT " . self::DEFAULT_LIMIT_SEARCH;
 		}
 		
-		Phalcon\DI::getDefault()->get('logger')->log("Final Sql: " . $sql);
+//		Phalcon\DI::getDefault()->get('logger')->log("Final Sql: " . $sql);
 		
 		return $sql;
 	}
