@@ -152,6 +152,7 @@ class ImportContactWrapper
 	 * @throws \InvalidArgumentException
 	 */
 	public function startImport($fields, $destiny, $dateformat, $delimiter, $header, $importmode = 'normal', $update = false) {
+		$this->log->log("Header: {$header}");
 		try {
 			ini_set('auto_detect_line_endings', '1');
 			$mode = $this->account->accountingMode;
@@ -212,7 +213,7 @@ class ImportContactWrapper
 
 			// Creacion de contactos utilizando LOAD DATA INFILE
 			// Preprocesando el archivo CSV
-			$this->importDataFromCSV($destiny, $header, $delimiter, $activeContacts, $contactLimit, $mode, $dbase, $importmode);
+			$this->importDataFromCSV($destiny, $header, $delimiter, $activeContacts, $contactLimit, $mode, $dbase, $importmode, $update);
 
 			$this->timer->endTimer('phase2');
 
@@ -378,7 +379,7 @@ class ImportContactWrapper
 	 * @param string $importmode
 	 * @throws \InvalidArgumentException
 	 */
-	protected function importDataFromCSV($sourcefile, $hasHeader, $delimiter, $activeContacts, $contactLimit, $mode, Dbase $dbase, $importmode)
+	protected function importDataFromCSV($sourcefile, $hasHeader, $delimiter, $activeContacts, $contactLimit, $mode, Dbase $dbase, $importmode, $update)
 	{
 		// Cuantas lineas tiene el archivo?
 		$linecount = $this->countFileRecords($sourcefile);
@@ -461,7 +462,7 @@ class ImportContactWrapper
 		
 		$this->timer->startTimer('clean-rows', 'Clean rows and insert contacts!');
 		// Limpiar los registros e insertarlos
-		$this->cleanInsertedRecords($this->account->idAccount, $dbase->idDbase);
+		$this->cleanInsertedRecords($this->account->idAccount, $dbase->idDbase, $update);
 		$this->timer->endTimer('clean-rows');
 	
 		// Actualizar/insertar campos personalizados
@@ -645,7 +646,7 @@ class ImportContactWrapper
 	 * @param int $idAccount
 	 * @param int $idDbase
 	 */
-	protected function cleanInsertedRecords($idAccount, $idDbase)
+	protected function cleanInsertedRecords($idAccount, $idDbase, $update)
 	{
 		$hora = time();
 		// Marcar emails bloqueados en la tabla temporal (para no importar contactos nuevos)
@@ -675,17 +676,9 @@ class ImportContactWrapper
 		//Actualizar contactos que ya estan en la base de datos					
 		if ($update) {
 			$createcontacts = "UPDATE contact AS c, {$this->tablename} t 
-							   SET c.idDbase = {$idDbase},
-								   c.idEmail = t.idEmail,
-								   c.name = t.name,
+							   SET c.name = t.name,
 								   c.lastName = t.lastName,
 								   c.birthDate = t.birthDate,
-								   c.status = {$hora},
-								   c.unsubscribed = 0,
-								   c.ipActivated = {$this->ipaddress},
-								   c.ipSubscribed = {$this->ipaddress},
-								   c.createdon = {$hora}, 
-								   c.subscribedon = {$hora}, 
 								   c.updatedon = {$hora}	   
 							   WHERE t.idContact IS NOT NULL
 							       AND t.blocked IS NULL";
