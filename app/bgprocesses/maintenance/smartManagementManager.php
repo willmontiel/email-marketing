@@ -22,6 +22,7 @@ class SmartManagmentManager
 	protected $SQLRules = "";
 	protected $SQLRulesArray = array();
 	protected $points;
+	protected $scored = array();
 	protected $accounts;
 	protected $account = null;
 	protected $comm = false;
@@ -224,7 +225,15 @@ class SmartManagmentManager
 					throw new Exception("Error while scoring account history... {$msg}");
 				}
 			}
-
+			
+			if (isset($this->scored[$account['idAccount']])) {
+				$this->scored[$account['idAccount']] += $this->points;
+			}
+			else {
+				$this->scored[$account['idAccount']] = $this->points;
+			}
+			 
+			
 			$db->commit();
 			$this->comm = true;
 		}
@@ -245,17 +254,11 @@ class SmartManagmentManager
 	private function sendCommunications()
 	{
 		if ($this->comm) {
-			$accounts = array();
+			$data = $this->getData();
+			$accounts = $data->accounts;
+			$mails = $data->mails;
 			
-			foreach ($this->accounts as $account) {
-				if (!in_array($account['idAccount'], $accounts)) {
-					$accounts[] = $account['idAccount'];
-				}
-			}
-			
-			$this->logger->log("Matches: " . print_r($accounts, true));
-			
-			if (count($account) > 0) {
+			if (count($accounts) > 0) {
 				foreach ($accounts as $account) {
 					$users = User::find(array(
 						'conditions' => 'idAccount = ?1',
@@ -263,18 +266,32 @@ class SmartManagmentManager
 					));
 
 					if (count($users) > 0) {
+						$mailsNames = $this->getMailsNames($account, $mails);
+						
+						$score = Score::findFirst(array(
+							'conditions' => 'idAccount = ?1',
+							'bind' => array(1 => $account)
+						));
+						
 						$transport = Swift_SendmailTransport::newInstance();
 						$swift = Swift_Mailer::newInstance($transport);
 
 						$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
-
+						
+						$this->logger->log(print_r($this->scored, true));
+						$this->logger->log($this->scored[$account]);
+						$this->logger->log($score->score);
+						$this->logger->log($mailsNames);
+						
 						$mail = new TestMail();
 						$mail->setAccount($this->account);
 						$mail->setDomain($domain);
 						$mail->setUrlManager($this->urlManager);
 						$mail->setContent($this->smart->content);
-
 						$mail->transformContent();
+						$mail->replaceVariablesForSmart(array(
+							$mailsNames,  $this->scored[$account], $score->score
+						));
 
 						$subject = $this->smart->subject;
 						$from = array($this->smart->fromEmail => $this->smart->fromName);
@@ -284,30 +301,85 @@ class SmartManagmentManager
 						$text = $mail->getPlainText();
 
 						foreach ($users as $user) {
-							$to = array($user->email => "{$user->firstName} {$user->lastName}");
-
-							$message = new Swift_Message($subject);
-							$message->setFrom($from);
-							$message->setTo($to);
-							$message->setBody($content, 'text/html');
-							$message->addPart($text, 'text/plain');
-
-							if (!empty($replyTo) && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
-								$message->setReplyTo($replyTo);
-							}
-
-							$sendMail = $swift->send($message, $failures);
-
-							if (!$sendMail){
-								$this->logger->log("Error while sending test mail: " . print_r($failures));
-							}
-							else {
-								$this->logger->log("Smartmanagment communication {$this->smart->idSmartmanagment}, user {$user->idUser} sent");
-							}
+							$this->sendToUsers($user, $subject, $from, $content, $text, $replyTo, $swift);
 						}
 					}
 				}
 			}
+		}
+	}
+	
+	private function getMailsNames($idAccount, $mails)
+	{
+		$names = '';
+		if (isset($mails[$idAccount])) {
+			$mail = $mails[$idAccount];
+			
+			$ids = implode(',', $mail);
+			$sql = "SELECT name FROM mail WHERE idMail IN ({$ids})";
+			$db = Phalcon\DI::getDefault()->get('db');
+			$result = $db->query($sql);
+			$m = $result->fetchAll();
+
+			if (count($m) > 0) {
+				$names = "<ul>";
+				foreach ($m as $value) {
+					$names .= "<li>{$value}</li>";
+				}
+				$names .= "</ul>";
+			}
+		}
+		
+		return $names;
+	}
+	
+	private function getData() 
+	{
+		$accounts = array();
+		$mails = array();
+		foreach ($this->accounts as $account) {
+			if (!in_array($account['idAccount'], $accounts)) {
+				$accounts[] = $account['idAccount'];
+			}
+
+			if (isset($mails[$account['idAccount']])) {
+				$mails[$account['idAccount']] = array($account['idMail']);
+			}
+			else {
+				$mails[$account['idAccount']][] = $account['idMail'];
+			}
+		}
+
+		$this->logger->log("Matches: " . print_r($accounts, true));
+		
+		$data = new stdClass();
+		$data->accounts = $account;
+		$data->mails = $mails;
+		
+		return $data;
+	}
+	
+	private function sendToUsers($user, $subject, $from, $content, $text, $replyTo, $swift)
+	{
+		$to = array($user->email => "{$user->firstName} {$user->lastName}");
+
+		$message = new Swift_Message($subject);
+		$message->setFrom($from);
+		$message->setTo($to);
+		$message->setBody($content, 'text/html');
+		$message->addPart($text, 'text/plain');
+
+		if (!empty($replyTo) && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
+			$message->setReplyTo($replyTo);
+		}
+
+		$sendMail = $swift->send($message, $failures);
+
+		if (!$sendMail){
+			$this->logger->log("Error while sending test mail: " . print_r($failures));
+		}
+		else {
+			$this->logger->log("Smartmanagment communication {$this->smart->idSmartmanagment}, user {$user->idUser} sent");
 		}
 	}
 }
