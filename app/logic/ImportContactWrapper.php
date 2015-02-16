@@ -152,7 +152,6 @@ class ImportContactWrapper
 	 * @throws \InvalidArgumentException
 	 */
 	public function startImport($fields, $destiny, $dateformat, $delimiter, $header, $importmode = 'normal', $update = false) {
-		$this->log->log("Header: {$header}");
 		try {
 			ini_set('auto_detect_line_endings', '1');
 			$mode = $this->account->accountingMode;
