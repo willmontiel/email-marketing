@@ -325,6 +325,7 @@ class SmartManagmentManager
 			if (count($m) > 0) {
 				$names = "<ul>";
 				foreach ($m as $value) {
+					$this->logger->log("Values: " . print_r($value, true));
 					$names .= "<li>{$value}</li>";
 				}
 				$names .= "</ul>";
