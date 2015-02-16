@@ -356,7 +356,7 @@ class SmartManagmentManager
 		$this->logger->log("Matches: " . print_r($accounts, true));
 		
 		$data = new stdClass();
-		$data->accounts = $account;
+		$data->accounts = $accounts;
 		$data->mails = $mails;
 		
 		return $data;
