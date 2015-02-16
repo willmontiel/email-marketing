@@ -151,7 +151,7 @@ class ImportContactWrapper
          * @param string $importmode
 	 * @throws \InvalidArgumentException
 	 */
-	public function startImport($fields, $destiny, $dateformat, $delimiter, $header, $importmode = 'normal') {
+	public function startImport($fields, $destiny, $dateformat, $delimiter, $header, $importmode = 'normal', $update = false) {
 		try {
 			ini_set('auto_detect_line_endings', '1');
 			$mode = $this->account->accountingMode;
@@ -187,7 +187,7 @@ class ImportContactWrapper
 
 			// Crear el mapper
 			$this->fieldmapper = new SelectedFieldsMapper;
-			$this->log->log('Position fields for mapping object: [' . print_r($posCol, true) . ']');
+//			$this->log->log('Position fields for mapping object: [' . print_r($posCol, true) . ']');
 
 			try {
 				$this->fieldmapper->setDbase($dbase);
@@ -217,17 +217,6 @@ class ImportContactWrapper
 			$this->timer->endTimer('phase2');
 
 			$this->timer->startTimer('phase3', 'Update counters!');
-                        /**
-                         * =====================================================
-                         * NOTA:
-                         * Modifiqué el STORED PROCEDURE de actualizacion de 
-                         * contadores de base de datos.
-                         * Ahora actualiza los contadores de todas las listas
-                         * de esa base de datos. Por lo tanto no es necesario
-                         * realizar la actualización de la lista que antes
-                         * se hacia
-                         * =====================================================
-                         */
 			$dbase->updateCountersInDbase();
 			$this->timer->endTimer('phase3');
 
@@ -367,12 +356,12 @@ class ImportContactWrapper
 		// [ fieldname => metadata, ... ]
 		// Ej: [ 'cf_1' => ' VARCHAR(100) DEFAULT NULL' ]
 		$fields = $this->fieldmapper->getAdditionalFields();
-		$this->log->log('Additional fields: [' . print_r($fields, true) . ']');
+//		$this->log->log('Additional fields: [' . print_r($fields, true) . ']');
 		
 		if (count($fields) > 0) {
 			$af = implode(',', array_map(function ($k, $v) { return $k . $v; }, array_keys($fields), $fields));
 			$alter = "ALTER TABLE {$this->tablename} ADD COLUMN ({$af})";
-			$this->log->log('Alter: [' . $alter . ']');
+//			$this->log->log('Alter: [' . $alter . ']');
 			$this->db->execute($alter);
 		}
 	}
@@ -394,17 +383,17 @@ class ImportContactWrapper
 		// Cuantas lineas tiene el archivo?
 		$linecount = $this->countFileRecords($sourcefile);
 
-		$maxrows = ($hasHeader)?$linecount:$linecount+1;
+		$maxrows = (($hasHeader) ? $linecount : $linecount+1);
 		$notimported = 0;
 		if ($mode == 'Contacto') {
 			// Modo contactos, verificar que es menor, el numero de registros
 			// del archivo, o el numero de contactos que se pueden insertar en
 			// la cuenta
 			$dif = $contactLimit - $activeContacts;
-			$maxrows = ($dif < $maxrows)?$dif:$maxrows;
-			$notimported = ($linecount>$maxrows)?($linecount - $maxrows):0;
+			$maxrows = (($dif < $maxrows) ? $dif : $maxrows);
+			$notimported = (($linecount>$maxrows) ? ($linecount - $maxrows) : 0);
 		}
-		$this->log->log("File rows: {$linecount}, maxrows: {$maxrows}");
+//		$this->log->log("File rows: {$linecount}, maxrows: {$maxrows}");
 		
 		/*
 		 * 
@@ -438,7 +427,7 @@ class ImportContactWrapper
 		// Numero de lineas que tiene ahora el archivo final
 		// Esto elimina duplicados, invalidos, etc
 		$flines = $this->countFileRecords($tmpFilename);
-		$this->log->log("Temporary file rows: {$flines}");
+//		$this->log->log("Temporary file rows: {$flines}");
 		
 		$this->timer->startTimer('load-rows', 'Load rows from temporary file into database!');
 		// Crear sentencia SQL que hace la importacion de los registros desde el
@@ -452,7 +441,7 @@ class ImportContactWrapper
 					. "({$fields})";
 		$sql_db_mode_strict = "SET session sql_mode='strict_all_tables'";
 		
-		$this->log->log("SQL: {$importfile}");
+//		$this->log->log("SQL: {$importfile}");
 		// Ejecutar sentencia SQL
 		
 		$this->db->execute($sql_db_mode);
@@ -533,7 +522,7 @@ class ImportContactWrapper
 					. "FROM {$this->tablename} "
 					. "WHERE idContact IS NOT NULL "
 					. "ON DUPLICATE KEY UPDATE {$data[1]} = {$fn}";
-			$this->log->log("Excuting SQL: [{$sql}]");
+//			$this->log->log("Excuting SQL: [{$sql}]");
 			$this->db->execute($sql);
 		}
 	}
@@ -594,7 +583,7 @@ class ImportContactWrapper
 		fclose($nfp);
 		
 		$this->incrementProgress($rows);
-		$this->log->log("Copying data from [{$sourcefile}] to [{$tmpFilename}]. {$rows} rows processed!");
+//		$this->log->log("Copying data from [{$sourcefile}] to [{$tmpFilename}]. {$rows} rows processed!");
 	}
 	
 	
@@ -675,12 +664,34 @@ class ImportContactWrapper
 							. "   t.dbase = 1 "
 							. "WHERE t.idEmail IS NOT NULL "
 							. "   AND c.idDbase = {$idDbase}";
+							
 		// Insertar contactos nuevos (ID nulo y no bloqueados)
 		$createcontacts    =  "INSERT INTO contact (idDbase, idEmail, name, lastName, birthDate, status, unsubscribed, ipActivated, ipSubscribed, createdon, subscribedon, updatedon) "
 							. "    SELECT {$idDbase}, t.idEmail, t.name, t.lastName, t.birthDate, {$hora}, 0, {$this->ipaddress}, {$this->ipaddress}, {$hora}, {$hora}, {$hora} "
 							. "    FROM {$this->tablename} t "
 							. "    WHERE t.idContact IS NULL "
 							. "        AND t.blocked IS NULL;";
+							
+		//Actualizar contactos que ya estan en la base de datos					
+		if ($update) {
+			$createcontacts = "UPDATE contact AS c, {$this->tablename} t 
+							   SET c.idDbase = {$idDbase},
+								   c.idEmail = t.idEmail,
+								   c.name = t.name,
+								   c.lastName = t.lastName,
+								   c.birthDate = t.birthDate,
+								   c.status = {$hora},
+								   c.unsubscribed = 0,
+								   c.ipActivated = {$this->ipaddress},
+								   c.ipSubscribed = {$this->ipaddress},
+								   c.createdon = {$hora}, 
+								   c.subscribedon = {$hora}, 
+								   c.updatedon = {$hora}	   
+							   WHERE t.idContact IS NOT NULL
+							       AND t.blocked IS NULL";
+		}					
+							
+							
 		// Marcar los registros que se insertaron como nuevos contactos
 		// idcontact es nulo y no estan bloqueados
 		$newcontact		   =  "UPDATE $this->tablename "
