@@ -117,6 +117,20 @@ class TestMail
 		$this->plainText = $text->getPlainText($this->body);
 	}
 	
+	/**
+	 * Reemplaza las variables en el correo por los datos de la gestión inteligente, se le pasa
+	 * un arreglo con los datos en este orden: 
+	 * correo, puntos ganados, puntos totales, correo, puntos ganados, puntos totales
+	 * se deben de repetir como se muestra en el ejemplo
+	 * @param type Array
+	 */
+	public function replaceVariablesForSmart($replace)
+	{
+		$search = array('%%CORREO%%', '%%PUNTOS_GANADOS%%', '%%PUNTOS_TOTALES%%', '%%MAIL%%', '%%SCORED%%', '%%SCORE%%');
+		$this->body = str_replace($search, $replace, $this->body);
+		$this->plainText = str_replace($search, $replace, $this->plainText);
+	}
+	
 	protected function replaceCustomFields()
 	{
 		preg_match_all('/%%([a-zA-Z0-9_\-]*)%%/', $this->plainText, $textFields);
