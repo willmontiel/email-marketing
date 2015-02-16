@@ -22,6 +22,7 @@ class SmartManagmentManager
 	protected $SQLRules = "";
 	protected $SQLRulesArray = array();
 	protected $points;
+	protected $scored = array();
 	protected $accounts;
 	protected $account = null;
 	protected $comm = false;
@@ -111,7 +112,7 @@ class SmartManagmentManager
 							
 							case 'condition-rule':
 								if ($d->class == "%") {
-									$part1 = "(({$part1}*100)/messagesSent)";
+									$part1 = "(({$part1}*100)/m.messagesSent)";
 								}
 								$part3 = $d->value;
 								break;
@@ -139,19 +140,19 @@ class SmartManagmentManager
 		$part1 = "";
 		switch ($index) {
 			case 'opens':
-				$part1 = "uniqueOpens";
+				$part1 = "m.uniqueOpens";
 				break;
 			
 			case 'bounced':
-				$part1 = "bounced";
+				$part1 = "m.bounced";
 				break;
 			
 			case 'unsubscribed':
-				$part1 = "unsubscribed";
+				$part1 = "m.unsubscribed";
 				break;
 			
 			case 'spam':
-				$part1 = "spam";
+				$part1 = "m.spam";
 				break;
 
 			default:
@@ -168,76 +169,72 @@ class SmartManagmentManager
 		if ($accounts->type == 'certain-accounts') {
 			if (count($accounts->target) > 0) {
 				$ids = implode(',', $accounts->target);
-				$targetSQL = " AND idAccount in ({$ids})";
+				$targetSQL = " AND m.idAccount in ({$ids})";
 			}
 		}
-		
-		$sql = "SELECT idAccount, idMail
-				FROM mail
-				WHERE status = 'Sent'
+				
+		$sql = "SELECT m.idAccount, m.idMail, s.idScorehistory
+				FROM mail AS m
+				LEFT JOIN scorehistory AS s ON (s.idAccount = m.idAccount AND s.idMail = m.idMail AND s.idSmartmanagment = {$this->smart->idSmartmanagment})
+				WHERE m.status = 'Sent'
 					{$targetSQL}
-					AND finishedon <= {$this->time}
-				{$this->SQLRules}";
-			
-//		$this->logger->log("SQL: {$sql}");
+					AND m.finishedon <= {$this->time}
+					{$this->SQLRules}
+					AND s.idScorehistory IS NULL";
 				
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sql);
 		$this->accounts = $result->fetchAll();
-		$this->logger->log("Matches: " . print_r($this->accounts));
 	}
 	
 	private function scoreAccounts()
 	{
 		foreach ($this->accounts as $account) {
-			$scorehistory = Scorehistory::findFirst(array(
-				'conditions' => 'idAccount = ?1 AND idSmartmanagment = ?2 AND idMail = ?3',
-				'bind' => array(1 => $account['idAccount'],
-								2 => $this->smart->idSmartmanagment,
-								3 => $account['idMail'])
-			));
-			
-			if (!$scorehistory) {
-				$this->comm = true;
-				
-				$score = \Score::findFirstByIdAccount($account['idAccount']);
+			$score = \Score::findFirstByIdAccount($account['idAccount']);
 
-				$db = Phalcon\DI::getDefault()->get('db');
-				$db->begin();
+			$db = Phalcon\DI::getDefault()->get('db');
+			$db->begin();
 
-				if (!$score) {
-					$score = new \Score();
-					$score->idAccount = $account['idAccount'];
-					$score->score = 0;
-					$score->createdon = time();
-				}
-				
-				$score->score += $this->points;
-				$score->updatedon = time();
-
-				if (!$score->save()) {
-					foreach ($score->getMessages() as $msg) {
-						$db->rollback();
-						throw new Exception("Error while scoring account... {$msg}");
-					}
-				}
-
-				$scorehistory = new \Scorehistory();
-				$scorehistory->idAccount = $account['idAccount'];
-				$scorehistory->idSmartmanagment = $this->smart->idSmartmanagment;
-				$scorehistory->idMail = $account['idMail'];
-				$scorehistory->score = $this->points;
-				$scorehistory->createdon = time();
-
-				if (!$scorehistory->save()) {
-					foreach ($scorehistory->getMessages() as $msg) {
-						$db->rollback();
-						throw new Exception("Error while scoring account history... {$msg}");
-					}
-				}
-
-				$db->commit();
+			if (!$score) {
+				$score = new \Score();
+				$score->idAccount = $account['idAccount'];
+				$score->score = 0;
+				$score->createdon = time();
 			}
+
+			$score->score += $this->points;
+			$score->updatedon = time();
+
+			if (!$score->save()) {
+				foreach ($score->getMessages() as $msg) {
+					$db->rollback();
+					throw new Exception("Error while scoring account... {$msg}");
+				}
+			}
+
+			$scorehistory = new \Scorehistory();
+			$scorehistory->idAccount = $account['idAccount'];
+			$scorehistory->idSmartmanagment = $this->smart->idSmartmanagment;
+			$scorehistory->idMail = $account['idMail'];
+			$scorehistory->score = $this->points;
+			$scorehistory->createdon = time();
+
+			if (!$scorehistory->save()) {
+				foreach ($scorehistory->getMessages() as $msg) {
+					$db->rollback();
+					throw new Exception("Error while scoring account history... {$msg}");
+				}
+			}
+			
+			if (isset($this->scored[$account['idAccount']])) {
+				$this->scored[$account['idAccount']] += $this->points;
+			}
+			else {
+				$this->scored[$account['idAccount']] = $this->points;
+			}
+			 
+			$db->commit();
+			$this->comm = true;
 		}
 	}
 	
@@ -256,34 +253,39 @@ class SmartManagmentManager
 	private function sendCommunications()
 	{
 		if ($this->comm) {
-			$accounts = array();
-		
-			foreach ($this->accounts as $account) {
-				if (!in_array($account['idAccount'], $accounts)) {
-					$accounts[] = $account['idAccount'];
-				}
-			}
-
+			$data = $this->getData();
+			$accounts = $data->accounts;
+			$mails = $data->mails;
+			
 			if (count($accounts) > 0) {
-				foreach ($accounts as $id) {
+				foreach ($accounts as $account) {
 					$users = User::find(array(
 						'conditions' => 'idAccount = ?1',
-						'bind' => array(1 => $id)
+						'bind' => array(1 => $account)
 					));
 
 					if (count($users) > 0) {
+						$mailsNames = $this->getMailsNames($account, $mails);
+						
+						$score = Score::findFirst(array(
+							'conditions' => 'idAccount = ?1',
+							'bind' => array(1 => $account)
+						));
+						
 						$transport = Swift_SendmailTransport::newInstance();
 						$swift = Swift_Mailer::newInstance($transport);
 
 						$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
-
+						
 						$mail = new TestMail();
 						$mail->setAccount($this->account);
 						$mail->setDomain($domain);
 						$mail->setUrlManager($this->urlManager);
 						$mail->setContent($this->smart->content);
-
 						$mail->transformContent();
+						$mail->replaceVariablesForSmart(array(
+							$mailsNames,  $this->scored[$account], $score->score
+						));
 
 						$subject = $this->smart->subject;
 						$from = array($this->smart->fromEmail => $this->smart->fromName);
@@ -293,30 +295,85 @@ class SmartManagmentManager
 						$text = $mail->getPlainText();
 
 						foreach ($users as $user) {
-							$to = array($user->email => "{$user->firstName} {$user->lastName}");
-
-							$message = new Swift_Message($subject);
-							$message->setFrom($from);
-							$message->setTo($to);
-							$message->setBody($content, 'text/html');
-							$message->addPart($text, 'text/plain');
-
-							if (!empty($replyTo) && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
-								$message->setReplyTo($replyTo);
-							}
-
-							$sendMail = $swift->send($message, $failures);
-
-							if (!$sendMail){
-								$this->logger->log("Error while sending test mail: " . print_r($failures));
-							}
-							else {
-								$this->logger->log("Smartmanagment communication {$this->smart->idSmartmanagment}, user {$user->idUser} sent");
-							}
+							$this->sendToUsers($user, $subject, $from, $content, $text, $replyTo, $swift);
 						}
 					}
 				}
 			}
+		}
+	}
+	
+	private function getMailsNames($idAccount, $mails)
+	{
+		$names = '';
+		if (isset($mails[$idAccount])) {
+			$mail = $mails[$idAccount];
+			
+			$ids = implode(',', $mail);
+			$sql = "SELECT name FROM mail WHERE idMail IN ({$ids})";
+			$db = Phalcon\DI::getDefault()->get('db');
+			$result = $db->query($sql);
+			$m = $result->fetchAll();
+			
+			if (count($m) > 0) {
+				$names = "<ul>";
+				foreach ($m as $value) {
+					$names .= "<li>{$value['name']}</li>";
+				}
+				$names .= "</ul>";
+			}
+		}
+		
+		return $names;
+	}
+	
+	private function getData() 
+	{
+		$accounts = array();
+		$mails = array();
+		foreach ($this->accounts as $account) {
+			if (!in_array($account['idAccount'], $accounts)) {
+				$accounts[] = $account['idAccount'];
+			}
+
+			if (!isset($mails[$account['idAccount']])) {
+				$mails[$account['idAccount']] = array($account['idMail']);
+			}
+			else {
+				$mails[$account['idAccount']][] = $account['idMail'];
+			}
+		}
+
+		$this->logger->log("Matches: " . print_r($accounts, true));
+		
+		$data = new stdClass();
+		$data->accounts = $accounts;
+		$data->mails = $mails;
+		
+		return $data;
+	}
+	
+	private function sendToUsers($user, $subject, $from, $content, $text, $replyTo, $swift)
+	{
+		$to = array($user->email => "{$user->firstName} {$user->lastName}");
+
+		$message = new Swift_Message($subject);
+		$message->setFrom($from);
+		$message->setTo($to);
+		$message->setBody($content, 'text/html');
+		$message->addPart($text, 'text/plain');
+
+		if (!empty($replyTo) && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
+			$message->setReplyTo($replyTo);
+		}
+
+		$sendMail = $swift->send($message, $failures);
+
+		if (!$sendMail){
+			$this->logger->log("Error while sending test mail: " . print_r($failures));
+		}
+		else {
+			$this->logger->log("Smartmanagment communication {$this->smart->idSmartmanagment}, user {$user->idUser} sent");
 		}
 	}
 }
