@@ -233,7 +233,6 @@ class SmartManagmentManager
 				$this->scored[$account['idAccount']] = $this->points;
 			}
 			 
-			
 			$db->commit();
 			$this->comm = true;
 		}
@@ -300,9 +299,9 @@ class SmartManagmentManager
 						$content = $mail->getBody();
 						$text = $mail->getPlainText();
 
-						foreach ($users as $user) {
-							$this->sendToUsers($user, $subject, $from, $content, $text, $replyTo, $swift);
-						}
+//						foreach ($users as $user) {
+//							$this->sendToUsers($user, $subject, $from, $content, $text, $replyTo, $swift);
+//						}
 					}
 				}
 			}
@@ -320,7 +319,9 @@ class SmartManagmentManager
 			$db = Phalcon\DI::getDefault()->get('db');
 			$result = $db->query($sql);
 			$m = $result->fetchAll();
-
+			$this->logger->log("sql {$sql}");
+			$this->logger->log("Names" . print_r($m, true));
+			
 			if (count($m) > 0) {
 				$names = "<ul>";
 				foreach ($m as $value) {
@@ -329,6 +330,8 @@ class SmartManagmentManager
 				$names .= "</ul>";
 			}
 		}
+		
+		$this->logger->log("{$names}");
 		
 		return $names;
 	}
