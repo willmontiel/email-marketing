@@ -277,11 +277,6 @@ class SmartManagmentManager
 
 						$domain = Urldomain::findFirstByIdUrlDomain($this->account->idUrlDomain);
 						
-						$this->logger->log(print_r($this->scored, true));
-						$this->logger->log($this->scored[$account]);
-						$this->logger->log($score->score);
-						$this->logger->log($mailsNames);
-						
 						$mail = new TestMail();
 						$mail->setAccount($this->account);
 						$mail->setDomain($domain);
@@ -299,9 +294,9 @@ class SmartManagmentManager
 						$content = $mail->getBody();
 						$text = $mail->getPlainText();
 
-//						foreach ($users as $user) {
-//							$this->sendToUsers($user, $subject, $from, $content, $text, $replyTo, $swift);
-//						}
+						foreach ($users as $user) {
+							$this->sendToUsers($user, $subject, $from, $content, $text, $replyTo, $swift);
+						}
 					}
 				}
 			}
@@ -319,20 +314,15 @@ class SmartManagmentManager
 			$db = Phalcon\DI::getDefault()->get('db');
 			$result = $db->query($sql);
 			$m = $result->fetchAll();
-			$this->logger->log("sql {$sql}");
-			$this->logger->log("Names" . print_r($m, true));
 			
 			if (count($m) > 0) {
 				$names = "<ul>";
 				foreach ($m as $value) {
-					$this->logger->log("Values: " . print_r($value, true));
-					$names .= "<li>{$value}</li>";
+					$names .= "<li>{$value['name']}</li>";
 				}
 				$names .= "</ul>";
 			}
 		}
-		
-		$this->logger->log("{$names}");
 		
 		return $names;
 	}
