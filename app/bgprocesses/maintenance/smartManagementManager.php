@@ -336,7 +336,7 @@ class SmartManagmentManager
 				$accounts[] = $account['idAccount'];
 			}
 
-			if (isset($mails[$account['idAccount']])) {
+			if (!isset($mails[$account['idAccount']])) {
 				$mails[$account['idAccount']] = array($account['idMail']);
 			}
 			else {
