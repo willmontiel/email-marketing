@@ -707,7 +707,7 @@ class ImportContactWrapper
 		$createcoxcl	   =  "INSERT INTO coxcl (idContactlist, idContact, createdon) "
 							. "    SELECT {$this->idContactlist}, t.idContact, {$hora} "
 							. "    FROM {$this->tablename} t "
-							. "    WHERE t.coxcl IS NULL "
+							. "    WHERE t.idContact IS NOT NULL AND t.coxcl IS NULL "
 							. "        AND t.blocked IS NULL";
 		// Marcar los registros que se adicionaran a la lista
 		// coxcl es nulo (no estan en la lista) y no estan bloqueados
