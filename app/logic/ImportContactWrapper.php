@@ -232,11 +232,13 @@ class ImportContactWrapper
 			$this->timer->endTimer('all-import');
 		}
 		catch (\InvalidArgumentException $e) {
+			$this->log->log("Exception...{$e}");
 			$this->destroyTemporaryTable();
 			$this->updateProcessStatus('Cancelado');
 			$this->saveProcess();
 		}
 		catch (\Exception $e) {
+			$this->log->log("Exception...{$e}");
 			$this->destroyTemporaryTable();
 			$this->updateProcessStatus('Cancelado');
 			$this->saveProcess();
@@ -548,7 +550,7 @@ class ImportContactWrapper
 		$rows = 0;
 
 		if ($hasHeader) {
-			$line = fgetcsv($fp, 0, $delimiter);
+			$line = fgetcsv($fp, 1, $delimiter);
 		}
 		// cada cierta cantidad de registros se debe informar avance
 		$every = (int)($maxrows/10);
