@@ -853,8 +853,6 @@ class ImportContactWrapper
 		$existCount = $this->db->fetchAll($queryExist);
 		$updatedCount = $this->db->fetchAll($queryUpdated);
 		
-		$this->log->log("Updated: " . print_r($updatedCount, true));
-		
 		$bloqued = $bloquedCount[0]['bloqueados'];
 		$exist = $existCount[0]['existentes'];
 		$updated = $updatedCount[0]['updated'];
