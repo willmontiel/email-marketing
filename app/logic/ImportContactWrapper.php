@@ -847,11 +847,13 @@ class ImportContactWrapper
 		}
 		$queryBloqued = "SELECT COUNT(*) AS bloqueados FROM {$this->tablename} WHERE blocked = 1 AND status IS NULL";
 		$queryExist = "SELECT COUNT(*)	AS existentes FROM {$this->tablename} WHERE status IS NULL AND coxcl = 1 AND blocked IS NULL";
-		$queryUpdated = "SELECT COUNT(*)  AS updated FROM {$this->tablename} WHERE new = 1";
+		$queryUpdated = "SELECT COUNT(idArray) AS updated FROM {$this->tablename} WHERE new IS NULL";
 		
 		$bloquedCount = $this->db->fetchAll($queryBloqued);
 		$existCount = $this->db->fetchAll($queryExist);
 		$updatedCount = $this->db->fetchAll($queryUpdated);
+		
+		$this->log->log("Updated: " . print_r($updatedCount, true));
 		
 		$bloqued = $bloquedCount[0]['bloqueados'];
 		$exist = $existCount[0]['existentes'];
