@@ -672,18 +672,7 @@ class ImportContactWrapper
 							. "    SELECT {$idDbase}, t.idEmail, t.name, t.lastName, t.birthDate, {$hora}, 0, {$this->ipaddress}, {$this->ipaddress}, {$hora}, {$hora}, {$hora} "
 							. "    FROM {$this->tablename} t "
 							. "    WHERE t.idContact IS NULL "
-							. "        AND t.blocked IS NULL;";
-							
-		//Actualizar contactos que ya estan en la base de datos					
-		if ($update) {
-			$createcontacts = "UPDATE contact AS c, {$this->tablename} t 
-							   SET c.name = t.name,
-								   c.lastName = t.lastName,
-								   c.birthDate = t.birthDate,
-								   c.updatedon = {$hora}	   
-							   WHERE c.idContact = t.idContact";
-		}					
-							
+							. "        AND t.blocked IS NULL;";					
 							
 		// Marcar los registros que se insertaron como nuevos contactos
 		// idcontact es nulo y no estan bloqueados
@@ -704,6 +693,15 @@ class ImportContactWrapper
 							. "SET t.coxcl = 1 "
 							. "WHERE t.idContact IS NOT NULL "
 							. "    AND x.idContactlist = {$this->idContactlist}";
+		//Actualizar contactos que ya estan en la base de datos					
+		if ($update) {
+			$createcontacts = "UPDATE contact AS c, {$this->tablename} t 
+							   SET c.name = t.name,
+								   c.lastName = t.lastName,
+								   c.birthDate = t.birthDate,
+								   c.updatedon = {$hora}	   
+							   WHERE c.idContact = t.idContact";
+		}	
 		// Insertar los contactos de la tabla temporal que aun no estan en la
 		// lista
 		$createcoxcl	   =  "INSERT INTO coxcl (idContactlist, idContact, createdon) "
