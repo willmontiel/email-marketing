@@ -65,8 +65,8 @@ class ImportContactWrapper
 		$this->debugMode = false;
 		
 		// Prueba temporalmente (borrar 2 lineas para produccion)
-		$this->temporaryMode = false;
-		$this->debugMode = true;
+//		$this->temporaryMode = false;
+//		$this->debugMode = true;
 
 		$this->timer = Phalcon\DI::getDefault()->get('timerObject');
 		$this->log = Phalcon\DI::getDefault()->get('logger');
@@ -260,7 +260,7 @@ class ImportContactWrapper
 	{
 		$this->createTemporaryTableName();
 		$this->getDB();
-		$tmp = ($this->temporaryMode)?' TEMPORARY ':'';
+		$tmp = ($this->temporaryMode) ? ' TEMPORARY ' : '';
 		
 		$this->db->execute("CREATE {$tmp} TABLE {$this->tablename} LIKE tmpimport");
 	}
@@ -679,8 +679,7 @@ class ImportContactWrapper
 								   c.lastName = t.lastName,
 								   c.birthDate = t.birthDate,
 								   c.updatedon = {$hora}	   
-							   WHERE t.idContact IS NOT NULL
-							       AND t.blocked IS NULL";
+							   WHERE c.idContact = t.idContact";
 		}					
 							
 							
