@@ -687,12 +687,6 @@ class ImportContactWrapper
 							. "SET t.idContact = c.idContact "
 							. "WHERE t.idEmail IS NOT NULL "
 							. "    AND c.idDbase = {$idDbase}";
-		// Marcar en la tabla temporal los que ya estan en la lista de contactos
-		$findcoxcl        =   "UPDATE {$this->tablename} t "
-							. "    JOIN coxcl x ON (t.idContact = x.idContact) "
-							. "SET t.coxcl = 1 "
-							. "WHERE t.idContact IS NOT NULL "
-							. "    AND x.idContactlist = {$this->idContactlist}";
 		//Actualizar contactos que ya estan en la base de datos					
 		if ($update) {
 			$createcontacts = "UPDATE contact AS c, {$this->tablename} t 
@@ -700,14 +694,20 @@ class ImportContactWrapper
 								   c.lastName = t.lastName,
 								   c.birthDate = t.birthDate,
 								   c.updatedon = {$hora}	   
-							   WHERE c.idContact = t.idContact";
-		}	
+							   WHERE t.idContact IS NOT NULL AND c.idContact = t.idContact";
+		}
+		// Marcar en la tabla temporal los que ya estan en la lista de contactos
+		$findcoxcl        =   "UPDATE {$this->tablename} t "
+							. "    JOIN coxcl x ON (t.idContact = x.idContact) "
+							. "SET t.coxcl = 1 "
+							. "WHERE t.idContact IS NOT NULL "
+							. "    AND x.idContactlist = {$this->idContactlist}";	
 		// Insertar los contactos de la tabla temporal que aun no estan en la
 		// lista
 		$createcoxcl	   =  "INSERT INTO coxcl (idContactlist, idContact, createdon) "
 							. "    SELECT {$this->idContactlist}, t.idContact, {$hora} "
 							. "    FROM {$this->tablename} t "
-							. "    WHERE t.idContact IS NOT NULL AND t.coxcl IS NULL "
+							. "    WHERE t.coxcl IS NULL "
 							. "        AND t.blocked IS NULL";
 		// Marcar los registros que se adicionaran a la lista
 		// coxcl es nulo (no estan en la lista) y no estan bloqueados
