@@ -687,15 +687,7 @@ class ImportContactWrapper
 							. "SET t.idContact = c.idContact "
 							. "WHERE t.idEmail IS NOT NULL "
 							. "    AND c.idDbase = {$idDbase}";
-		//Actualizar contactos que ya estan en la base de datos					
-		if ($update) {
-			$createcontacts = "UPDATE contact AS c, {$this->tablename} t 
-							   SET c.name = t.name,
-								   c.lastName = t.lastName,
-								   c.birthDate = t.birthDate,
-								   c.updatedon = {$hora}	   
-							   WHERE t.idContact IS NOT NULL AND c.idContact = t.idContact";
-		}
+		
 		// Marcar en la tabla temporal los que ya estan en la lista de contactos
 		$findcoxcl        =   "UPDATE {$this->tablename} t "
 							. "    JOIN coxcl x ON (t.idContact = x.idContact) "
@@ -726,6 +718,18 @@ class ImportContactWrapper
 		$this->db->execute($findcoxcl);
 		$this->db->execute($createcoxcl);
 		$this->db->execute($status);
+		
+		//Actualizar contactos que ya estan en la base de datos					
+		if ($update) {
+			$updatecontacts = "UPDATE contact AS c, {$this->tablename} t 
+							   SET c.name = t.name,
+								   c.lastName = t.lastName,
+								   c.birthDate = t.birthDate,
+								   c.updatedon = {$hora}	   
+							   WHERE c.idContact = t.idContact";
+								   
+			$this->db->execute($updatecontacts);
+		}
 		
 //		$this->db->commit();
 		
