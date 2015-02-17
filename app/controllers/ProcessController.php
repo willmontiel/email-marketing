@@ -389,6 +389,7 @@ class ProcessController extends ControllerBase
 				"invalid" => $process->invalid,
 				"bloqued" => $process->bloqued,
 				"limit" => $process->limitcontact,
+				"updated" => $process->updated,
 				"repeated" => $process->repeated
 			);
 
@@ -404,6 +405,7 @@ class ProcessController extends ControllerBase
 				"bloqued" => $count['bloqued'],
 				"limit" => $count['limit'],
 				"repeated" => $count['repeated'],
+				"updated" => $count['updated'],
 				"idProcess" => $process->idImportproccess
 			);
 		}

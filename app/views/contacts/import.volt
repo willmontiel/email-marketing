@@ -238,7 +238,7 @@
                                                                 <label>
                                                                     {{' {{view Ember.Checkbox  checkedBinding="update" name="update"}} '}}
                                                                     Actualizar los datos de los contactos que ya se encuentren en la base de datos<br/>
-                                                                    <i>Si habilita esta opción se reemplazara la información de los contactos que ya se encuentran en la base de datos por la información que esté en el archivo</i>
+                                                                    <i>Si habilita esta opción se reemplazara la información de los contactos que ya se encuentran en la base de datos por la información que esté en el archivo, este proceso podría tardar más de lo habitual</i>
                                                                 </label>
                                                             </div>
                                                         </td>

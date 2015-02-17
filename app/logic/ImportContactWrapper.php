@@ -383,7 +383,7 @@ class ImportContactWrapper
 		// Cuantas lineas tiene el archivo?
 		$linecount = $this->countFileRecords($sourcefile);
 
-		$maxrows = (($hasHeader) ? $linecount : $linecount+1);
+		$maxrows = (($hasHeader) ? $linecount-1 : $linecount);
 		$notimported = 0;
 		if ($mode == 'Contacto') {
 			// Modo contactos, verificar que es menor, el numero de registros
@@ -847,14 +847,17 @@ class ImportContactWrapper
 		}
 		$queryBloqued = "SELECT COUNT(*) AS bloqueados FROM {$this->tablename} WHERE blocked = 1 AND status IS NULL";
 		$queryExist = "SELECT COUNT(*)	AS existentes FROM {$this->tablename} WHERE status IS NULL AND coxcl = 1 AND blocked IS NULL";
+		$queryUpdated = "SELECT COUNT(*)  AS updated FROM {$this->tablename} WHERE new = 1";
 		
 		$bloquedCount = $this->db->fetchAll($queryBloqued);
 		$existCount = $this->db->fetchAll($queryExist);
+		$updatedCount = $this->db->fetchAll($queryUpdated);
 		
 		$bloqued = $bloquedCount[0]['bloqueados'];
 		$exist = $existCount[0]['existentes'];
+		$updated = $updatedCount[0]['updated'];
 		
-		$queryInfo = "UPDATE importproccess SET exist = {$exist}, invalid = {$this->invalid}, bloqued = {$bloqued}, limitcontact = {$limit}, repeated = {$this->repeated} WHERE idImportproccess = {$this->idProccess}";
+		$queryInfo = "UPDATE importproccess SET exist = {$exist}, invalid = {$this->invalid}, updated = {$updated}, bloqued = {$bloqued}, limitcontact = {$limit}, repeated = {$this->repeated} WHERE idImportproccess = {$this->idProccess}";
 		$this->db->execute($queryInfo);
 		
 		$proccess = Importproccess::findFirstByIdImportproccess($this->idProccess);
