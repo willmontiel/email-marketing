@@ -167,6 +167,17 @@
 									</tr>
 									<tr class="green">
 										<td>
+											<span class="glyphicon glyphicon-repeat"></span>
+										</td>
+										<td>
+											Actualizados exitosamente
+										</td>
+										<td class="big-number text-right">
+											{{process['updated']}}
+										</td>
+									</tr>
+									<tr class="green">
+										<td>
 											<span class="glyphicon glyphicon-ok-circle"></span>
 										</td>
 										<td>

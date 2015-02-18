@@ -15,9 +15,10 @@
 		lastname: DS.attr( 'string' ),
 		birthdate: DS.attr( 'string' ),
 		header :DS.attr( 'boolean' ),
+		update :DS.attr( 'boolean' ),
 		delimiter: DS.attr( 'string' ),
 		dateformat: DS.attr( 'string' ),
-                importmode: DS.attr('string')
+        importmode: DS.attr('string')
                 
 		{%for field in customfields%}
 			,
@@ -228,6 +229,18 @@
                                                                 <strong>Nota:</strong>
                                                                 Esta opción es avanzada, si no sabe cual debe elegir utilice el valor recomendado!
                                                             </p>
+                                                        </td>
+                                                    </tr>
+													<tr>
+                                                        <th><strong>Actualización de datos: </strong></th>
+                                                        <td>
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    {{' {{view Ember.Checkbox  checkedBinding="update" name="update"}} '}}
+                                                                    Actualizar los datos de los contactos que ya se encuentren en la base de datos<br/>
+                                                                    <i>Si habilita esta opción se reemplazara la información de los contactos que ya se encuentran en la base de datos por la información que esté en el archivo, este proceso podría tardar más de lo habitual</i>
+                                                                </label>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 </tbody>
