@@ -27,6 +27,7 @@ class ChildImport extends ChildProcess
 			$dateformat = $arrayDecode->dateformat;
 			$delimiter = $arrayDecode->delimiter;
 			$header = $arrayDecode->header;
+			$update = $arrayDecode->update;
 			$idAccount = $arrayDecode->idAccount;
 			$ipaddress = $arrayDecode->ipaddress;
 			$importmode = (isset($arrayDecode->importmode))?$arrayDecode->importmode:'normal';
@@ -44,7 +45,7 @@ class ChildImport extends ChildProcess
 			$wrapper->setAccount($account);
 			$log->log('Finalizacion Seteo de Account');
 			$log->log('Inicio Proceso de Data');
-			$wrapper->startImport($fields, $destiny, $dateformat, $delimiter, $header, $importmode);
+			$wrapper->startImport($fields, $destiny, $dateformat, $delimiter, $header, $importmode, $update);
 			$log->log('Finalizacion Proceso de Data');
 			$log->log('***----------------------------***');
 			$log->log('***----------------------------***');

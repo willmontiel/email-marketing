@@ -88,7 +88,7 @@ class SelectedFieldsMapper
 				}
 			}
 			else if ($idfield == 'birthdate') {
-				\Phalcon\DI::getDefault()->get('logger')->log("Es birthdate {$idfield}");
+//				\Phalcon\DI::getDefault()->get('logger')->log("Es birthdate {$idfield}");
 				$this->fieldnames[] = $idfield;
 				$this->transformations[] = 'birthdate';
 				$newmap[$stposition] = $position;
