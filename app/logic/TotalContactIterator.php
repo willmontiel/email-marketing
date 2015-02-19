@@ -329,7 +329,7 @@ class TotalContactIterator implements Iterator
 			foreach ($cfields as $cfield) {
 				$cfidentifiers[] = $cfield->idCustomField;
 				
-				$type = ($cfield->type == 'Numerical' ? 'INT(100)' : 'VARCHAR(100)');
+				$type = 'VARCHAR(200)';
 				$name = $this->cleanSpaces($cfield->name);
 				
 				$this->cfs[] = $name;
