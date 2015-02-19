@@ -279,7 +279,7 @@ class ContactExporter extends BaseWrapper
 			throw new \Exception('Error while saving file in server');
 		}
 		
-		$db->execute("DROP TEMPORARY TABLE $this->tablename");
+//		$db->execute("DROP TEMPORARY TABLE $this->tablename");
 		
 		return true;
 	}
