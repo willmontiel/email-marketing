@@ -162,7 +162,6 @@ class ContactExporter extends BaseWrapper
 			}
 			
 			foreach ($contactIterator as $contact) {
-				$this->logger->log(print_r($contact, true));
 				$status = (empty($contact['status']) ? "null" : "'{$contact['status']}'");
 				$email = (empty($contact['email']) ? "null" : "'{$contact['email']}'");
 				$name = (empty($contact['name']) ? "null" : "'{$contact['name']}'");
