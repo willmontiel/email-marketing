@@ -114,7 +114,7 @@ class ContactExporter extends BaseWrapper
 	private function createTmpTable()
 	{
 		$this->db = Phalcon\DI::getDefault()->get('db');
-		$this->tablename = "tmp{$this->data->idCriteria}{$this->data->criteria}";
+		$this->tablename = "export_tmp_{$this->data->idCriteria}{$this->data->criteria}";
 		$newtable = "CREATE TEMPORARY TABLE $this->tablename LIKE tmpexport";
 		$this->db->execute($newtable);
 	}
@@ -279,7 +279,7 @@ class ContactExporter extends BaseWrapper
 			throw new \Exception('Error while saving file in server');
 		}
 		
-		$db->execute("DROP TEMPORARY TABLE $this->tablename");
+//		$db->execute("DROP TEMPORARY TABLE $this->tablename");
 		
 		return true;
 	}
