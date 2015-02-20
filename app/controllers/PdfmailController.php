@@ -278,7 +278,7 @@ class PdfmailController extends ControllerBase
 					$p = $file[0][0];
 					if ($mail->pdfstructure == 3) {
 						$this->logger->log("d: " . print_r($p, true));
-						$thispdf = implode('_', $p);
+						$thispdf = explode('_', $p);
 						$this->logger->log("p: " . print_r($thispdf, true));
 						$p = $thispdf[4];
 					}
