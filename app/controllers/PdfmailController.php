@@ -277,10 +277,12 @@ class PdfmailController extends ControllerBase
 				if ($pdfmail) {
 					$p = $file[0][0];
 					if ($mail->pdfstructure == 3) {
+						$this->logger->log(print_r($p, true));
 						$thispdf = implode('_', $p);
-						$npdf = $thispdf[1];
+						$this->logger->log(print_r($thispdf, true));
+						$p = $thispdf[1];
 					}
-					$name = preg_replace('/\\.[^.\\s]{3,4}$/', '', $npdf);
+					$name = preg_replace('/\\.[^.\\s]{3,4}$/', '', $p);
 					$name = preg_replace("/[^0-9,.]/", "", $name);
 					
 					$this->logger->log("Name: {$name}");
