@@ -265,6 +265,8 @@ class PdfmailController extends ControllerBase
 			
 			$this->resetPdfmail($mail);
 			
+			$this->logger->log(print_r($files, true));
+			
 			foreach ($files->matches as $file) {
 				$pdfmail = Pdfmail::findFirst(array(
 					'conditions' => 'idMail = ?1 AND name = ?2',
@@ -409,7 +411,7 @@ class PdfmailController extends ControllerBase
 						JOIN fieldinstance AS fi ON (fi.idContact = c.idContact AND idCustomField = {$customf->idCustomField})
 					WHERE c.idContact IN ({$ids})";
 			
-			$this->logger->log("SQL {$sql}");		
+//			$this->logger->log("SQL {$sql}");		
 					
 			$executer = new \EmailMarketing\General\Misc\SQLExecuter();
 			$executer->instanceDbAbstractLayer();
@@ -424,7 +426,7 @@ class PdfmailController extends ControllerBase
 			}
 		}
 		
-		$this->logger->log(print_r($contacts, true));		
+//		$this->logger->log(print_r($contacts, true));		
 		
 		return $contacts;
 	}
