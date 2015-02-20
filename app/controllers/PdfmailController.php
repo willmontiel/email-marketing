@@ -265,7 +265,7 @@ class PdfmailController extends ControllerBase
 			
 			$this->resetPdfmail($mail);
 			
-			$this->logger->log(print_r($files, true));
+//			$this->logger->log(print_r($files, true));
 			
 			foreach ($files->matches as $file) {
 				$pdfmail = Pdfmail::findFirst(array(
@@ -277,6 +277,8 @@ class PdfmailController extends ControllerBase
 				if ($pdfmail) {
 					$name = preg_replace('/\\.[^.\\s]{3,4}$/', '', $file[0][0]);
 					$name = preg_replace("/[^0-9,.]/", "", $name);
+					
+					$this->logger->log("Name: {$name}");
 					$clave = array_search($name, $contacts);
 					if ($clave != false) {
 						$pdfmail->idContact = $clave;
