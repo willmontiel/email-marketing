@@ -424,6 +424,8 @@ class PdfmailController extends ControllerBase
 			}
 		}
 		
+		$this->logger->log(print_r($contacts, true));		
+		
 		return $contacts;
 	}
 	
