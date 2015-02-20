@@ -409,6 +409,8 @@ class PdfmailController extends ControllerBase
 						JOIN fieldinstance AS fi ON (fi.idContact = c.idContact AND idCustomField = {$customf->idCustomField})
 					WHERE c.idContact IN ({$ids})";
 			
+			$this->logger->log("SQL {$sql}");		
+					
 			$executer = new \EmailMarketing\General\Misc\SQLExecuter();
 			$executer->instanceDbAbstractLayer();
 			$executer->setSQL($sql);
