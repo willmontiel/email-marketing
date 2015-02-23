@@ -45,8 +45,10 @@ class StatisticController extends ControllerBase
 		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
 		$interpreter->setData($mail->target);
 		$interpreter->modelData();
+		$criteria = $interpreter->getCriteria();
 		$target = $interpreter->getNames();
 		
+		$this->logger->log("Criteria: {$criteria}");
 		$this->logger->log("target: " . print_r($target, true));
 		
 		return $target;
