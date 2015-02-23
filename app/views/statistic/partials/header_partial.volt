@@ -48,7 +48,7 @@
 					<div class="widget-content">
 						<div class="widget-header">Remitente</div>	
 						<div class="widget-body">
-							{% if item.fromName is empty OR item.fromEmail is empty%}<span style="color: #bd1b06">Este correo no contiene un remitente</span>{% else %} {{item.fromName}}&lt;{{item.fromEmail}}&gt;{% endif %}
+							{% if mail.fromName is empty OR mail.fromEmail is empty%}<span style="color: #bd1b06">Este correo no contiene un remitente</span>{% else %} {{mail.fromName}}&lt;{{mail.fromEmail}}&gt;{% endif %}
 						</div>	
 					</div>
 				</div>
@@ -66,7 +66,7 @@
 					<div class="widget-content">
 						<div class="widget-header">Asunto</div>	
 						<div class="widget-body">
-							{% if item.subject is empty%}<span style="color: #bd1b06">Este correo no contiene un asunto</span>{% else %}{{item.subject}}{% endif %}
+							{% if mail.subject is empty%}<span style="color: #bd1b06">Este correo no contiene un asunto</span>{% else %}{{mail.subject}}{% endif %}
 						</div>	
 					</div>
 				</div>
@@ -76,7 +76,7 @@
 					<div class="widget-content">
 						<div class="widget-header">Responder a</div>	
 						<div class="widget-body">
-							{% if item.replyTo is empty%}<span style="color: #777">Este correo no tiene configurado un "Responder a"</span>{% else %}{{item.replyTo}}{% endif %}
+							{% if mail.replyTo is empty%}<span style="color: #777">Este correo no tiene configurado un "Responder a"</span>{% else %}{{mail.replyTo}}{% endif %}
 						</div>	
 					</div>
 				</div>
