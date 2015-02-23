@@ -28,7 +28,7 @@
 		<div class="row oculto" onClick="expandMailPreview();" id="mail-preview">
 			<hr>	
 			<div style="font-size: 1.8em; text-align: center; color: #777;">Detalles</div><br />
-			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+			<div class="col-xs-12 col-sm-12 col-md-3 col-md-offset-1 col-lg-3 col-lg-offset-1">
 				<div class="preview-mail img-wrap">
 					<div class="not-available">
 				{% if mail.previewData is not defined%}
@@ -41,7 +41,7 @@
 				</div>
 			</div>
 
-			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+			<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
 				<div class="small-widget">
 					<div class="widget-icon"><span class="glyphicon glyphicon-send"></span></div>
 					<div class="widget-content">
