@@ -45,10 +45,21 @@ class StatisticController extends ControllerBase
 		$interpreter->setData($t);
 		$interpreter->modelData();
 		$criteria = $interpreter->getCriteria();
-		$target = $interpreter->getNames();
+		$tg = $interpreter->getNames();
 		
-		$this->logger->log("Criteria: {$criteria}");
-		$this->logger->log("target: " . print_r($target, true));
+		switch ($criteria) {
+				case 'dbases':
+					$target = "Base(s) de dato(s): {$tg}";
+					break;
+				
+				case 'contactlists':
+					$target = "Lista(s) de contacto(s): {$tg}";
+					break;
+			
+				case 'segments':
+					$target = "Segmento(s): {$tg}";
+					break;
+		}	
 		
 		return $target;
 	}
