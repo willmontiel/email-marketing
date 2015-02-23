@@ -86,10 +86,7 @@
 				<a href="{{ url('smartmanagment') }}" class="btn-actn">Gestión inteligente</a>
 			</div>
 		</div>
-	</div>
-	<div class="space"></div>
 	
-	<div class="container-fluid">
 		<div class="col-xs-6 col-md-3">
 			<div class="big-btn-nav sm-btn-blue">
 				<a href="{{ url('pdf') }}"  class="shortcuts"><span class="sm-button-large-program-envios"></span></a>
