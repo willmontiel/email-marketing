@@ -40,56 +40,10 @@ class StatisticController extends ControllerBase
 	
 	private function getTargetFromMail($mail)
 	{
-		$t = json_decode($mail->target);
-		$target = "Indefinida";
-		
-		switch ($t->destination) {
-			case 'contactlists':
-				$target = "Listas de contactos: ";
-				foreach ($t->ids as $id) {
-					$list = Contactlist::findFirst(array(
-						'conditions' => "idContactlist = ?1",
-						'bind' => array(1 => $id)
-					));
-					
-					
-					if ($list) {
-						$target .= "{$list->name}, ";
-					}
-				}
-				break;
-			
-			case 'dbases':
-				$target = "Bases de datos: ";
-				foreach ($t->ids as $id) {
-					$list = Dbase::findFirst(array(
-						'conditions' => "idDbase = ?1",
-						'bind' => array(1 => $id)
-					));
-
-					if ($list) {
-						$target .= "{$list->name}, ";
-					}
-				}
-				break;
-			
-			case 'segments':
-				$target = "Segmentos: ";
-				foreach ($t->ids as $id) {
-					$list = Segment::findFirst(array(
-						'conditions' => "idSegment = ?1",
-						'bind' => array(1 => $id)
-					));
-
-					if ($list) {
-						$target .= "{$list->name}, ";
-					}
-				}
-				break;
-			
-			default:
-				break;
-		}
+		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
+		$interpreter->setData($mail->target);
+		$interpreter->modelData();
+		$target = $interpreter->getNames();
 		
 		return $target;
 	}
