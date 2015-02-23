@@ -41,7 +41,7 @@
 				</div>
 			</div>
 
-			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 				<div class="small-widget">
 					<div class="widget-icon"><span class="glyphicon glyphicon-send"></span></div>
 					<div class="widget-content">
