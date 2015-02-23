@@ -40,12 +40,14 @@ class StatisticController extends ControllerBase
 	
 	private function getTargetFromMail($mail)
 	{
+		$this->logger->log("target: " . print_r($mail->target, true));
+		
 		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
 		$interpreter->setData($mail->target);
 		$interpreter->modelData();
 		$target = $interpreter->getNames();
 		
-		$this->logger->log(print_r($target, true));
+		$this->logger->log("target: " . print_r($target, true));
 		
 		return $target;
 	}
