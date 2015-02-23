@@ -36,7 +36,9 @@
 						<div class="hexagon hexagon-sm hexagon-primary">
 							<div class="hexagon-wrap">
 								<a href="javascript: void(0);" class="hexagon-inner toolTip" style="cursor: none;text-decoration: none; text-align: center;">
-									<i>{{item.idPdftemplate}}</i>
+									<i style="right: 12px;position: absolute;">
+										{{item.idPdftemplate}}
+									</i>
 								</a>
 							</div>
 						</div>
