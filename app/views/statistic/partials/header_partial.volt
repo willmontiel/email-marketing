@@ -13,8 +13,12 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-				Enviado	el {{date('d/M/Y g:i a', mail.finishedon)}} <br />
-				Tipo de correo: {{mail.type}}
+				<div class="title-info">
+					Enviado	el {{date('d/M/Y g:i a', mail.finishedon)}}
+				</div>	
+				<div class="title-info">
+					Tipo de correo: {{mail.type}}
+				</div>	
 			</div>	
 			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 				<div class="contact-indicator">
