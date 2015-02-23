@@ -120,15 +120,8 @@
 	<!------------------ Ember! ---------------------------------->
 	<div id="emberAppstatisticsContainer">
 		<script type="text/x-handlebars">
-
-			{#   Botones de navegacion   #}
-			{{ partial("mail/partials/small_buttons_nav_partial",['activelnk': 'statisticsmail']) }}
-
 			{#   Encabezado pag   #}
 			{{ partial("statistic/partials/header_partial") }}
-						
-			{#   Vista en miniatura del correo y datos del mismo   #}
-			{{ partial("statistic/partials/preview_email_partial") }}
 			
 			{#   Estadisticas generales   #}
 			{{ partial("statistic/partials/general_stats_partial") }}
