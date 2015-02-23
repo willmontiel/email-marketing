@@ -24,60 +24,72 @@
 			</div>
 			<div class="clearfix"></div>
 		</div>
-			
+		
 		<div class="row oculto" onClick="expandMailPreview();" id="mail-preview">
-			<hr />
-			<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
-				<table class="table">
-					<thead></thead>
-					<tbody>
-						<tr>
-							<td>
-								<div class="bg-thumb">
-									<div class="window">
-										<img {% if mail.previewData is defined%}
-												src="data: image/png;base64, {{mail.previewData}}"
-											 {% else %}
-												src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNzEiIGhlaWdodD0iMTgwIj48cmVjdCB3aWR0aD0iMTcxIiBoZWlnaHQ9IjE4MCIgZmlsbD0iI2VlZSI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9Ijg1LjUiIHk9IjkwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MTcxeDE4MDwvdGV4dD48L3N2Zz4="
-											 {% endif %} class="" alt="thumbnail del correo" />
-									</div>
-								</div>
-							</td>
-							<td>
-								<table class="table">
-									<thead></thead>
-									<tbody>
-										<tr>
-											<td>
-												De
-											</td>
-											<td>
-												{{mail.fromName}} &lt;{{mail.fromEmail}}&gt;
-											</td>
-										</tr>
-										<tr>
-											<td>
-												Asunto
-											</td>
-											<td>
-												{{mail.subject}}
-											</td>
-										</tr>
-										<tr>
-											<td>
-												Para
-											</td>
-											<td>
-												{{target}}
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+			<hr>	
+			<div style="font-size: 1.8em; text-align: center; color: #777;">Detalles</div><br />
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+				<div class="preview-mail img-wrap">
+					<div class="not-available">
+				{% if mail.previewData is not defined%}
+						<span class="glyphicon glyphicon-eye-close icon-not-available"></span>
+						<label>Previsualización no disponible</label>
+				{% else %}
+						<img src="data: image/png;base64, {{mail.previewData}}" />
+				{% endif %}	
+					</div>
+				</div>
 			</div>
-		</div>	
+
+			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+				<div class="small-widget">
+					<div class="widget-icon"><span class="glyphicon glyphicon-send"></span></div>
+					<div class="widget-content">
+						<div class="widget-header">Fecha de envío</div>	
+						<div class="widget-body">{{date('d/M/Y g:i a', item.startedon)}}</div>	
+					</div>
+				</div>
+
+				<div class="small-widget">
+					<div class="widget-icon"><span class="glyphicon glyphicon-tag"></span></div>
+					<div class="widget-content">
+						<div class="widget-header">Asunto</div>	
+						<div class="widget-body">
+							{% if item.subject is empty%}<span style="color: #bd1b06">Este correo no contiene un asunto</span>{% else %}{{item.subject}}{% endif %}
+						</div>	
+					</div>
+				</div>
+
+				<div class="small-widget">
+					<div class="widget-icon"><span class="glyphicon glyphicon-share-alt"></span></div>
+					<div class="widget-content">
+						<div class="widget-header">Remitente</div>	
+						<div class="widget-body">
+							{% if item.fromName is empty OR item.fromEmail is empty%}<span style="color: #bd1b06">Este correo no contiene un remitente</span>{% else %} {{item.fromName}}&lt;{{item.fromEmail}}&gt;{% endif %}
+						</div>	
+					</div>
+				</div>
+
+				<div class="small-widget">
+					<div class="widget-icon"><span class="glyphicon glyphicon-retweet"></span></div>
+					<div class="widget-content">
+						<div class="widget-header">Responder a</div>	
+						<div class="widget-body">
+							{% if item.replyTo is empty%}<span style="color: #777">Este correo no tiene configurado un "Responder a"</span>{% else %}{{item.replyTo}}{% endif %}
+						</div>	
+					</div>
+				</div>
+
+				<div class="small-widget">
+					<div class="widget-icon"><span class="glyphicon glyphicon-asterisk"></span></div>
+					<div class="widget-content">
+						<div class="widget-header">Tipo de correo</div>	
+						<div class="widget-body">
+							{% if item.type is empty%}<span style="color: #777">Indefinido</span>{% else %}{{item.type}}{% endif %}
+						</div>	
+					</div>
+				</div>
+			</div>	
+		</div>
 	</div>
 </div>
