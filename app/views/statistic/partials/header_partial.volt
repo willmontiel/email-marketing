@@ -1,15 +1,28 @@
 <div class="row header-background">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<div class="row" onClick="expandMailPreview();">
-			<div class="col-md-5">
-				<h4 class="sectiontitle numbers-contacts">{{mail.name}}</h4>
-			</div>
-			<div class="col-md-7">
-				<div class="col-md-6">
-					<p><span class="blue big-number">{{statisticsData.total|numberf}} </span>correos enviados</p>
+		<div class="row" onClick="expandMailPreview();" style="cursor: pointer;">
+			<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+				<div class="header">
+					<div class="title">
+						{{mail.name}}
+					</div>
+					<div class="title-info">
+						Enviado	el {{date('d/M/Y g:i a', item.finishedon)}}
+					</div>	
 				</div>
-				<div class="col-md-6">
-					<br><p class="text-right">Enviado el: {{date('Y-m-d', mail.finishedon)}}</p>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+					<p>
+						<span class="blue big-number">{{statisticsData.total|numberf}} </span>
+						correos enviados
+					</p>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+					<br>
+						<p class="text-right">
+							Enviado el: {{date('Y-m-d', mail.finishedon)}}
+						</p>
 				</div>
 			</div>
 			<div class="clearfix"></div>
