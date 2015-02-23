@@ -149,7 +149,7 @@ class InterpreterTarget
 		return $values;
 	}
 
-	private function modelData()
+	public function modelData()
 	{
 		$this->top = false;
 		$this->list = false;
