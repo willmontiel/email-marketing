@@ -2,17 +2,25 @@
 <div class="row header-background">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<div class="row" onClick="expandMailPreview();" style="cursor: pointer;">
-			<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
+			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 				<div class="header">
 					<div class="title">
 						{{mail.name}}
 					</div>
 					<div class="title-info">
-						Enviado	el {{date('d/M/Y g:i a', item.finishedon)}}
+						<span style="text-decoration: underline;">Haga clic aqui para ver más detalles</span>
 					</div>	
 				</div>
 			</div>
-			<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+			<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+				<div class="title-info">
+					Enviado	el {{date('d/M/Y g:i a', mail.finishedon)}}
+				</div>	
+				<div class="title-info">
+					Tipo de correo: {{mail.type}}
+				</div>	
+			</div>	
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 				<div class="contact-indicator">
 					<span class="total-contacts">
 						{{statisticsData.total|numberf}}
