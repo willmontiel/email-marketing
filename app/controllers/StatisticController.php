@@ -40,8 +40,9 @@ class StatisticController extends ControllerBase
 	
 	private function getTargetFromMail($mail)
 	{
+		$t = json_decode($mail->target);
 		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
-		$interpreter->setData($mail->target);
+		$interpreter->setData($t);
 		$interpreter->modelData();
 		$criteria = $interpreter->getCriteria();
 		$target = $interpreter->getNames();
