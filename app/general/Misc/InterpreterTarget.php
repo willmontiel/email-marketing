@@ -151,6 +151,7 @@ class InterpreterTarget
 
 	public function modelData()
 	{
+		$this->logger->log("Data " . print_r($this->data, true));
 		$this->top = false;
 		$this->list = false;
 		
