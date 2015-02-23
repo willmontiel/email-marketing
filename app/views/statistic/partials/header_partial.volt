@@ -15,7 +15,7 @@
 			<div class="clearfix"></div>
 		</div>
 			
-		<div class="row oculto" onClick="expandMailPreview();">
+		<div class="row oculto" onClick="expandMailPreview();" id="mail-preview">
 			<hr />
 			<div class="col-sm-8 col-md-5 col-md-offset-1">
 				<div class="bg-thumb">
