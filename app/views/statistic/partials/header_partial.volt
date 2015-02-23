@@ -8,16 +8,13 @@
 						{{mail.name}}
 					</div>
 					<div class="title-info">
-						<span style="text-decoration: underline;">Haga clic aqui para ver más detalles</span>
+						Enviado	el {{date('d/M/Y g:i a', mail.finishedon)}}
 					</div>	
 				</div>
 			</div>
-			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" style="padding-top: 50px;">
 				<div class="title-info">
-					Enviado	el {{date('d/M/Y g:i a', mail.finishedon)}}
-				</div>	
-				<div class="title-info">
-					Tipo de correo: {{mail.type}}
+					<span style="text-decoration: underline;">Haga clic aqui para ver más detalles</span>
 				</div>	
 			</div>	
 			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
