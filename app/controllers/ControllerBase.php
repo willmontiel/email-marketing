@@ -87,6 +87,32 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 		return $username;
 	}
 	
+	public function getTargetFromMail($mail)
+	{
+		$t = json_decode($mail->target);
+		$interpreter = new \EmailMarketing\General\Misc\InterpreterTarget();
+		$interpreter->setData($t);
+		$interpreter->modelData();
+		$criteria = $interpreter->getCriteria();
+		$tg = $interpreter->getNames();
+		
+		switch ($criteria) {
+				case 'dbases':
+					$target = "Base(s) de dato(s): {$tg}";
+					break;
+				
+				case 'contactlists':
+					$target = "Lista(s) de contacto(s): {$tg}";
+					break;
+			
+				case 'segments':
+					$target = "Segmento(s): {$tg}";
+					break;
+		}	
+		
+		return $target;
+	}
+	
 	public function getPrefix($name)
 	{
 		$name = str_replace(' ', '', $name);

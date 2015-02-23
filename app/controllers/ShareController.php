@@ -67,45 +67,4 @@ class ShareController extends ControllerBase
 			$this->response->redirect('error/link');
 		}
 	}
-	
-	private function getTargetFromMail($mail)
-	{
-		$t = json_decode($mail->target);
-		switch ($t->destination) {
-			case 'contactlists':
-				$model = Contactlist;
-				$name = 'Listas de contactos' ;
-				$key = 'idContactlist';
-				break;
-			
-			case 'dbases':
-				$model = Dbase;
-				$name = 'Bases de datos';
-				$key = 'idDbase';
-				break;
-			
-			case 'segments':
-				$model = Segment;
-				$name = 'Segmentos';
-				$key = 'idSegment';
-				break;
-			
-			default:
-				break;
-		}
-		
-		$target = "{$name}: ";
-		foreach ($t->ids as $id) {
-			$list = $model::findFirst(array(
-				'conditions' => "{$key} = ?1",
-				'bind' => array(1 => $id)
-			));
-
-			if ($list) {
-				$target .= "{$list->name}, ";
-			}
-		}
-		
-		return $target;
-	}
 }
