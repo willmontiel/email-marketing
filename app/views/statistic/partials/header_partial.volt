@@ -43,10 +43,20 @@
 
 			<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
 				<div class="small-widget">
+					<div class="widget-icon"><span class="glyphicon glyphicon-share-alt"></span></div>
+					<div class="widget-content">
+						<div class="widget-header">Remitente</div>	
+						<div class="widget-body">
+							{% if item.fromName is empty OR item.fromEmail is empty%}<span style="color: #bd1b06">Este correo no contiene un remitente</span>{% else %} {{item.fromName}}&lt;{{item.fromEmail}}&gt;{% endif %}
+						</div>	
+					</div>
+				</div>
+					
+				<div class="small-widget">
 					<div class="widget-icon"><span class="glyphicon glyphicon-send"></span></div>
 					<div class="widget-content">
-						<div class="widget-header">Fecha de envío</div>	
-						<div class="widget-body">{{date('d/M/Y g:i a', item.startedon)}}</div>	
+						<div class="widget-header">Destinatarios</div>	
+						<div class="widget-body">{{target}}</div>	
 					</div>
 				</div>
 
@@ -61,31 +71,11 @@
 				</div>
 
 				<div class="small-widget">
-					<div class="widget-icon"><span class="glyphicon glyphicon-share-alt"></span></div>
-					<div class="widget-content">
-						<div class="widget-header">Remitente</div>	
-						<div class="widget-body">
-							{% if item.fromName is empty OR item.fromEmail is empty%}<span style="color: #bd1b06">Este correo no contiene un remitente</span>{% else %} {{item.fromName}}&lt;{{item.fromEmail}}&gt;{% endif %}
-						</div>	
-					</div>
-				</div>
-
-				<div class="small-widget">
 					<div class="widget-icon"><span class="glyphicon glyphicon-retweet"></span></div>
 					<div class="widget-content">
 						<div class="widget-header">Responder a</div>	
 						<div class="widget-body">
 							{% if item.replyTo is empty%}<span style="color: #777">Este correo no tiene configurado un "Responder a"</span>{% else %}{{item.replyTo}}{% endif %}
-						</div>	
-					</div>
-				</div>
-
-				<div class="small-widget">
-					<div class="widget-icon"><span class="glyphicon glyphicon-asterisk"></span></div>
-					<div class="widget-content">
-						<div class="widget-header">Tipo de correo</div>	
-						<div class="widget-body">
-							{% if item.type is empty%}<span style="color: #777">Indefinido</span>{% else %}{{item.type}}{% endif %}
 						</div>	
 					</div>
 				</div>
