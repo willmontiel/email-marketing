@@ -45,6 +45,8 @@ class StatisticController extends ControllerBase
 		$interpreter->modelData();
 		$target = $interpreter->getNames();
 		
+		$this->logger->log(print_r($target, true));
+		
 		return $target;
 	}
 	
