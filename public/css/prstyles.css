@@ -337,6 +337,16 @@ body {
 .field-zone-name {
 	word-break: break-word;
 }
+.edit-form-out-zone {
+	border: solid 1px #d7d7d7;
+	/*background-image:  url("../images/empty_bg.png");*/
+}
+.top-editor-form {
+	height: 50px;
+	background-color: #ccc;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+}
 /* Fin formularios */
 
 

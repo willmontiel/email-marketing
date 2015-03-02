@@ -83,7 +83,11 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/new">
-		<div class="col-md-7 col-sm-12 col-xs-12 col-md-offset-1 border">
+	<div class="row">
+		<div class="col-md-7 col-sm-12 col-xs-12 col-md-offset-1 top-editor-form">
+			
+		</div>
+		<div class="col-md-7 col-sm-12 col-xs-12 col-md-offset-1 border edit-form-out-zone">
 			<form class="form-horizontal form-full-content" role="form"></form>
 
 			<form class="form-horizontal form-full-button" role="form"></form>
@@ -101,6 +105,7 @@
 			<button class="btn btn-guardar btn-sm extra-padding" {{ '{{action "sendData" this}}' }}>Crear formulario</button>
 		</div>
 	<div class="space"></div>
+	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/edit">
