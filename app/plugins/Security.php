@@ -545,9 +545,6 @@ class Security extends Plugin
 			$user = User::findFirstByIdUser($this->session->get('userid'));
 			if ($user) {
 				$role = $user->userrole;
-				// Inyectar el usuario
-				$this->_dependencyInjector->set('userObject', $user);
-				
 				$userefective = new stdClass();
 				$userefective->enable = false;
 				
@@ -555,8 +552,10 @@ class Security extends Plugin
 				if (isset($efective)) {
 					$userefective->enable = true;
 					$role = 'ROLE_SUDO';
+					$user->userrole = 'ROLE_SUDO';
 				}
-				
+				// Inyectar el usuario
+				$this->_dependencyInjector->set('userObject', $user);
 				$this->_dependencyInjector->set('userefective', $userefective);
 			}
 		}
