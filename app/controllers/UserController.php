@@ -27,7 +27,7 @@ class UserController extends ControllerBase
 	public function newAction()
 	{
 		$user = new User();
-		$form = new UserForm($user);
+		$form = new UserForm($user, $this->user);
 		
 		$account = $this->user->account;
 		$prefix = $account->prefix . '_';
@@ -95,7 +95,7 @@ class UserController extends ControllerBase
 		$this->view->setVar('prefix', $prefix);
 		
 		$user->username = $this->removePrefix($user->username);
-		$form = new UserForm($user);
+		$form = new UserForm($user, $this->user);
 
 		if ($this->request->isPost()) {   
 			$form->bind($this->request->getPost(), $user);

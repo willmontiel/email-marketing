@@ -430,7 +430,7 @@ class AccountController extends ControllerBase
 	public function newuserAction($idAccount)
 	{
 		$user = new User();
-		$form = new UserForm($user);
+		$form = new UserForm($user, $this->user);
 		
 		$account = Account::findFirst(array(
 			'conditions' => 'idAccount = ?1',
@@ -517,7 +517,7 @@ class AccountController extends ControllerBase
 		
 		$this->view->setVar("user", $userExist);
 		$this->view->setVar("prefix", $prefix);
-		$form = new UserForm($userExist);
+		$form = new UserForm($userExist, $this->user);
 
 		if ($this->request->isPost()) {   
 			$form->bind($this->request->getPost(), $userExist);
