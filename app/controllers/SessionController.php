@@ -231,6 +231,7 @@ class SessionController extends ControllerBase
 		$this->session->set('authenticated', true);
 
 		$this->user = $user;
+		$this->user->userrole = 'ROLE_SUDO';
 		
 		$uefective = $this->session->get('userefective');
 		$this->traceSuccess("Login by sudo: {$uefective->username} / {$uefective->idUser}, in account {$this->user->account->idAccount} with user {$this->user->username} / {$this->user->idUser}");

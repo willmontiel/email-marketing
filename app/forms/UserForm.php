@@ -73,7 +73,6 @@ class UserForm extends Form
 //			), array(
 //			'class' => 'form-control'
 //        )));
-		
 		$roles = Role::find();
 		$r = array();
 		if ($thuser->userrole == 'ROLE_SUDO') {
