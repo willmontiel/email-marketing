@@ -554,6 +554,7 @@ class Security extends Plugin
 				$efective = $this->session->get('userefective');
 				if (isset($efective)) {
 					$userefective->enable = true;
+					$role = 'ROLE_SUDO';
 				}
 				
 				$this->_dependencyInjector->set('userefective', $userefective);
