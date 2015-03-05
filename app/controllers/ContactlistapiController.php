@@ -14,10 +14,10 @@ class ContactlistapiController extends ControllerBase
 		$limit = $this->request->getQuery('limit');
 		$page = $this->request->getQuery('page');
 		
-		$this->logger->log('Criterio de búsqueda: ' . $search);
-		$this->logger->log('Filtro: ' . $filter);
-		$this->logger->log('Limit: ' . $limit);
-		$this->logger->log('Page: ' . $page);
+//		$this->logger->log('Criterio de búsqueda: ' . $search);
+//		$this->logger->log('Filtro: ' . $filter);
+//		$this->logger->log('Limit: ' . $limit);
+//		$this->logger->log('Page: ' . $page);
                 
 		$pager = new PaginationDecorator();
 		if ($limit) {

@@ -702,6 +702,7 @@ class ContactWrapper extends BaseWrapper
 		$object['birthDate'] = (!empty($contact->birthDate) ? $this->dateFormat->transformDateFormat($contact->birthDate, 'Y-m-d', 'd/m/Y') : '');
 //		$object['lastName'] = utf8_decode($contact->lastName);
 		$object['lastName'] = $contact->lastName;
+		$object['cl'] = $this->findContactlists($contact);
 		$object['isActive'] = ($contact->status != 0);
 		$object['activatedOn'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
 		$object['isSubscribed'] = ($contact->unsubscribed == 0);
@@ -750,6 +751,8 @@ class ContactWrapper extends BaseWrapper
 			$object['campo' . $field->idCustomField] = $value;
 		}
 		
+//		$this->logger->log(print_r($object, true));
+		
 		return $object;
 	}
 	
@@ -795,6 +798,7 @@ class ContactWrapper extends BaseWrapper
 		$object['name'] =  $contact->name;
 		$object['birthDate'] = (!empty($contact->birthDate) ? $this->dateFormat->transformDateFormat($contact->birthDate, 'Y-m-d', 'd/m/Y') : '');
 		$object['lastName'] = $contact->lastName;
+		$object['cl'] = $this->findContactlists($contact);
 		$object['isActive'] = ($contact->status != 0);
 		$object['activatedOn'] = (($contact->status != 0)?date('d/m/Y H:i', $contact->status):'');
 		$object['isSubscribed'] = ($contact->unsubscribed == 0);
@@ -841,6 +845,24 @@ class ContactWrapper extends BaseWrapper
 		return $object;
 	}
 	
+	private function findContactlists($contact)
+	{
+		$sql = "SELECT cl.idContactlist, cl.name 
+						 FROM coxcl AS co
+							JOIN contactlist AS cl ON (cl.idContactlist = co.idContactlist)
+						 WHERE co.idContact = {$contact->idContact}";
+		
+		$result = $this->db->query($sql);
+		$contactlists = $result->fetchAll();
+		$cl = array();
+		foreach ($contactlists as $value) {
+			$cl[] = $value['name'];
+		}
+		
+		return implode(', ', $cl);
+	}
+
+
 	public function findContactsComplete(Contactlist $list)
 	{
 		// Arreglo de contactos encontrados
