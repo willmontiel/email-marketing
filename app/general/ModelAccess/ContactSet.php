@@ -456,6 +456,7 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 			$c['name'] = $contact['name'];
 			$c['birthDate'] = (!empty($contact['birthDate']) ? $dateFormat->transformDateFormat($contact['birthDate'], 'Y-m-d', 'd/m/Y') : '');
 			$c['lastName'] = $contact['lastName'];
+			$c['cl'] = $this->findContactlists($contact);
 			$c['isActive'] = ($contact['status'] != 0);
 			$c['activatedOn'] = (($contact['status'] != 0)?date('d/m/Y H:i', $contact['status']):'');
 			$c['isSubscribed'] = ($contact['unsubscribed'] == 0);
@@ -504,6 +505,23 @@ class ContactSet implements \EmailMarketing\General\ModelAccess\DataSource
 		$this->rows = $object;
 	}
 
+	private function findContactlists($contact)
+	{
+		$sql = "SELECT cl.idContactlist, cl.name 
+						 FROM coxcl AS co
+							JOIN contactlist AS cl ON (cl.idContactlist = co.idContactlist)
+						 WHERE co.idContact = {$contact['idContact']}";
+		
+		$result = \Phalcon\DI::getDefault()->get('db')->query($sql);
+		$contactlists = $result->fetchAll();
+		$cl = array();
+		foreach ($contactlists as $value) {
+			$cl[] = $value['name'];
+		}
+		
+		return implode(', ', $cl);
+	}
+	
 	/**
 	 * Metodos de la interface DataSource
 	 */

@@ -8,6 +8,7 @@ var myContactModel = {
 	lastName: DS.attr( 'string' ),
 	birthDate: DS.attr('string'),
 	status: DS.attr( 'number' ),
+	cl: DS.attr('string'),
 	activatedOn: DS.attr('string'),
 	bouncedOn: DS.attr('string'),
 	subscribedOn: DS.attr('string'),

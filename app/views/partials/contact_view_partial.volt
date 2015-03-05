@@ -161,6 +161,15 @@
 		</div>
 		{{ '{{/if}}' }}
 		<div id="collapse-history-contact-{{'{{unbound id}}'}}" class="panel-collapse collapse">
+					<h4>Listas de contactos a las que está asociado</h4>
+					<div class="box">
+						<div class="box-content padded">
+							<div style="padding: 5px; border: 1px solid #ddd; background-color: white;">
+								{{ '{{cl}}' }}
+							</div>
+						</div>
+					</div>		
+							
 					<h4>Historial</h4>
 					<div class="box">
 						<div class="box-content padded">
