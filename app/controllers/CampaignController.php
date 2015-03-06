@@ -504,6 +504,22 @@ class CampaignController extends ControllerBase
 			
 			$this->view->setVar("autoresponder", $autoresponder);
 		 }
+		 
+		$cfs = Customfield::findAllCustomfieldNamesInAccount($this->user->account);
+		foreach ($cfs as $cf) {
+			$linkname = strtoupper(str_replace(array ("á", "é", "í", "ó", "ú", "ñ", " ", "&", ), 
+											   array ("a", "e", "i", "o", "u", "n", "_"), $cf[0]));
+			$arrayCf[] = array('originalName' => ucwords($cf[0]), 'linkName' => $linkname);
+		}
+		$this->view->setVar('cfs', $arrayCf);
+		
+		$forms = Form::findAllFormsInAccount($this->user->account);
+		
+		foreach ($forms as $form) {
+			$arrayForm[] = array('idForm' => $form[0], 'name' => ucwords($form[1]));
+		}
+
+		$this->view->setVar('forms', $arrayForm);
 	}
 	
 	public function getcancelAction($idAutoresponder)
