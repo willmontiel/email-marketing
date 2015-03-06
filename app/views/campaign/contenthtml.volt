@@ -11,6 +11,8 @@
 	{{ javascript_include('vendors/redactor/plugins/fullscreen.js') }}
 	{{ javascript_include('vendors/redactor/plugins/textdirection.js') }}
 	{{ javascript_include('js/editor/forms_text_editor.js') }}
+	{{ javascript_include('vendors/bootstrap_v2/spectrum/js/spectrum.js') }}
+	{{ stylesheet_link('vendors/bootstrap_v2/spectrum/css/spectrum.css') }}
 
 	<script type="text/javascript">
 		{% if autoresponder is defined %}
@@ -191,6 +193,73 @@
 			</div>
 		</div>
 	</div>
+	
+	
+	<div id="clipsmodal" style="display: none;">
+		<section>
+			<ul class="redactor_clips_box">
+				<li>
+					<a href="#" class="redactor_clip_link">Email</a>
+
+					<div class="redactor_clip" style="display: none;">
+						%%EMAIL%%
+					</div>
+				</li>
+				<li>
+					<a href="#" class="redactor_clip_link">Nombre</a>
+
+					<div class="redactor_clip" style="display: none;">
+						%%NOMBRE%%
+					</div>
+				</li>
+				<li>
+					<a href="#" class="redactor_clip_link">Apellido</a>
+
+					<div class="redactor_clip" style="display: none;">
+						%%APELLIDO%%
+					</div>
+				</li>
+				<li>
+					<a href="#" class="redactor_clip_link">Fecha de nacimiento</a>
+
+					<div class="redactor_clip" style="display: none;">
+						%%FECHA_DE_NACIMIENTO%%​
+					</div>
+				</li>
+				{%if cfs is defined %}
+					{%for cf in cfs%}
+						<li>
+							<a href="#" class="redactor_clip_link">{{cf['originalName']}}</a>
+
+							<div class="redactor_clip" style="display: none;">
+								%%{{cf['linkName']}}%%
+							</div>
+						</li>
+					{%endfor%}
+				{%endif%}
+				<li>
+					<a href="#" class="redactor_clip_link">Enlace de des-suscripcion</a>
+
+					<div class="redactor_clip" style="display: none;">
+						<a href="%%UNSUBSCRIBE%%">Para des-suscribirse haga clic aqui</a>
+
+					</div>
+				</li>
+				<li>
+					<a href="#" class="redactor_clip_link">Enlace de version web</a>
+
+					<div class="redactor_clip" style="display: none;">
+						<a href="%%WEBVERSION%%">Version web</a>
+
+					</div>
+				</li>
+			</ul>
+		</section>
+		<footer>
+			<a href="#" class="redactor_modal_btn redactor_btn_modal_close">Close</a>
+		</footer>
+	</div>
+	
 	
 	<div id="forms-update" style="display: none;">
 		<section>
