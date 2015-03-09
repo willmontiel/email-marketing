@@ -27,6 +27,7 @@ class PermissionsDataBase
 			'ROLE_TRAINING' => 7,
 			'ROLE_TEMPLATE' => 8,
 			'ROLE_ADMIN_DB' => 9,
+			'ROLE_ACCOUNTING' => 10,
 		);
 	}
 	
@@ -323,6 +324,85 @@ class PermissionsDataBase
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'smartmanagment::update'),
 			array( 'Role' => 'ROLE_SUDO', 'Action' => 'smartmanagment::delete'),
 			
+			//			----------//----------**ROLE_ACCOUNTING**----------//----------
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'contact::create'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'contact::read'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'contact::update'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'contact::delete'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'contact::(un)subscribe'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'contact::importbatch'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'contact::import'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'contact::export'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'contactlist::create'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'contactlist::read'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'contactlist::update'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'contactlist::delete'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'dbase::create'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'dbase::read'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'account::read'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'account::billing'),
+
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'customfield::create'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'customfield::read'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'customfield::update'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'customfield::delete'),
+
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'segment::create'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'segment::read'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'segment::update'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'segment::delete'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'blockemail::read'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'blockemail::block email'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'blockemail::unblock email'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'process::download'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'dashboard::read'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'mail::create'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'mail::read'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'mail::update'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'mail::send'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'mail::clone'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'template::create'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'template::read'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'template::update'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'template::on any template'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'statistic::read'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'statistic::download'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'statistic::share'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'flashmessage::create'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'flashmessage::read'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'flashmessage::update'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'flashmessage::delete'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'form::create'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'form::read'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'form::update'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'form::delete'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'tools::read'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'api::billing'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'api::account'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'campaign::create'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'campaign::read'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'campaign::update'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'campaign::delete'),
+			
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'pdf::create'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'pdf::read'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'pdf::update'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'pdf::delete'),
+			array( 'Role' => 'ROLE_ACCOUNTING', 'Action' => 'pdf::send'),
 			
 //			----------//----------**ROLE_ADMIN**----------//----------
 			

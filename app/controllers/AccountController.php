@@ -609,7 +609,10 @@ class AccountController extends ControllerBase
 	public function accountingAction()
 	{
 		$user = $this->user;
-		$accounts = Account::find();
+		$accounts = Account::find(array(
+			'conditions' => 'status = ?1',
+			'bind' => array(1 => 1)
+		));
 		
 		$accounting = new \EmailMarketing\General\Misc\AccountingObject();
 		$accounting->setAccounts($accounts);
