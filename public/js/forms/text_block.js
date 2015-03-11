@@ -36,7 +36,7 @@ TxtBlock.prototype.designField = function() {
 							<div class="col-md-7 col-sm-8 col-xs-7">\n\
 								' + input + '\n\
 							</div>\n\
-							<div class="btn-group">\n\
+							<div class="form-btns-opt">\n\
 								<a class="btn btn-default btn-sm edit-field">\n\
 									<span class="glyphicon glyphicon-pencil"></span>\n\
 								</a>\n\

@@ -84,18 +84,19 @@
 
 <script type="text/x-handlebars" data-template-name="forms/new">
 	<div class="row">
-		<div class="col-md-7 col-sm-12 col-xs-12 col-md-offset-1 top-editor-form">
-			
-		</div>
-		<div class="col-md-7 col-sm-12 col-xs-12 col-md-offset-1 border edit-form-out-zone">
-			<form class="form-horizontal form-full-content" role="form"></form>
+		<div class="col-md-11 col-sm-12 col-xs-12 top-editor-form"></div>
+		<div class="col-md-11 col-sm-12 col-xs-12 outline-editor-form">
+			<div class="col-md-8 col-sm-12 col-xs-12 col-md-offset-1 border edit-form-out-zone">
+				<form class="form-horizontal form-full-content" role="form"></form>
 
-			<form class="form-horizontal form-full-button" role="form"></form>
-		</div>
-		<div class="col-md-3 col-sm-12 col-xs-12">
-			<div class="form-menu">
-				<h6 class="sectiontitle title-fields-options">Campos para agregar al formulario</h4>
+				<form class="form-horizontal form-full-button" role="form"></form>
 			</div>
+			<div class="col-md-3 col-sm-12 col-xs-12">
+				<div class="form-menu">
+					<h6 class="sectiontitle title-fields-options">Campos para agregar al formulario</h4>
+				</div>
+			</div>
+			<div class="clearfix"></div>
 		</div>
 		<div class="clearfix"></div>
 		<div class="space"></div>
@@ -104,6 +105,7 @@
 			<button class="btn btn-default btn-sm extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
 			<button class="btn btn-guardar btn-sm extra-padding" {{ '{{action "sendData" this}}' }}>Crear formulario</button>
 		</div>
+		
 	<div class="space"></div>
 	</div>
 </script>

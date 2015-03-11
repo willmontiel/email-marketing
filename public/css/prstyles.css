@@ -317,8 +317,13 @@ body {
 	background-color: #d5d5d5 !important;
 	color: #888 !important;
 }
+.field-content-zone {
+	padding-top: 5px;
+	border: 5px solid transparent;
+}
 .field-content-zone:hover {
-	background-color: antiquewhite;
+	border: 5px solid #A2C8E8;
+	border-radius: 6px;
 }
 .hide-form-field,
 .create-email-spot,
@@ -338,14 +343,19 @@ body {
 	word-break: break-word;
 }
 .edit-form-out-zone {
-	border: solid 1px #d7d7d7;
-	/*background-image:  url("../images/empty_bg.png");*/
+	border: 1px dashed #68a6ce;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	background-color: #FCFCFC;
 }
 .top-editor-form {
-	height: 50px;
-	background-color: #ccc;
+	height: 30px;
+	background-color: #00BEDE;
 	border-top-left-radius: 8px;
 	border-top-right-radius: 8px;
+}
+.outline-editor-form{
+	border: solid 1px #A2C8E8;
 }
 /* Fin formularios */
 
