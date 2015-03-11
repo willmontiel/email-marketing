@@ -59,7 +59,11 @@ class TrackController extends ControllerBase
 			$url = $trackingObj->trackClickEvent($idLink, $geolocalization);	
 				
 			if (!$url) {
-				return $this->response->redirect('error/link');
+				$link = $trackingObj->getLinkToRedirect($idLink, false);
+				if(!$link) {
+					return $this->response->redirect('error/link');
+				}
+				return $this->response->redirect($link, true);
 			}
 			return $this->response->redirect($url, true);
 		}
@@ -190,7 +194,7 @@ class TrackController extends ControllerBase
 				$instance->saveClick();
 			}
 			
-			$url = $trackingObj->getLinkToRedirect($idLink);
+			$url = $trackingObj->getLinkToRedirect($idLink, true);
 		}
 		catch (\InvalidArgumentException $e) {
 			$this->logger->log('Exception: [' . $e->getMessage() . ']');

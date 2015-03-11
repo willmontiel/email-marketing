@@ -355,7 +355,7 @@ class TrackingObject
 			}
 			else {
 //				$this->log->log('Ya se contabilizó');
-				return $this->getLinkToRedirect($idLink);
+				return $this->getLinkToRedirect($idLink, true);
 			}
 		}
 		catch (InvalidArgumentException $e) {
@@ -416,7 +416,7 @@ class TrackingObject
 		return $records;
 	}
 	
-	public function getLinkToRedirect($idLink)
+	public function getLinkToRedirect($idLink, $replace = true)
 	{
 		$ml = Maillink::findFirst(array(
 			'conditions' => 'idMailLink = ?1',
@@ -427,7 +427,12 @@ class TrackingObject
 			throw new Exception('Ml object not found!');
 		}
 		
-		return $this->insertGoogleAnalyticsUrl($this->replaceLinkCustomFields($ml->link));
+		if($replace) {
+			return $this->insertGoogleAnalyticsUrl($this->replaceLinkCustomFields($ml->link));
+		}
+		else {
+			return $ml->link;
+		}
 	}
 	
 	
