@@ -69,10 +69,18 @@ class TrackController extends ControllerBase
 		}
 		catch (\InvalidArgumentException $e) {
 			$this->logger->log('Exception: [' . $e . ']');
+			$link = ($idLink != 0) ? $trackingObj->getLinkToRedirect($idLink, false) : false;
+			if($link) {
+				return $this->response->redirect($link, true);
+			}
 			return $this->response->redirect('error/link');
 		}
 		catch (\Exception $e) {
 			$this->logger->log('Exception: [' . $e . ']');
+			$link = ($idLink != 0) ? $trackingObj->getLinkToRedirect($idLink, false) : false;
+			if($link) {
+				return $this->response->redirect($link, true);
+			}
 			return $this->response->redirect('error/link');
 		}
 	}
