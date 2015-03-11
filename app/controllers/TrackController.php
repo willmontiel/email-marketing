@@ -59,8 +59,11 @@ class TrackController extends ControllerBase
 			$url = $trackingObj->trackClickEvent($idLink, $geolocalization);	
 				
 			if (!$url) {
-				$trackingObj->getLinkToRedirect($idLink, false);
-				return $this->response->redirect('error/link');
+				$link = $trackingObj->getLinkToRedirect($idLink, false);
+				if(!$link) {
+					return $this->response->redirect('error/link');
+				}
+				return $this->response->redirect($link, true);
 			}
 			return $this->response->redirect($url, true);
 		}
