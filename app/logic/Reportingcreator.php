@@ -5,12 +5,13 @@ class Reportingcreator
 	public $type;
 	public $tablename;
 	public $dir;
-	
+	public $logger;
 	
 	public function __construct(Mail $mail, $type) 
 	{
 		$this->mail = $mail;
 		$this->type = $type;
+		$this->logger = Phalcon\DI::getDefault()->get('logger');
 	}	
 
 	public function createReport()
