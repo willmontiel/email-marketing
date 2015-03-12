@@ -212,7 +212,7 @@ class StatisticController extends ControllerBase
 			$this->traceSuccess("Creating report, idMail: {$id}, type: {$type}");
 		}
 		else {
-			$this->flashSession("No existe el correo, por favor verifique la información");
+			$this->flashSession->error("No existe el correo, por favor verifique la información");
 			return $this->response->redirect("error");
 		}
 	}
