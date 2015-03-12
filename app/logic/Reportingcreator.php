@@ -121,13 +121,6 @@ class Reportingcreator
 	
 	protected function getQueryForClicksReport($name, $dir)
 	{
-		$phql = "SELECT null, " . $this->mail->idMail . ", 'clicks', e.email, null, null, null, l.link, null, null, ml.click
-				 FROM mxcxl AS ml
-					JOIN contact AS c ON (c.idContact = ml.idContact)
-					JOIN email AS e ON (e.idEmail = c.idEmail)
-					JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
-				 WHERE ml.idMail = " . $this->mail->idMail;
-		
 		$sqlc = "SELECT c.idContact, e.email, c.name, c.lastName, cf.name AS field, IF(fi.textValue = null, fi.numberValue, textValue) AS value, l.link, ml.click
 				 FROM mxcxl AS ml
 					 JOIN contact AS c ON (c.idContact = ml.idContact)
@@ -137,7 +130,7 @@ class Reportingcreator
 					 JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
 				 WHERE ml.idMail = {$this->mail->idMail}";
 				
-		$this->logger->log($sqlc);		 
+//		$this->logger->log($sqlc);		 
 				 
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sqlc);
@@ -145,7 +138,21 @@ class Reportingcreator
 				 
 		$model = $this->modelContacts($contacts);
 		
-		$this->logger->log(print_r($model, true));
+//		$this->logger->log(print_r($model, true));
+		
+		if (count($model->fields) > 0) {
+			$values = implode('VARCHAR(200), ', $model->fields);
+			$this->logger->log($values);
+			$addFields = "ALTER TABLE {$this->tablename} ADD ({$values})";
+			$this->logger->log($addFields);
+		}
+		
+		$phql = "SELECT null, " . $this->mail->idMail . ", 'clicks', e.email, null, null, null, l.link, null, null, ml.click
+				 FROM mxcxl AS ml
+					JOIN contact AS c ON (c.idContact = ml.idContact)
+					JOIN email AS e ON (e.idEmail = c.idEmail)
+					JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
+				 WHERE ml.idMail = " . $this->mail->idMail;
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
