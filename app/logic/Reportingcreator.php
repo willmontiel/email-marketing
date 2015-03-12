@@ -190,7 +190,7 @@ class Reportingcreator
 				
 				$modelc[$contact['idContact']] = $array;
 			}
-			else if (isset($modelc[$contact['idContact']]) || !empty($contact['field'])) {
+			else if (isset($modelc[$contact['idContact']]) && !empty($contact['field'])) {
 				$field = $this->cleanString($contact['field']);
 				$modelc[$contact['idContact']][$field] = (isset($contact['value']) AND !empty($contact['value']) ? $contact['value'] : '');
 				if (!in_array($field, $fields)) {
