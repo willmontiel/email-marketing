@@ -127,6 +127,23 @@ class Reportingcreator
 					JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
 				 WHERE ml.idMail = " . $this->mail->idMail;
 		
+		$sqlc = "SELECT c.idContact, e.email, c.name, c.lastName, cf.name, IF(fi.textValue = null, fi.numberValue, textValue) AS field, l.link, ml.click
+				 FROM mxcxl AS ml
+					 JOIN contact AS c ON (c.idContact = ml.idContact)
+					 JOIN email AS e ON (e.idEmail = c.idEmail)
+					 LEFT JOIN fieldinstance AS fi ON (fi.idContact = c.idContact)
+					 LEFT JOIN customfield AS cf ON (cf.idCustomfield = fi.idCustomfield)
+					 JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
+				 WHERE ml.idMail = {$this->mail->idMail}";
+				 
+		$db = Phalcon\DI::getDefault()->get('db');
+		$result = $db->query($sqlc);
+		$contacts = $result->fetchAll();	 
+				 
+		$model = $this->modelContacts($contacts);
+		
+		$this->logger->log(print_r($model, true));
+		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
 		$report =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, link 
@@ -144,6 +161,55 @@ class Reportingcreator
 		return $data;
 	}
 	
+	protected function modelContacts($contacts)
+	{
+		$modelc = array();
+		$fields = array();
+		
+		foreach ($contacts as $contact) {
+			if (!isset($modelc[$contact['idContact']])) {
+				$array = array(
+					'idContact' => $contact['idContact'],
+					'email' => $contact['email'],
+					'name' => $contact['name'],
+					'click' => $contact['click'],
+					'link' => $contact['link'],
+				);
+				
+				if (!empty($contact['field'])) {
+					$field = $this->cleanString($contact['field']);
+					$array[$field] = $contact['value'];
+					if (!in_array($field, $fields)) {
+						$fields[] = $field;
+					}
+				}
+				
+				$modelc[$contact['idContact']] = $array;
+			}
+			else if (isset($modelc[$contact['idContact']]) || !empty($contact['field'])) {
+				$field = $this->cleanString($contact['field']);
+				$modelc[$contact['idContact']][$field] = $contact['value'];
+				if (!in_array($field, $fields)) {
+					$fields[] = $field;
+				}
+			}
+		}
+		
+		$object = new stdClass();
+		$object->model = $modelc;
+		$object->fields = $fields;
+		
+		return $object;
+	}
+
+	
+	protected function cleanString($string) 
+	{
+		$string = str_replace(' ', '_', $string); // Replaces all spaces with hyphens.
+		return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+	}
+
+
 	protected function getQueryForUnsubscribedReport($name, $dir)
 	{
 		$phql = "SELECT null, " . $this->mail->idMail. ", 'unsubscribed', e.email, c.name, c.lastName, null, null, null, null, v.unsubscribe
