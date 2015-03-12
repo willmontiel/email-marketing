@@ -121,12 +121,12 @@ class Reportingcreator
 	
 	protected function getQueryForClicksReport($name, $dir)
 	{
-//		$phql = "SELECT null, " . $this->mail->idMail . ", 'clicks', e.email, null, null, null, l.link, null, null, ml.click
-//				 FROM mxcxl AS ml
-//					JOIN contact AS c ON (c.idContact = ml.idContact)
-//					JOIN email AS e ON (e.idEmail = c.idEmail)
-//					JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
-//				 WHERE ml.idMail = " . $this->mail->idMail;
+		$phql = "SELECT null, " . $this->mail->idMail . ", 'clicks', e.email, null, null, null, l.link, null, null, ml.click
+				 FROM mxcxl AS ml
+					JOIN contact AS c ON (c.idContact = ml.idContact)
+					JOIN email AS e ON (e.idEmail = c.idEmail)
+					JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
+				 WHERE ml.idMail = " . $this->mail->idMail;
 		
 		$sqlc = "SELECT c.idContact, e.email, c.name, c.lastName, cf.name, IF(fi.textValue = null, fi.numberValue, textValue) AS field, l.link, ml.click
 				 FROM mxcxl AS ml
@@ -136,6 +136,8 @@ class Reportingcreator
 					 LEFT JOIN customfield AS cf ON (cf.idCustomfield = fi.idCustomfield)
 					 JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
 				 WHERE ml.idMail = {$this->mail->idMail}";
+				
+		$this->logger->log($sqlc);		 
 				 
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sqlc);
@@ -173,6 +175,7 @@ class Reportingcreator
 					'idContact' => $contact['idContact'],
 					'email' => $contact['email'],
 					'name' => $contact['name'],
+					'lastName' => $contact['lastName'],
 					'click' => $contact['click'],
 					'link' => $contact['link'],
 				);

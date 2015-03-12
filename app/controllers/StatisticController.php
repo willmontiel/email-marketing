@@ -173,7 +173,7 @@ class StatisticController extends ControllerBase
 			catch (Exception $e) {
 				$this->logger->log("Exception: {$e}");
 				$this->traceFail("Creating report, idMail: {$id}, type: {$type}");
-				$this->flashSession("Ha ocurrido un error, por favor contacte al administrador");
+				$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
 				return $this->response->redirect("statistic/mail/{$id}");
 			}
 			
