@@ -82,7 +82,7 @@ class UserForm extends Form
 		}
 		else {
 			foreach ($roles as $rol) {
-				if ($rol->name != 'ROLE_SUDO' || $rol->name != 'ROLE_ACCOUNTING') {
+				if ($rol->name != 'ROLE_SUDO' && $rol->name != 'ROLE_ACCOUNTING' && $rol->name != 'ROLE_ADMIN_DB') {
 					$r[$rol->name] = $rol->name; 
 				}
 			}
