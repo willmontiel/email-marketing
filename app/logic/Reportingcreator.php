@@ -128,7 +128,7 @@ class Reportingcreator
 					JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
 				 WHERE ml.idMail = " . $this->mail->idMail;
 		
-		$sqlc = "SELECT c.idContact, e.email, c.name, c.lastName, cf.name, IF(fi.textValue = null, fi.numberValue, textValue) AS field, l.link, ml.click
+		$sqlc = "SELECT c.idContact, e.email, c.name, c.lastName, cf.name AS field, IF(fi.textValue = null, fi.numberValue, textValue) AS value, l.link, ml.click
 				 FROM mxcxl AS ml
 					 JOIN contact AS c ON (c.idContact = ml.idContact)
 					 JOIN email AS e ON (e.idEmail = c.idEmail)
