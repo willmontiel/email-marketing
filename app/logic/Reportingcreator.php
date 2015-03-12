@@ -120,12 +120,12 @@ class Reportingcreator
 	
 	protected function getQueryForClicksReport($name, $dir)
 	{
-		$phql = "SELECT null, " . $this->mail->idMail . ", 'clicks', e.email, null, null, null, l.link, null, null, ml.click
-				 FROM mxcxl AS ml
-					JOIN contact AS c ON (c.idContact = ml.idContact)
-					JOIN email AS e ON (e.idEmail = c.idEmail)
-					JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
-				 WHERE ml.idMail = " . $this->mail->idMail;
+//		$phql = "SELECT null, " . $this->mail->idMail . ", 'clicks', e.email, null, null, null, l.link, null, null, ml.click
+//				 FROM mxcxl AS ml
+//					JOIN contact AS c ON (c.idContact = ml.idContact)
+//					JOIN email AS e ON (e.idEmail = c.idEmail)
+//					JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
+//				 WHERE ml.idMail = " . $this->mail->idMail;
 		
 		$sqlc = "SELECT c.idContact, e.email, c.name, c.lastName, cf.name, IF(fi.textValue = null, fi.numberValue, textValue) AS field, l.link, ml.click
 				 FROM mxcxl AS ml
@@ -178,7 +178,7 @@ class Reportingcreator
 				
 				if (!empty($contact['field'])) {
 					$field = $this->cleanString($contact['field']);
-					$array[$field] = $contact['value'];
+					$array[$field] = (isset($contact['value']) AND !empty($contact['value']) ? $contact['value'] : '');
 					if (!in_array($field, $fields)) {
 						$fields[] = $field;
 					}
@@ -188,10 +188,7 @@ class Reportingcreator
 			}
 			else if (isset($modelc[$contact['idContact']]) || !empty($contact['field'])) {
 				$field = $this->cleanString($contact['field']);
-				$array1 = array($field => $contact['value']);
-				$array2 = $modelc[$contact['idContact']];
-				$array = array_merge($array1, $array2);
-				$modelc[$contact['idContact']] = $array;
+				$modelc[$contact['idContact']][$field] = $contact['value'];
 				if (!in_array($field, $fields)) {
 					$fields[] = $field;
 				}
