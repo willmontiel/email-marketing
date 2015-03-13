@@ -173,7 +173,7 @@ class StatisticController extends ControllerBase
 			catch (Exception $e) {
 				$this->logger->log("Exception: {$e}");
 				$this->traceFail("Creating report, idMail: {$id}, type: {$type}");
-				$this->flashSession("Ha ocurrido un error, por favor contacte al administrador");
+				$this->flashSession->error("Ha ocurrido un error, por favor contacte al administrador");
 				return $this->response->redirect("statistic/mail/{$id}");
 			}
 			
@@ -200,19 +200,18 @@ class StatisticController extends ControllerBase
 			echo $r->title . PHP_EOL;
 			echo PHP_EOL;
 			echo ' ,Total,Porcentaje' . PHP_EOL;
-			echo 'Correos enviados:, ' . $mail->totalContacts . PHP_EOL;
-			echo 'Aperturas únicas:, ' . $mail->uniqueOpens . " , " . ($mail->uniqueOpens*100)/$mail->totalContacts . "%" .PHP_EOL;
-			echo 'Clics sobre enlaces:, ' . $mail->clicks . " , " . PHP_EOL;
-			echo 'Des-suscritos:, ' . $mail->unsubscribed . " , " . ($mail->unsubscribed*100)/$mail->totalContacts . "%" .PHP_EOL;
-			echo 'Rebotes:, ' . $mail->bounced . " , " . ($mail->bounced*100)/$mail->totalContacts . "%" .PHP_EOL;
+			echo 'Correos enviados:, ' . round($mail->messagesSent) . PHP_EOL;
+			echo 'Aperturas unicas:, ' . round($mail->uniqueOpens) . " , " . round(($mail->uniqueOpens*100)/$mail->messagesSent) . "%" .PHP_EOL;
+			echo 'Clics sobre enlaces:, ' . round($mail->clicks) . " , " . PHP_EOL;
+			echo 'Des-suscritos:, ' . round($mail->unsubscribed) . " , " . round(($mail->unsubscribed*100)/$mail->messagesSent) . "%" .PHP_EOL;
+			echo 'Rebotes:, ' . round($mail->bounced) . " , " . round(($mail->bounced*100)/$mail->messagesSent) . "%" .PHP_EOL;
 			echo PHP_EOL;
-			echo 'FECHA,DIRECCIÓN DE CORREO ELÉCTRONICO' .PHP_EOL;
 			readfile($this->mailReportsDir->reports . $report->name);
 			
 			$this->traceSuccess("Creating report, idMail: {$id}, type: {$type}");
 		}
 		else {
-			$this->flashSession("No existe el correo, por favor verifique la información");
+			$this->flashSession->error("No existe el correo, por favor verifique la información");
 			return $this->response->redirect("error");
 		}
 	}

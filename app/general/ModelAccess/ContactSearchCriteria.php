@@ -66,7 +66,7 @@ class ContactSearchCriteria
                     }
             }
             
-            \Phalcon\DI::getDefault()->get('logger')->log("values: " . print_r($values, true));
+//            \Phalcon\DI::getDefault()->get('logger')->log("values: " . print_r($values, true));
 	}
 	
 	/*
