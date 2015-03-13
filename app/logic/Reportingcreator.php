@@ -248,7 +248,7 @@ class Reportingcreator
 			else if (isset($modelc[$contact['idContact']]) && !empty($contact['field'])) {
 				$field = $this->cleanString($contact['field']);
 				$this->logger->log("Value {$contact['value']}");
-				$value = (isset($contact['value']) AND !empty($contact['value']) ? $contact['value'] : '');
+				$value = ((isset($contact['value']) && !empty($contact['value'])) ? $contact['value'] : '');
 				$this->logger->log("Value {$value}");
 				$modelc[$contact['idContact']][$field] = $this->cleanQuotes($value);
 				if (!in_array($field, $fields)) {
