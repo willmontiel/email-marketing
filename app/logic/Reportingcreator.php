@@ -145,10 +145,11 @@ class Reportingcreator
 		
 			$this->logger->log(print_r($model, true));
 			$fields = "";
-			
+			$comma = "";
 			if (count($model->fields) > 0) {
 				$values = implode(' VARCHAR(200), ', $model->fields);
 				$fields = implode(', ', $model->fields);
+				$comma = ",";
 				$this->logger->log($values);
 				$addFields = "ALTER TABLE {$this->tablename} ADD ({$values})";
 				$this->logger->log($addFields);
@@ -166,23 +167,23 @@ class Reportingcreator
 			foreach ($model->model as $contact) {
 				if (count($model->fields) > 0) {
 					$f = true;
-					$fields = "";
+					$fi = "";
 					foreach ($model->fields as $field) {
 						if ($f) {
-							$fields .= "'{$contact[$field]}'";
+							$fi .= "'{$contact[$field]}'";
 						}
 						else {
-							$fields .= ", '{$contact[$field]}'";
+							$fi .= ", '{$contact[$field]}'";
 						}
 						
 					}
 				}
 				
 				if ($first) {
-					$values .= "(null, {$this->mail->idMail}, 'clicks', '{$contact['email']}', '{$contact['name']}', '{$contact['lastName']}', '{$contact['birthDate']}', null, '{$contact['link']}', null, null, {$contact['click']} {$fields})";
+					$values .= "(null, {$this->mail->idMail}, 'clicks', '{$contact['email']}', '{$contact['name']}', '{$contact['lastName']}', '{$contact['birthDate']}', null, '{$contact['link']}', null, null, {$contact['click']} {$fi})";
 				}
 				else {
-					$values .= ", (null, {$this->mail->idMail}, 'clicks', '{$contact['email']}', '{$contact['name']}', '{$contact['lastName']}', '{$contact['birthDate']}', null, '{$contact['link']}', null, null, {$contact['click']} {$fields})";
+					$values .= ", (null, {$this->mail->idMail}, 'clicks', '{$contact['email']}', '{$contact['name']}', '{$contact['lastName']}', '{$contact['birthDate']}', null, '{$contact['link']}', null, null, {$contact['click']} {$fi})";
 				}
 				
 				$first = false;
@@ -190,9 +191,9 @@ class Reportingcreator
 			
 			$this->logger->log($values);
 			
-			$sql = "INSERT INTO $this->tablename idTmpReport, idMail, reportType, email, name, lastName, birthdate,
-					os, link, bouncedType, category, date {$fields}
-					values {$values}";
+			$sql = "INSERT INTO $this->tablename (idTmpReport, idMail, reportType, email, name, lastName, birthdate,
+					os, link, bouncedType, category, date {$comma}{$fields})
+					VALUES {$values}";
 					
 			$this->logger->log($sql);
 			
