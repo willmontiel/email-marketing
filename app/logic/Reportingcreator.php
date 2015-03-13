@@ -104,7 +104,9 @@ class Reportingcreator
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
-		$report =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, os 
+		$report =  "SELECT 'Fecha', 'Email', 'Sistema operativo'
+					UNION ALL
+					SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, os 
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$dir}{$name}'
 						FIELDS TERMINATED BY ','
@@ -277,7 +279,9 @@ class Reportingcreator
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
-		$report =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, name, lastName 
+		$report =  "SELECT 'Fecha', 'Email', 'Nombre', 'Apellido'
+					UNION ALL
+					SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, name, lastName 
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$dir}{$name}'
 						FIELDS TERMINATED BY ','
@@ -303,7 +307,9 @@ class Reportingcreator
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
-		$report =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, bouncedType, category
+		$report =  "SELECT 'Fecha', 'Email', 'Tipo de rebote', 'Categoria'
+					UNION ALL
+					SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, bouncedType, category
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$dir}{$name}'
 						FIELDS TERMINATED BY ','
@@ -330,15 +336,17 @@ class Reportingcreator
 		
 		$sql = "INSERT INTO $this->tablename ($phql)";
 		
-		$report =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, bouncedType, category
+		$report =  "SELECT 'Fecha', 'Email', 'Tipo de spam', 'Categoria'
+					UNION ALL
+					SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, bouncedType, category
 						FROM {$this->tablename}
 						INTO OUTFILE  '{$dir}{$name}'
 						FIELDS TERMINATED BY ','
 						ENCLOSED BY '\"'
 						LINES TERMINATED BY '\n'";
 		
-		Phalcon\DI::getDefault()->get('logger')->log("SQL: {$sql}");
-		Phalcon\DI::getDefault()->get('logger')->log("Report: {$report}");
+//		Phalcon\DI::getDefault()->get('logger')->log("SQL: {$sql}");
+//		Phalcon\DI::getDefault()->get('logger')->log("Report: {$report}");
 						
 		$data = array(
 			'generate' => $sql,
