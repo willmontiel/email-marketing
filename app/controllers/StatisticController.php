@@ -201,10 +201,10 @@ class StatisticController extends ControllerBase
 			echo PHP_EOL;
 			echo ' ,Total,Porcentaje' . PHP_EOL;
 			echo 'Correos enviados:, ' . $mail->messagesSent . PHP_EOL;
-			echo 'Aperturas únicas:, ' . $mail->uniqueOpens . " , " . ($mail->uniqueOpens*100)/$mail->messagesSent . "%" .PHP_EOL;
+			echo 'Aperturas unicas:, ' . $mail->uniqueOpens . " , " . round(($mail->uniqueOpens*100)/$mail->messagesSent) . "%" .PHP_EOL;
 			echo 'Clics sobre enlaces:, ' . $mail->clicks . " , " . PHP_EOL;
-			echo 'Des-suscritos:, ' . $mail->unsubscribed . " , " . ($mail->unsubscribed*100)/$mail->messagesSent . "%" .PHP_EOL;
-			echo 'Rebotes:, ' . $mail->bounced . " , " . ($mail->bounced*100)/$mail->messagesSent . "%" .PHP_EOL;
+			echo 'Des-suscritos:, ' . $mail->unsubscribed . " , " . round(($mail->unsubscribed*100)/$mail->messagesSent) . "%" .PHP_EOL;
+			echo 'Rebotes:, ' . $mail->bounced . " , " . round(($mail->bounced*100)/$mail->messagesSent) . "%" .PHP_EOL;
 			echo PHP_EOL;
 			echo 'FECHA,DIRECCION DE CORREO ELECTRONICO' .PHP_EOL;
 			readfile($this->mailReportsDir->reports . $report->name);
