@@ -152,6 +152,11 @@ class Reportingcreator
 				$values = implode(' VARCHAR(200), ', $model->fields);
 				$fields = implode(', ', $model->fields);
 				$comma = ",";
+				$fieldsheader = "";
+				foreach ($model->fields as $value) {
+					$fieldsheader .= ", '{$value}'";
+				}
+				
 				$this->logger->log($values);
 				$addFields = "ALTER TABLE {$this->tablename} ADD ({$values} VARCHAR(200))";
 				$this->logger->log($addFields);
@@ -192,7 +197,7 @@ class Reportingcreator
 					
 			$this->logger->log($sql);
 			
-			$report =  "SELECT 'Fecha', 'Email', 'Nombre', 'Apellido', 'Fecha de cumpleanos', 'Link' {$comma}{$fields} 
+			$report =  "SELECT 'Fecha', 'Email', 'Nombre', 'Apellido', 'Fecha de cumpleanos', 'Link' {$fieldsheader} 
 						UNION ALL				
 						SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, name, lastName, birthDate, link {$comma}{$fields} 
 							FROM {$this->tablename}
