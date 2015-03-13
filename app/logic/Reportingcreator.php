@@ -121,7 +121,11 @@ class Reportingcreator
 	
 	protected function getQueryForClicksReport($name, $dir)
 	{
-		$sqlc = "SELECT c.idContact, e.email, c.name, c.lastName, cf.name AS field, IF(fi.textValue = null, fi.numberValue, textValue) AS value, l.link, ml.click
+		
+		$sql = null;
+		$report = null;
+		
+		$sqlc = "SELECT c.idContact, e.email, c.name, c.lastName, c.birthDate, cf.name AS field, IF(fi.textValue = null, fi.numberValue, textValue) AS value, l.link, ml.click
 				 FROM mxcxl AS ml
 					 JOIN contact AS c ON (c.idContact = ml.idContact)
 					 JOIN email AS e ON (e.idEmail = c.idEmail)
@@ -130,39 +134,74 @@ class Reportingcreator
 					 JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
 				 WHERE ml.idMail = {$this->mail->idMail}";
 				
-//		$this->logger->log($sqlc);		 
+		$this->logger->log($sqlc);		 
 				 
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sqlc);
 		$contacts = $result->fetchAll();	 
-				 
-		$model = $this->modelContacts($contacts);
 		
-//		$this->logger->log(print_r($model, true));
+		if (count($contacts) > 0) {
+			$model = $this->modelContacts($contacts);
 		
-		if (count($model->fields) > 0) {
-			$values = implode('VARCHAR(200), ', $model->fields);
-			$this->logger->log($values);
-			$addFields = "ALTER TABLE {$this->tablename} ADD ({$values})";
-			$this->logger->log($addFields);
-		}
-		
-		$phql = "SELECT null, " . $this->mail->idMail . ", 'clicks', e.email, null, null, null, l.link, null, null, ml.click
-				 FROM mxcxl AS ml
-					JOIN contact AS c ON (c.idContact = ml.idContact)
-					JOIN email AS e ON (e.idEmail = c.idEmail)
-					JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
-				 WHERE ml.idMail = " . $this->mail->idMail;
-		
-		$sql = "INSERT INTO $this->tablename ($phql)";
-		
-		$report =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, link 
-						FROM {$this->tablename}
-						INTO OUTFILE  '{$dir}{$name}'
-						FIELDS TERMINATED BY ','
-						ENCLOSED BY '\"'
-						LINES TERMINATED BY '\n'";
+			$this->logger->log(print_r($model, true));
+			$fields = "";
 			
+			if (count($model->fields) > 0) {
+				$values = implode(' VARCHAR(200), ', $model->fields);
+				$fields = implode(', ', $model->fields);
+				$this->logger->log($values);
+				$addFields = "ALTER TABLE {$this->tablename} ADD ({$values})";
+				$this->logger->log($addFields);
+
+				$db = Phalcon\DI::getDefault()->get('db');
+				$add = $db->execute($addFields);
+
+				if (!$add) {
+					throw new \Exception('Error while adding customfields in tmp db');
+				}
+			}
+			
+			$first = true;
+			$values = "";
+			foreach ($model->model as $contact) {
+				if (count($model->fields) > 0) {
+					$f = true;
+					$fields = "";
+					foreach ($model->fields as $field) {
+						if ($f) {
+							$fields .= "'{$contact[$field]}'";
+						}
+						else {
+							$fields .= ", '{$contact[$field]}'";
+						}
+						
+					}
+				}
+				
+				if ($first) {
+					$values .= "(null, {$this->mail->idMail}, 'clicks', '{$contact['email']}', '{$contact['name']}', '{$contact['lastName']}', '{$contact['birthDate']}', null, '{$contact['link']}', null, null, {$contact['click']} {$fields})";
+				}
+				else {
+					$values .= ", (null, {$this->mail->idMail}, 'clicks', '{$contact['email']}', '{$contact['name']}', '{$contact['lastName']}', '{$contact['birthDate']}', null, '{$contact['link']}', null, null, {$contact['click']} {$fields})";
+				}
+				
+				$first = false;
+			}
+			
+			$this->logger->log($values);
+			
+			$sql = "INSERT INTO $this->tablename idTmpReport, idMail, reportType, email, name, lastName, birthdate,
+					os, link, bouncedType, category, date {$fields}
+					values {$values}";
+					
+			$report =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), link, email, name, lastName, birthDate, {$fields} 
+							FROM {$this->tablename}
+							INTO OUTFILE  '{$dir}{$name}'
+							FIELDS TERMINATED BY ','
+							ENCLOSED BY '\"'
+							LINES TERMINATED BY '\n'";
+		}
+
 		$data = array(
 			'generate' => $sql,
 			'save' => $report
@@ -304,14 +343,19 @@ class Reportingcreator
 	
 	protected function saveReport($generate,$save) 
 	{
-		$db = Phalcon\DI::getDefault()->get('db');
-		$s = $db->execute($generate);
-		$g = $db->execute($save);
-		
-		if (!$s || !$g) {
-			throw new \Exception('Error while generting info in tmp db');
+		if ($generate != null AND $save != null) {
+			$db = Phalcon\DI::getDefault()->get('db');
+			$s = $db->execute($generate);
+			$g = $db->execute($save);
+
+			if (!$s || !$g) {
+				throw new \Exception('Error while generting info in tmp db');
+			}
+
+			$db->execute("DROP TEMPORARY TABLE $this->tablename");
+			return true;
 		}
-		$db->execute("DROP TEMPORARY TABLE $this->tablename");
-		return true;
+		
+		return false;
 	}
 }
