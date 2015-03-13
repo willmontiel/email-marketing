@@ -177,7 +177,7 @@ class Reportingcreator
 						else {
 							$fi .= ", '{$contact[$field]}'";
 						}
-						
+						$f = false;
 					}
 				}
 				
