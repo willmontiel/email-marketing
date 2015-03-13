@@ -247,7 +247,10 @@ class Reportingcreator
 			}
 			else if (isset($modelc[$contact['idContact']]) && !empty($contact['field'])) {
 				$field = $this->cleanString($contact['field']);
-				$modelc[$contact['idContact']][$field] = (isset($contact['value']) AND !empty($contact['value']) ? $contact['value'] : '');
+				$this->logger->log("Value {$contact['value']}");
+				$value = (isset($contact['value']) AND !empty($contact['value']) ? $contact['value'] : '');
+				$this->logger->log("Value {$value}");
+				$modelc[$contact['idContact']][$field] = $this->cleanQuotes($value);
 				if (!in_array($field, $fields)) {
 					$fields[] = $field;
 				}
@@ -265,9 +268,14 @@ class Reportingcreator
 	protected function cleanString($string) 
 	{
 		$string = str_replace(' ', '_', $string); // Replaces all spaces with hyphens.
-		return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+		$string = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+		return strtolower($string); // Removes special chars.
 	}
 
+	protected function cleanQuotes($string)
+	{
+		return str_replace(array("'", '"'), array("", ""), $string);
+	}
 
 	protected function getQueryForUnsubscribedReport($name, $dir)
 	{
