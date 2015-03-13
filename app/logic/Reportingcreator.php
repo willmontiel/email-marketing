@@ -194,12 +194,16 @@ class Reportingcreator
 					os, link, bouncedType, category, date {$fields}
 					values {$values}";
 					
+			$this->logger->log($sql);
+			
 			$report =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), link, email, name, lastName, birthDate, {$fields} 
 							FROM {$this->tablename}
 							INTO OUTFILE  '{$dir}{$name}'
 							FIELDS TERMINATED BY ','
 							ENCLOSED BY '\"'
 							LINES TERMINATED BY '\n'";
+							
+			$this->logger->log($report);				
 		}
 
 		$data = array(
