@@ -153,7 +153,7 @@ class Reportingcreator
 				$fields = implode(', ', $model->fields);
 				$comma = ",";
 				$this->logger->log($values);
-				$addFields = "ALTER TABLE {$this->tablename} ADD ({$values})";
+				$addFields = "ALTER TABLE {$this->tablename} ADD ({$values} VARCHAR(200))";
 				$this->logger->log($addFields);
 
 				$db = Phalcon\DI::getDefault()->get('db');
