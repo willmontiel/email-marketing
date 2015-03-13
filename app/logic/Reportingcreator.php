@@ -123,7 +123,6 @@ class Reportingcreator
 	
 	protected function getQueryForClicksReport($name, $dir)
 	{
-		
 		$sql = null;
 		$report = null;
 		
@@ -135,8 +134,6 @@ class Reportingcreator
 					 LEFT JOIN customfield AS cf ON (cf.idCustomfield = fi.idCustomfield)
 					 JOIN maillink AS l ON (l.idMailLink = ml.idMailLink)
 				 WHERE ml.idMail = {$this->mail->idMail}";
-				
-		$this->logger->log($sqlc);		 
 				 
 		$db = Phalcon\DI::getDefault()->get('db');
 		$result = $db->query($sqlc);
@@ -144,8 +141,6 @@ class Reportingcreator
 		
 		if (count($contacts) > 0) {
 			$model = $this->modelContacts($contacts);
-		
-			$this->logger->log(print_r($model, true));
 			$fields = "";
 			$comma = "";
 			if (count($model->fields) > 0) {
@@ -157,9 +152,7 @@ class Reportingcreator
 					$fieldsheader .= ", '{$value}'";
 				}
 				
-				$this->logger->log($values);
 				$addFields = "ALTER TABLE {$this->tablename} ADD ({$values} VARCHAR(200))";
-				$this->logger->log($addFields);
 
 				$db = Phalcon\DI::getDefault()->get('db');
 				$add = $db->execute($addFields);
@@ -189,13 +182,9 @@ class Reportingcreator
 				$first = false;
 			}
 			
-			$this->logger->log($values);
-			
 			$sql = "INSERT INTO $this->tablename (idTmpReport, idMail, reportType, email, name, lastName, birthdate,
 					os, link, bouncedType, category, date {$comma}{$fields})
 					VALUES {$values}";
-					
-			$this->logger->log($sql);
 			
 			$report =  "SELECT 'Fecha', 'Email', 'Nombre', 'Apellido', 'Fecha de cumpleanos', 'Link' {$fieldsheader} 
 						UNION ALL				
@@ -204,9 +193,7 @@ class Reportingcreator
 							INTO OUTFILE  '{$dir}{$name}'
 							FIELDS TERMINATED BY ','
 							ENCLOSED BY '\"'
-							LINES TERMINATED BY '\n'";
-							
-			$this->logger->log($report);				
+							LINES TERMINATED BY '\n'";			
 		}
 
 		$data = array(
@@ -245,9 +232,7 @@ class Reportingcreator
 			}
 			else if (isset($modelc[$contact['idContact']]) && !empty($contact['field'])) {
 				$field = $this->cleanString($contact['field']);
-				$this->logger->log("Value {$contact['value']}");
 				$value = ((isset($contact['value']) && !empty($contact['value'])) ? $contact['value'] : '');
-				$this->logger->log("Value {$value}");
 				$modelc[$contact['idContact']][$field] = $this->cleanQuotes($value);
 				if (!in_array($field, $fields)) {
 					$fields[] = $field;
@@ -364,6 +349,8 @@ class Reportingcreator
 	
 	protected function saveReport($generate,$save) 
 	{
+		$this->logger->log($generate);
+		$this->logger->log($save);
 		if ($generate != null AND $save != null) {
 			$db = Phalcon\DI::getDefault()->get('db');
 			$s = $db->execute($generate);
