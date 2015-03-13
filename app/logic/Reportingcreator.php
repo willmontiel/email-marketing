@@ -168,16 +168,9 @@ class Reportingcreator
 			$values = "";
 			foreach ($model->model as $contact) {
 				if (count($model->fields) > 0) {
-					$f = true;
 					$fi = "";
 					foreach ($model->fields as $field) {
-						if ($f) {
-							$fi .= "'{$contact[$field]}'";
-						}
-						else {
-							$fi .= ", '{$contact[$field]}'";
-						}
-						$f = false;
+						$fi .= ", '{$contact[$field]}'";
 					}
 				}
 				
