@@ -197,7 +197,9 @@ class Reportingcreator
 					
 			$this->logger->log($sql);
 			
-			$report =  "SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, name, lastName, birthDate, link {$comma}{$fields} 
+			$report =  "SELECT 'Fecha', 'Email', 'Nombre', 'Apellido', 'Fecha de cumpleanos', 'Link'
+						UNION ALL				
+						SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, name, lastName, birthDate, link {$comma}{$fields} 
 							FROM {$this->tablename}
 							INTO OUTFILE  '{$dir}{$name}'
 							FIELDS TERMINATED BY ','
