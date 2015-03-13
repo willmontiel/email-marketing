@@ -95,7 +95,7 @@ class Reportingcreator
 	
 	protected function getQueryForOpenReport($name, $dir)
 	{
-		$phql = "SELECT null, ". $this->mail->idMail .", 'opens', e.email, null, null, null, null, null, null, v.opening
+		$phql = "SELECT null, ". $this->mail->idMail .", 'opens', e.email, null, null, null, null, null, null, null, v.opening
 					FROM mxc AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (e.idEmail = c.idEmail)
@@ -262,7 +262,7 @@ class Reportingcreator
 
 	protected function getQueryForUnsubscribedReport($name, $dir)
 	{
-		$phql = "SELECT null, " . $this->mail->idMail. ", 'unsubscribed', e.email, c.name, c.lastName, null, null, null, null, v.unsubscribe
+		$phql = "SELECT null, " . $this->mail->idMail. ", 'unsubscribed', e.email, c.name, c.lastName, c.birthDate, null, null, null, null, v.unsubscribe
 					FROM mxc AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (c.idEmail = e.idEmail)
@@ -289,7 +289,7 @@ class Reportingcreator
 	
 	protected function getQueryForBouncedReport($name, $dir)
 	{
-		$phql = "SELECT null, " . $this->mail->idMail . ", 'bounced', e.email, null, null, null, null, b.type, b.description, v.bounced
+		$phql = "SELECT null, " . $this->mail->idMail . ", 'bounced', e.email, null, null, null, null, null, b.type, b.description, v.bounced
 					FROM mxc AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (e.idEmail = c.idEmail)
@@ -318,7 +318,7 @@ class Reportingcreator
 	
 	protected function getQueryForSpamReport($name, $dir)
 	{
-		$phql = "SELECT null, " . $this->mail->idMail . ", 'spam', e.email, null, null, null, null, b.type, b.description, v.bounced
+		$phql = "SELECT null, " . $this->mail->idMail . ", 'spam', e.email, null, null, null, null, null, b.type, b.description, v.bounced
 					FROM mxc AS v
 						JOIN contact AS c ON (c.idContact = v.idContact)
 						JOIN email AS e ON (e.idEmail = c.idEmail)
@@ -349,8 +349,8 @@ class Reportingcreator
 	
 	protected function saveReport($generate,$save) 
 	{
-		$this->logger->log($generate);
-		$this->logger->log($save);
+//		$this->logger->log($generate);
+//		$this->logger->log($save);
 		if ($generate != null AND $save != null) {
 			$db = Phalcon\DI::getDefault()->get('db');
 			$s = $db->execute($generate);
