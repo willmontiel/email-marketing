@@ -171,6 +171,10 @@ class CampaignWrapper extends BaseWrapper
 			$buscar = array("<script" , "</script>");
 			$reemplazar = array("<!-- ", " -->");
 			$newContent = str_replace($buscar,$reemplazar, $content);
+			if(!strpos($newContent, "http-equiv")){
+				$meta = '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
+				$newContent = str_replace('<head>',$meta, $newContent);
+			}
 			$this->autoresponder->content = htmlspecialchars($newContent, ENT_QUOTES);
 		}
 		else {
