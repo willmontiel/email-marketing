@@ -10,7 +10,11 @@ FormEditor.prototype.startEvents = function(obj) {
 	this.createZones();
 	this.designCustomFields();
 	this.sortableEvent();
-	this.title_xeditable();
+	
+//	this.title_xeditable();
+	this.header_zone();
+	this.adv_tools_zone();
+	
 	this.button_xeditable();
 	if(obj === null) {
 		this.designDefaultFields();
@@ -21,8 +25,8 @@ FormEditor.prototype.startEvents = function(obj) {
 };
 
 FormEditor.prototype.createZones = function() {
-	this.titlezone = $('<div class="container-form-title-name"><h4 class="sectiontitle"><a href="#" class="editable editable-click" id="form-title-name" data-type="text" data-pk="1" data-original-title="Título del formulario">' + this.title + '</a></h4></div>');
-	$('.form-full-content').append(this.titlezone);
+//	this.titlezone = $('<div class="container-form-title-name"><h4 class="sectiontitle"><a href="#" class="editable editable-click" id="form-title-name" data-type="text" data-pk="1" data-original-title="Título del formulario">' + this.title + '</a></h4></div>');
+//	$('.form-full-content').append(this.titlezone);
 	
 	this.editorzone = $('<div class="form-content-zone"></div>');
 	$('.form-full-content').append(this.editorzone);
@@ -108,9 +112,20 @@ FormEditor.prototype.editField = function(field) {
 		editzone.find('.field-hide-option').on('click', function() {
 			if($(this)[0].checked) {
 				editzone.find('.field-default-value').closest('.edit-row-in-zone').removeClass('hide-form-field');
+				editzone.addClass('form-edit-zone-extended');
 			}
 			else {
 				editzone.find('.field-default-value').closest('.edit-row-in-zone').addClass('hide-form-field');
+				editzone.removeClass('form-edit-zone-extended');
+			}
+		});
+		
+		editzone.find('.field-required-option').on('click', function() {
+			if($(this)[0].checked) {
+				editzone.find('.form-opt-field-container .required-form-btn').addClass('checked');
+			}
+			else {
+				editzone.find('.form-opt-field-container .required-form-btn').removeClass('checked');
 			}
 		});
 		
@@ -130,6 +145,36 @@ FormEditor.prototype.editField = function(field) {
 			else {
 				$.gritter.add({title: 'Error', text: 'El valor del campo no puede estar vacio', sticky: false, time: 2000});
 			}
+		});
+	}
+};
+
+FormEditor.prototype.editZone = function(zone) {	
+	$('.field-edit-zone-row').remove();
+	$('.accept-form-field-changes').off('click');
+	
+	if(zone.content.find('.form-field-editing').length > 0) {
+		zone.content.find('.field-edit-zone-row').remove();
+		$('.form-field-editing').removeClass('form-field-editing');
+		this.editorzone.sortable({ disabled: false });
+	}
+	else {
+		$('.form-field-editing').removeClass('form-field-editing');
+		zone.content.find('.edit-field').addClass('form-field-editing');		
+	
+		this.editorzone.sortable({ disabled: true });
+
+		var editzone = zone.getEditZone();
+		zone.content.append(editzone);
+
+		var t = this;
+		
+		editzone.find('.accept-form-field-changes').on('click', function() {
+			zone.changeValues(editzone);
+			$(this).parents('.field-edit-zone-row').remove();
+			$(this).off('click');
+			$('.form-field-editing').removeClass('form-field-editing');
+			t.editorzone.sortable({ disabled: false });
 		});
 	}
 };
@@ -167,15 +212,30 @@ FormEditor.prototype.sortableEvent = function() {
 	});
 };
 
-FormEditor.prototype.title_xeditable = function() {
-	var t = this;
-	this.titlezone.find('#form-title-name').editable({ 
-		type: 'text', 
-		success: function (resp, newValue) { 
-			t.title = newValue;
-		} 
-	});
+FormEditor.prototype.header_zone = function() {
+	var header = new ZoneHeader(this);
+	header.designHeaderZone();
 };
+
+FormEditor.prototype.adv_tools_zone = function() {
+	var adv_tools = new ToolsZone(this);
+	adv_tools.designZone();
+	adv_tools.colorFontFields();
+};
+
+FormEditor.prototype.updateStyle = function(property, value) {
+	this.editorzone.css(property, value);
+};
+
+//FormEditor.prototype.title_xeditable = function() {
+//	var t = this;
+//	this.titlezone.find('#form-title-name').editable({ 
+//		type: 'text', 
+//		success: function (resp, newValue) { 
+//			t.title = newValue;
+//		} 
+//	});
+//};
 
 FormEditor.prototype.button_xeditable = function() {
 	var t = this;

@@ -87,13 +87,26 @@
 		<div class="col-md-11 col-sm-12 col-xs-12 top-editor-form"></div>
 		<div class="col-md-11 col-sm-12 col-xs-12 outline-editor-form">
 			<div class="col-md-8 col-sm-12 col-xs-12 col-md-offset-1 border edit-form-out-zone">
+				<div id="header-zone"></div>
 				<form class="form-horizontal form-full-content" role="form"></form>
 
 				<form class="form-horizontal form-full-button" role="form"></form>
 			</div>
-			<div class="col-md-3 col-sm-12 col-xs-12">
-				<div class="form-menu">
-					<h6 class="sectiontitle title-fields-options">Campos para agregar al formulario</h4>
+			<div class="col-md-3 col-sm-12 col-xs-12" id="accordion" role="tablist">
+				<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+					<h6 class="sectiontitle title-fields-options">Campos para agregar al formulario</h6>
+				</a>
+				<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+					<div class="form-menu">
+					</div>
+				</div>
+				
+				<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+					<h6 class="sectiontitle title-fields-options">Herramientas del formulario</h6>
+				</a>
+				<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+					<div class="form-adv-tools">
+					</div>
 				</div>
 			</div>
 			<div class="clearfix"></div>

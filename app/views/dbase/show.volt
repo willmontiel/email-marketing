@@ -7,11 +7,13 @@
 	{{ partial("partials/xeditable_view_partial") }}
 	{{ partial("partials/xeditable_select_view_partial") }}
 	{{ partial("statistic/partials/partial_graph") }}
+	{{ javascript_include('vendors/bootstrap_v2/spectrum/js/spectrum.js') }}
 	{{ javascript_include('js/search-reference-pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/mixin_save_form.js') }}
 	{{ javascript_include('js/jquery_ui_1.10.3.js') }}
 	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
+	{{ stylesheet_link('vendors/bootstrap_v2/spectrum/css/spectrum.css') }}
 	{{ stylesheet_link('vendors/datetime_picker_jquery/jquery.datetimepicker.css') }}
 	{{ partial("statistic/partials/partial_pie_highcharts") }}
 
@@ -69,6 +71,9 @@
 	{{ javascript_include('js/forms/multiple_select_block.js') }}
 	{{ javascript_include('js/forms/date_block.js') }}
 	{{ javascript_include('js/forms/form_zone.js') }}
+	{{ javascript_include('js/forms/zone_creator.js') }}
+	{{ javascript_include('js/forms/header_zone.js') }}
+	{{ javascript_include('js/forms/tools_zone.js') }}
 	
 	<script type="text/javascript">
 		//Contactos por dominios

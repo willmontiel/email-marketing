@@ -9,7 +9,7 @@ function EmailBlock(zone, id, name) {
 }
 
 EmailBlock.prototype.designOptionField = function() {
-	this.option = $('<div class="form-options ' + this.id + '-option">\n\
+	this.option = $('<div class="btn btn-default btn-sm extra-padding form-options ' + this.id + '-option">\n\
 						' + this.name + '\n\
 					</div>');
 	this.zone.createFieldInOptions(this);
@@ -26,9 +26,12 @@ EmailBlock.prototype.designField = function() {
 							<div class="col-md-7 col-sm-8 col-xs-7">\n\
 								<input type="text" class="form-control field-label-placeholder" placeholder="' + this.placeholder + '">\n\
 							</div>\n\
-							<div class="btn-group">\n\
-								<div class="btn btn-default btn-sm edit-field">\n\
+							<div class="form-btns-opt">\n\
+								<div class="form-tool edit-field">\n\
 									<span class="glyphicon glyphicon-pencil"></span>\n\
+								</div>\n\
+								<div class="form-tool move-field">\n\
+									<span class="glyphicon glyphicon-move"></span>\n\
 								</div>\n\
 							</div>\n\
 						</div>\n\
@@ -61,20 +64,17 @@ EmailBlock.prototype.changeValues = function(editzone) {
 };
 
 EmailBlock.prototype.getEditZone = function() {
-	var edit = $('<div class="field-edit-zone-row">\n\
-					<div class="col-md-10 col-md-offset-1 field-edit-zone">\n\
-						<div class="form-group edit-row-in-zone">\n\
-							<label class="col-md-4">Label</label><div class="col-md-8"><input type="text" class="form-control field-label-name" value="' + this.name + '"></div>\n\
-						</div>\n\
-						<div class="form-group edit-row-in-zone">\n\
-							<label class="col-md-4">Placeholder</label><div class="col-md-8"><input type="text" class="form-control field-placeholder" value="' + this.placeholder + '"></div>\n\
-						</div>\n\
-						<div class="pull-right edit-button-row-in-zone">\n\
-							<a class="accept-form-field-changes btn btn-default btn-guardar extra-padding btn-sm">Aceptar</a>\n\
-						</div>\n\
-					</div>\n\
-				</div>\n\
-				<div class="clearfix"></div>');
+	
+	var extendedzone = (this.hide) ? 'form-edit-zone-extended' : '';
+		
+	var zone = new ZoneCreator();
+	zone.designFieldEditZone(extendedzone);
+	zone.designSaveBtn();
+	zone.designNameField(this.name);
+	zone.designPlaceholderField(this.placeholder);
+	
+	var edit = zone.getZone();
+	
 	return edit;
 };
 
