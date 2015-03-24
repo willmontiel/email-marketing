@@ -244,6 +244,8 @@ class Reportingcreator
 		$object->model = $modelc;
 		$object->fields = $fields;
 		
+		$this->logger->log("Object click: " . print_r($object, true));
+		
 		return $object;
 	}
 
