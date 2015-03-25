@@ -204,6 +204,11 @@ class Reportingcreator
 		return $data;
 	}
 	
+	protected function modelArray($contacts)
+	{
+		
+	}
+	
 	protected function modelContacts($contacts)
 	{
 		$modelc = array();
@@ -211,13 +216,19 @@ class Reportingcreator
 		
 		foreach ($contacts as $contact) {
 			if (!isset($modelc[$contact['idContact']])) {
+				$link = array(
+					'time' => $contact['click'],
+					'link' => $contact['link'],
+				);
+				
+				$links = array($link);
+				
 				$array = array(
 					'idContact' => $contact['idContact'],
 					'email' => $contact['email'],
 					'name' => $contact['name'],
 					'lastName' => $contact['lastName'],
-					'click' => $contact['click'],
-					'link' => $contact['link'],
+					'links' => $links
 				);
 				
 				if (!empty($contact['field'])) {
@@ -230,12 +241,21 @@ class Reportingcreator
 				
 				$modelc[$contact['idContact']] = $array;
 			}
-			else if (isset($modelc[$contact['idContact']]) && !empty($contact['field'])) {
+			else if (isset($modelc[$contact['idContact']])) {
 				$field = $this->cleanString($contact['field']);
 				$value = ((isset($contact['value']) && !empty($contact['value'])) ? $contact['value'] : '');
 				$modelc[$contact['idContact']][$field] = $this->cleanQuotes($value);
 				if (!in_array($field, $fields)) {
 					$fields[] = $field;
+				}
+				
+				$link = array(
+					'time' => $contact['click'],
+					'link' => $contact['link'],
+				);
+				
+				if (!in_array($link, $modelc[$contact['idContact']]['links'])) {
+					$modelc[$contact['idContact']]['links'][] = $link;
 				}
 			}
 		}
