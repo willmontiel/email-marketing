@@ -172,20 +172,26 @@ class Reportingcreator
 					}
 				}
 				
-				if ($first) {
-					$values .= "(null, {$this->mail->idMail}, 'clicks', '{$contact['email']}', '{$contact['name']}', '{$contact['lastName']}', '{$contact['birthDate']}', null, '{$contact['link']}', null, null, {$contact['click']} {$fi})";
+				if (count($contact['links']) > 0) {
+					foreach ($contact['links'] as $link) {
+						if ($first) {
+							$values .= "(null, {$this->mail->idMail}, 'clicks', '{$contact['email']}', '{$contact['name']}', '{$contact['lastName']}', '{$contact['birthDate']}', null, '{$link['link']}', null, null, {$link['time']} {$fi})";
+						}
+						else {
+							$values .= ", (null, {$this->mail->idMail}, 'clicks', '{$contact['email']}', '{$contact['name']}', '{$contact['lastName']}', '{$contact['birthDate']}', null, '{$link['link']}', null, null, {$link['time']} {$fi})";
+						}
+
+						$first = false;
+					}
 				}
-				else {
-					$values .= ", (null, {$this->mail->idMail}, 'clicks', '{$contact['email']}', '{$contact['name']}', '{$contact['lastName']}', '{$contact['birthDate']}', null, '{$contact['link']}', null, null, {$contact['click']} {$fi})";
-				}
-				
-				$first = false;
 			}
 			
 			$sql = "INSERT INTO $this->tablename (idTmpReport, idMail, reportType, email, name, lastName, birthdate,
 					os, link, bouncedType, category, date {$comma}{$fields})
 					VALUES {$values}";
 			
+//			$this->logger->log($sql);		
+					
 			$report =  "SELECT 'Fecha', 'Email', 'Nombre', 'Apellido', 'Fecha de cumpleanos', 'Link' {$fieldsheader} 
 						UNION ALL				
 						SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, name, lastName, birthDate, link {$comma}{$fields} 
@@ -211,13 +217,19 @@ class Reportingcreator
 		
 		foreach ($contacts as $contact) {
 			if (!isset($modelc[$contact['idContact']])) {
+				$link = array(
+					'time' => $contact['click'],
+					'link' => $contact['link'],
+				);
+				
+				$links = array($link);
+				
 				$array = array(
 					'idContact' => $contact['idContact'],
 					'email' => $contact['email'],
 					'name' => $contact['name'],
 					'lastName' => $contact['lastName'],
-					'click' => $contact['click'],
-					'link' => $contact['link'],
+					'links' => $links
 				);
 				
 				if (!empty($contact['field'])) {
@@ -230,12 +242,21 @@ class Reportingcreator
 				
 				$modelc[$contact['idContact']] = $array;
 			}
-			else if (isset($modelc[$contact['idContact']]) && !empty($contact['field'])) {
+			else if (isset($modelc[$contact['idContact']])) {
 				$field = $this->cleanString($contact['field']);
 				$value = ((isset($contact['value']) && !empty($contact['value'])) ? $contact['value'] : '');
 				$modelc[$contact['idContact']][$field] = $this->cleanQuotes($value);
 				if (!in_array($field, $fields)) {
 					$fields[] = $field;
+				}
+				
+				$link = array(
+					'time' => $contact['click'],
+					'link' => $contact['link'],
+				);
+				
+				if (!in_array($link, $modelc[$contact['idContact']]['links'])) {
+					$modelc[$contact['idContact']]['links'][] = $link;
 				}
 			}
 		}
@@ -243,6 +264,8 @@ class Reportingcreator
 		$object = new stdClass();
 		$object->model = $modelc;
 		$object->fields = $fields;
+		
+//		$this->logger->log("Object click: " . print_r($object, true));
 		
 		return $object;
 	}
