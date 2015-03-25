@@ -190,7 +190,7 @@ class Reportingcreator
 					os, link, bouncedType, category, date {$comma}{$fields})
 					VALUES {$values}";
 			
-			$this->logger->log($sql);		
+//			$this->logger->log($sql);		
 					
 			$report =  "SELECT 'Fecha', 'Email', 'Nombre', 'Apellido', 'Fecha de cumpleanos', 'Link' {$fieldsheader} 
 						UNION ALL				
