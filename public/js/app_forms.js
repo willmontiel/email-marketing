@@ -22,6 +22,7 @@ App.Form = DS.Model.extend({
 	listselected: DS.attr( 'string' ),
 	content: DS.attr( 'string' ),
 	framecode: DS.attr( 'string' ),
+	html: DS.attr( 'string' ),
 	isInscription: function() {
 		var value = (this.get('type') === 'Inscription') ? true : false;
 		return value;
@@ -458,6 +459,19 @@ App.FormsCodeRoute = Ember.Route.extend({
 });
 
 App.FormsCodeController = Ember.ObjectController.extend({
+	actions: {
+		cancel: function() {
+			this.get("model").rollback();
+			this.transitionToRoute('forms.index');
+		}
+	}
+});
+
+App.FormsHtmlRoute = Ember.Route.extend({
+	
+});
+
+App.FormsHtmlController = Ember.ObjectController.extend({
 	actions: {
 		cancel: function() {
 			this.get("model").rollback();

@@ -300,6 +300,9 @@ body {
 	cursor: pointer;
 	display: block;
 }
+.form-full-button {
+	margin-top: -15px;
+}
 .field-option-disabled {
 	color: rgb(180, 180, 180) !important;
 	background-color: rgb(243, 243, 243) !important;
@@ -317,7 +320,7 @@ body {
 	z-index: 100;
 	height: 55px;
 }
-.form-opt-field-container{
+.form-opt-field-container, .color-container-form{
 	float: left;
 	margin-right: 10px;
 }
@@ -338,10 +341,14 @@ body {
 .hide-form-field,
 .create-email-spot,
 .btn-form-email-creator-save,
-.form-btns-opt{
+.form-btns-opt,
+.form_toolbar_bgimg_container{
 	display: none;
 }
-
+.form-btns-opt{
+	font-size: 13px !important;
+	line-height: 0 !important;
+}
 .form-field-hide-selected {
 	font-style: italic;
 	background-color: rgb(233, 233, 233);
@@ -358,6 +365,7 @@ body {
 	margin-top: 10px;
 	margin-bottom: 10px;
 	background-color: #FCFCFC;
+	padding: 25px 0;
 }
 .top-editor-form {
 	height: 30px;
@@ -399,6 +407,7 @@ body {
 .form-tool.move-field{
 	left: 50%;
 	top: -13px;
+	z-index: 10;
 }
 .form-tool.edit-field:hover{
 	background-color: #46B352;
@@ -435,9 +444,17 @@ body {
 	z-index: 100;
 	left: 20px;
 	color: #333333;
+	font-size: 13px !important;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
 }
 .form-edit-zone-extended{
 	width: 875px !important;
+}
+.form-date-container{
+	float: left;
+}
+.form-date-field{
+	width: 100px !important;
 }
 .required-form-btn{
 	color: darkgray;
@@ -461,13 +478,27 @@ body {
 .form-size-one{
 	width: 600px;
 	margin: auto;
+}
+.input-form-zone{
+	width: 300px;
+}
+.field-zone-name.control-label{
+	width: 150px;
+	margin-right: 10px;
+}
+/*#header-zone .form-size-one{
 	padding: 20px 10px 0 10px;
+}*/
+.form_toolbar_bgimg_container, .bgimg_toolbar_form{
+	float: left;
+}
+.form_toolbar_bgimg_container input{
+	width: 180px;
 }
 .field-content-zone.field-content-zone-header{
 /*	border: 5px solid transparent;
 	border-radius: 6px;*/
-	height: 80px;
-	margin-top: 20px;
+	height: 90px;
 }
 /*.field-content-zone.field-content-zone-header:hover{
 	border: 5px solid #46B352;
@@ -476,6 +507,9 @@ body {
 	width: 100%;
 	height: 100%;
 	text-align: center;
+	background-position: top center;
+	background-repeat: no-repeat;
+	line-height: 65px
 }
 .font-property-btn{
 	color: white;
@@ -495,6 +529,28 @@ body {
 }
 .align-toolbar-form-left, .align-toolbar-form-center, .align-toolbar-form-right{
 	padding: 3px 5px 2px 6px;
+}
+.adv_tools_list, .adv_tools_list li {
+	list-style: none;
+}
+ul.adv_tools_list{
+	padding: 5px;
+}
+.form-toolbar-spinner{
+	width: 16px;
+	font-size: 13px !important;
+	text-align: end;
+}
+.field-edit-zone-row span.ui-icon{
+	text-indent: 0;
+	top: 60%;
+	font-size: 10px !important;
+}
+.field-edit-zone-row a.ui-spinner-button{
+	cursor: pointer;
+} 
+.field-edit-zone-row .ui-spinner{
+	float: left;
 }
 /* Fin formularios */
 

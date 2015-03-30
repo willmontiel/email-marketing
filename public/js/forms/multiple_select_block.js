@@ -30,10 +30,10 @@ MultSlctBlock.prototype.designField = function() {
 	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
 						<div class="form-group field-content-zone ' + hide + '">\n\
-							<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name control-label">\n\
+							<label class="pull-left field-zone-name control-label">\n\
 								' + required + this.name + ':\n\
 							</label>\n\
-							<div class="col-md-7 col-sm-8 col-xs-7">\n\
+							<div class="pull-left input-form-zone">\n\
 								<select class="form-control field-label-select-options" multiple="true">\n\
 									' + slctoptions + '\n\
 								</select>\n\
@@ -75,7 +75,7 @@ MultSlctBlock.prototype.changeValues = function(editzone) {
 	this.name = editzone.find('.field-label-name').val();
 	this.required = (editzone.find('.field-required-option')[0].checked) ? 'Si' : 'No';
 	this.hide = editzone.find('.field-hide-option')[0].checked;
-	this.defaultvalue = editzone.find('.field-default-value').val().join();
+	this.defaultvalue = (editzone.find('.field-default-value').val() != null) ? editzone.find('.field-default-value').val().join() : '';
 	this.content.find('.field-zone-name').text(this.name);
 	
 	if( this.required === 'Si' ) {

@@ -3,7 +3,7 @@ function DateBlock(zone, id, name, required) {
 	this.id = id;
 	this.name = name;
 	this.required = required;
-	this.defaultvalue = {day: '1', month: 'Enero', year: ''};
+	this.defaultvalue = {day: '1', month: '1', year: ''};
 	this.hide = false;
 	this.months = [{name:'Enero', value:'01'}, {name:'Febrero', value:'02'}, {name:'Marzo', value:'03'}, {name:'Abril', value:'04'}, {name:'Mayo', value:'05'}, {name:'Junio', value:'06'}, {name:'Julio', value:'07'}, {name:'Agosto', value:'08'}, {name:'Septiembre', value:'09'}, {name:'Octubre', value:'10'}, {name:'Noviembre', value:'11'}, {name:'Diciembre', value:'12'}];
 }
@@ -38,17 +38,28 @@ DateBlock.prototype.designField = function() {
 	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
 						<div class="form-group field-content-zone ' + hide + '">\n\
-							<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name control-label">\n\
+							<label class="pull-left field-zone-name control-label">\n\
 								' + required + this.name + ':\n\
 							</label>\n\
-							<div class="col-md-7 col-sm-8 col-xs-7">\n\
+							<div class="pull-left">\n\
 								<div class="input-group date date_view_picker group-datepicker">\n\
-									<input class="form-control" readonly="readonly" type="text">\n\
+									<div class="form-date-container">\n\
+										<select class="form-control form-date-field">' + days + '</select>\n\
+									</div>\n\
+									<div class="form-date-container">\n\
+										<select class="form-control form-date-field">' + months + '</select>\n\
+									</div>\n\
+									<div class="form-date-container">\n\
+										<input type="text" class="form-control form-date-field">\n\
+									</div>\n\
 								</div>\n\
 							</div>\n\
 							<div class="form-btns-opt">\n\
 								<div class="form-tool edit-field">\n\
 									<span class="glyphicon glyphicon-pencil"></span>\n\
+								</div>\n\
+								<div class="form-tool move-field">\n\
+									<span class="glyphicon glyphicon-move"></span>\n\
 								</div>\n\
 								<div class="form-tool delete-field">\n\
 									<span class="glyphicon glyphicon-trash"></span>\n\
@@ -64,22 +75,14 @@ DateBlock.prototype.designField = function() {
 
 DateBlock.prototype.startFieldEvents = function() {
 	var t = this;
-	
-	this.content.find('.date_view_picker').datetimepicker({
-		format:'d/m/Y',
-		inline:true,
-		timepicker:false,
-		lang:'es',
-		startDate: 0
-	});
-	
+
 	this.content.find('.edit-field').on('click', function(){
 		t.zone.editField(t);	
 	});
 	
 	this.content.find('.delete-field').on('click', function(){
 		t.name = t.option.text().trim();
-		t.defaultvalue = {day: '1', month: 'Enero', year: ''};
+		t.defaultvalue = {day: '1', month: '1', year: ''};
 		t.hide = false;
 		t.zone.deleteField(t);	
 	});
@@ -121,7 +124,7 @@ DateBlock.prototype.getEditZone = function() {
 		}
 	}
 	for (var i = 0; i < this.months.length; i++) {
-		var selected = (this.months[i] === this.defaultvalue.month) ? 'selected' : '';
+		var selected = (this.months[i].value === this.defaultvalue.month) ? 'selected' : '';
 		months+= '<option value="' + this.months[i].value + '" ' + selected + '>' + this.months[i].name + '</option>';
 	}
 	var required = (this.required === 'Si') ? 'checked' : '';

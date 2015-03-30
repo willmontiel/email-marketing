@@ -36,6 +36,7 @@
 							</a>
 							{{ '{{#if isInscription}}' }}
 								{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-th"></span> Codigo{{ '{{/link-to}}' }}
+								{{ '{{#link-to "forms.html" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-th"></span> HTML{{ '{{/link-to}}' }}
 							{{ '{{else}}' }}
 								{{ '{{#link-to "forms.link" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-link"></span> Enlace{{ '{{/link-to}}' }}
 							{{ '{{/if}}' }}
@@ -88,9 +89,9 @@
 		<div class="col-md-11 col-sm-12 col-xs-12 outline-editor-form">
 			<div class="col-md-8 col-sm-12 col-xs-12 col-md-offset-1 border edit-form-out-zone">
 				<div id="header-zone"></div>
-				<form class="form-horizontal form-full-content" role="form"></form>
+				<div class="form-horizontal form-full-content"></div>
 
-				<form class="form-horizontal form-full-button" role="form"></form>
+				<div class="form-horizontal form-full-button"></div>
 			</div>
 			<div class="col-md-3 col-sm-12 col-xs-12" id="accordion" role="tablist">
 				<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -167,6 +168,24 @@
 	</div>
 </script>
 
+<script type="text/x-handlebars" data-template-name="forms/html">
+	<div class="row">
+		<h4 class="sectiontitle">Código del formulario</h4>
+		<div class="col-md-6">
+			<div class="bs-callout bs-callout-info">
+				<h4>Código HTML</h4>
+				<p>Copie y pegue el siguiente código en su página web</p>
+				<div>
+					<textarea rows="4" cols="70"><!DOCTYPE html><html><head></head><body>{{ '{{unbound html}}' }}</body></html></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="button-actions">
+			<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Regresar</button>
+		</div>
+	</div>
+</script>
+
 <script type="text/x-handlebars" data-template-name="forms/link">
 	<div class="row">
 		<h4 class="sectiontitle">Enlace Formulario de Actualización</h4>
@@ -184,25 +203,21 @@
 
 <script type="text/javascript">
 	function preview(id) {
-		$.post("{{url('form/preview')}}/" + id, function(form){
-			var f = form.form;
+//		$.post("{{url('form/preview')}}/" + id, function(form){
+		$.post("{{url('form/preview')}}/" + id, function(obj){	
+{#			var f = form.form;
 			
-			var button = '<div class="form-actions pull-right"><a class="btn btn-sm btn-default btn-guardar extra-padding">' + f.button + '</a></div><div class="clearfix"></div>';
-			var title = '<h4 class="sectiontitle">' + f.title + '</h4>';
-			var content = title + '<form class="form-horizontal">';
+			var content = f.title + '<form class="form-horizontal">';
 			for(var i = 0; i < f.fields.length; i++) {
 				content+= '<div class="form-group ' + f.fields[i].hide + '"><div class="col-md-3">' + f.fields[i].label + '</div><div class="col-md-7">' + f.fields[i].field + '</div></div>'
 			}
-			content+= button + '</form>';
+			content+= f.button + '</form>';
 			$('#preview-modal').empty();
-			$('#preview-modal').append(content);
-			$('.date_view_picker').datetimepicker({
-				format:'Y-m-d',
-				inline:true,
-				timepicker:false,
-				lang:'es',
-				startDate: 0
-			});
+			$('#preview-modal').append(content);#}
+						
+			var form = obj.form;
+			$('#preview-modal').empty();
+			$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#preview-modal').contents().find('body').append(form);
 		});
 	}
 	

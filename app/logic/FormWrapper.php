@@ -128,6 +128,7 @@ class FormWrapper extends BaseWrapper
 		}
 		
 		$jsonObject['framecode'] = $this->getFrameCode($phObject);
+		$jsonObject['html'] = $this->getHtmlCode($phObject);
 		
 		return $jsonObject;
 	}
@@ -152,6 +153,12 @@ class FormWrapper extends BaseWrapper
 		return 'Finalizado';
 	}
 	
+	public function getHtmlCode($form)
+	{
+		$creator = new FormCreator();
+		return $creator->getHtmlForm($form);
+	}
+
 	public function getHeightForFrame($fullcontent)
 	{
 		$content = $fullcontent->content;

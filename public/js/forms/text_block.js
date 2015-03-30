@@ -30,10 +30,10 @@ TxtBlock.prototype.designField = function() {
 	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
 						<div class="form-group field-content-zone ' + hide + '">\n\
-							<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name control-label">\n\
+							<label class="pull-left field-zone-name control-label">\n\
 								' + required + this.name + ':\n\
 							</label>\n\
-							<div class="col-md-7 col-sm-8 col-xs-7">\n\
+							<div class="input-form-zone pull-left">\n\
 								' + input + '\n\
 							</div>\n\
 							<div class="form-btns-opt">\n\

@@ -56,3 +56,20 @@ ZoneCreator.prototype.designFontAlignField = function(left, center, right) {
 	return align;
 };
 
+ZoneCreator.prototype.designBgImageField = function(selected, link) {
+	var bg_image = $('<li class="edit-row-in-zone"><div class="font-property-btn bgimg_toolbar_form ' + selected + '"><span class="glyphicon glyphicon-picture"></span></div><div class="form_toolbar_bgimg_container"><input class="form-control field-image-bg" type="text" placeholder="Escriba Link" value="' + link + '"></div></li>');
+	this.zone.find('ul.field-edit-zone').append(bg_image);
+	return bg_image;
+};
+
+ZoneCreator.prototype.designColorField = function(id) {
+	var color = $('<li class="edit-row-in-zone"><div class="color-container-form"><input type="text" id="' + id + '" name="' + id + '" class="pick-a-color"></div></li>');
+	this.zone.find('ul.field-edit-zone').append(color);
+	return color;
+};
+
+ZoneCreator.prototype.designSpinnerField = function(id, value) {
+	var spinner = $('<li class="edit-row-in-zone"><input id="' + id + '" class="form-toolbar-spinner" value=' + value + '></li>');
+	this.zone.find('ul.field-edit-zone').append(spinner);
+	return spinner;
+};

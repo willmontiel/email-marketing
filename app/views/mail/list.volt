@@ -6,6 +6,7 @@
 			$.post("{{url('mail/previewindex')}}/" + id, function(preview){
 				var e = preview.preview;
 				$( "#preview-modal-content" ).empty();
+				console.log(e);
 				$('<iframe frameborder="0" width="100%" height="100%"/>').appendTo('#preview-modal-content').contents().find('body').append(e);
 			});
 		}

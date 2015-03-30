@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+       {# <meta charset="utf-8">
 		<!-- Always force latest IE rendering engine or request Chrome Frame -->
 		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
@@ -18,7 +18,6 @@
 		{{ javascript_include('js/pluggins-editor/vendor/excanvas.js') }}
 		<![endif]-->
 
-		{{ javascript_include('vendors/bootstrap_v3/js/jquery-1.9.1.js') }}
 		{{ javascript_include('vendors/bootstrap_v3/js/bootstrap.js') }}
 		{{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.sparkline.js') }}
 		{{ javascript_include('vendors/bootstrap_v3/vendors/js/spark_auto.js') }}
@@ -26,10 +25,11 @@
 		{{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.gritter.js') }}
 		{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
 		{{ javascript_include('js/form_date_field.js') }}
-		{{ javascript_include('js/required_fields_forms.js') }}
+		{{ javascript_include('vendors/bootstrap_v3/js/jquery-1.9.1.js') }}
+		{{ javascript_include('js/required_fields_forms.js') }}#}
 	</head>
 	<body>
-		<div class="container">
+		{#<div class="container">
 			<div class="row">
 				<div class="col-md-5">
 					<h4 class="sectiontitle">{{elements['title']}}</h4>
@@ -50,6 +50,7 @@
 					</form>
 				</div>
 			</div>
-		</div>
+		</div>#}
+		{{ html }}
 	</body>
 </html>

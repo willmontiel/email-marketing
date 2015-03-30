@@ -3,7 +3,6 @@
 {% block header_javascript %}
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
-	{{ partial("partials/date_view_partial") }}
 	{{ partial("partials/xeditable_view_partial") }}
 	{{ partial("partials/xeditable_select_view_partial") }}
 	{{ partial("statistic/partials/partial_graph") }}
@@ -12,9 +11,13 @@
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/mixin_save_form.js') }}
 	{{ javascript_include('js/jquery_ui_1.10.3.js') }}
-	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
+	{{ stylesheet_link('css/jquery-ui.css') }}
+	{{ stylesheet_link('vendors/bootstrap-tagsinput/bootstrap-tagsinput.css')}}
+	{{ javascript_include('vendors/bootstrap-tagsinput/bootstrap-tagsinput.js')}}
+	{# stylesheet_link('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.min.css') }}
+	{{ javascript_include('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.js')}}
+	{{ javascript_include('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.es.js')#}
 	{{ stylesheet_link('vendors/bootstrap_v2/spectrum/css/spectrum.css') }}
-	{{ stylesheet_link('vendors/datetime_picker_jquery/jquery.datetimepicker.css') }}
 	{{ partial("statistic/partials/partial_pie_highcharts") }}
 
 	<script type="text/javascript">
@@ -74,6 +77,7 @@
 	{{ javascript_include('js/forms/zone_creator.js') }}
 	{{ javascript_include('js/forms/header_zone.js') }}
 	{{ javascript_include('js/forms/tools_zone.js') }}
+	{{ javascript_include('js/forms/button_block.js') }}
 	
 	<script type="text/javascript">
 		//Contactos por dominios
