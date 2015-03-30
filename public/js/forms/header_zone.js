@@ -45,6 +45,9 @@ ZoneHeader.prototype.designHeaderZone = function() {
 							</div>\n\
 						</div>');
 		$('#header-zone').append(this.content);
+		if(this.adv_tools){
+			this.updateStyle('background-color', this.adv_tools.background_color);
+		}
 		this.startZoneEvents();
 	}
 };
