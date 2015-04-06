@@ -243,6 +243,14 @@ class Security extends Plugin
 				//Segmentapi
 				'segmentapi::searchcontacts' => array('contact' => array('read')),
 				
+				//Apiforms
+				'apiform::getforms' => array('form' => array('read')),
+				'apiform::getforminformation' => array('form' => array('read')),
+				'apiform::createforminformation' => array('form' => array('create')),
+				'apiform::createformcontent' => array('form' => array('update')),
+				'apiform::deleteform' => array('form' => array('delete')),
+				'apiform::getcontactlists' => array('form' => array('read')),
+				
 				//Apimail
 				'apimail::newmail' => array('mail' => array('read', 'create', 'send')),
 				'apimail::mailcontactstatistics' => array('statistic' => array('read')),

@@ -6,8 +6,13 @@
 	<script type="text/javascript">
 		var MyDbaseUrl = '{{urlManager.getApi_v1Url()}}';
 	</script>
+	{{ javascript_include('js/jquery_ui_1.10.3.js') }}
+	{{ stylesheet_link('css/jquery-ui.css') }}
+	{{ javascript_include('vendors/bootstrap_v2/spectrum/js/spectrum.js') }}
+	{{ stylesheet_link('vendors/bootstrap_v2/spectrum/css/spectrum.css') }}
 	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
+	{{ javascript_include('js/mixin_save_form.js') }}
 	{{ javascript_include('js/app_std.js') }}
 	{{ javascript_include('js/list_model.js') }}
 	{{ javascript_include('js/app_list.js') }}
@@ -28,7 +33,41 @@
 			allowContactlist: {{acl_Ember('api::getlists')}}
 		};
 	</script>
+	
+	<script type="text/javascript">
+		App.formfields = new Array();
+		{%for field in fields %}
+			{{ ember_customfield_options(field) }}
+			{{ ember_customfield_options_xeditable(field) }}
+			App.formfields.push({id: {{field.idCustomField}}, 
+								name: '{{field.name}}', 
+								type: '{{field.type}}',
+								required: '{{field.required}}',
+								values: '{{field.values}}'});
+		{%endfor%}
+		
+		var config = {baseUrl: "{{url('')}}"};
+		
+		function iframeResize() {
+			var iFrame = document.getElementById('iframeEditor');
+			iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
+		};
+	</script>
+	
 	{{ javascript_include('js/app_segment.js') }}
+	
+	{{ javascript_include('js/app_forms.js') }}
+	{{ javascript_include('js/forms/email_block.js') }}
+	{{ javascript_include('js/forms/text_block.js') }}
+	{{ javascript_include('js/forms/select_block.js') }}
+	{{ javascript_include('js/forms/multiple_select_block.js') }}
+	{{ javascript_include('js/forms/date_block.js') }}
+	{{ javascript_include('js/forms/form_zone.js') }}
+	{{ javascript_include('js/forms/zone_creator.js') }}
+	{{ javascript_include('js/forms/header_zone.js') }}
+	{{ javascript_include('js/forms/tools_zone.js') }}
+	{{ javascript_include('js/forms/button_block.js') }}
+	
 {% endblock %}
 {% block content %}
 {{flashSession.output()}}
@@ -90,6 +129,17 @@
 						<a href="{{url('dbase')}}" class="btn-actn">Configuración avanzada</a>
 					</div>
 				</div>
+
+
+				<div class="col-xs-6 col-md-3">
+					<div class="big-btn-nav sm-btn-blue">
+						{{'{{#link-to "forms" class="shortcuts"}} <span class="sm-button-large-bloq-list"></span>{{/link-to}}'}}
+					</div>
+					<div class="w-190 center">
+						{{'{{#link-to "forms" class="btn-actn"}}Formularios{{/link-to}}'}}
+					</div>
+				</div>
+
 
 				<div class="col-xs-6 col-md-3">
 					<div class="big-btn-nav sm-btn-blue">
@@ -376,5 +426,8 @@
 		<!-- SM -->
 	<div class="prueba"></div>
 	{{ partial("contactlist/segment_partial")}}
+	
+	<!---------------------- Forms Template -------------------------->
+	{{ partial("contactlist/partials/forms_partial") }}
 </div>
 {% endblock %}

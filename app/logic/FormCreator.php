@@ -70,7 +70,7 @@ class FormCreator
 	
 	protected function getButton($element)
 	{
-		$button = '<div class="sm-form-btn-container" style="text-align: ' . $element->align . ';"><input class="sm-form-btn" style="color: ' . $element->color . '; background-color: #274e13; font-size: ' . $element->size . 'px; font-family: ' . $element->family . '; font-weight: ' . $element->bold . ';" value="' . $element->name . '" type="submit"></div>';
+		$button = '<div class="sm-form-btn-container" style="text-align: ' . $element->align . ';"><input class="sm-form-btn" style="color: ' . $element->color . '; background-color: ' . $element->bckg_color . '; font-size: ' . $element->size . 'px; font-family: ' . $element->family . '; font-weight: ' . $element->bold . ';" value="' . $element->name . '" type="submit"></div>';
 		return $button;
 	}
 	

@@ -193,6 +193,24 @@ class FormWrapper extends BaseWrapper
 		return $listjson;
 	}
 	
+	public function getAccountListsInJson(Account $account)
+	{
+		$listjson = array();
+		
+		$dbases = Dbase::find(array(
+			'conditions' => 'idAccount = ?1',
+			'bind' => array(1 => $account->idAccount)
+		));
+		
+		foreach ($dbases as $dbase) {
+			foreach ($dbase->contactlist as $contactlist) {
+				$listjson[] = $this->convertContactListToJson($contactlist);
+			}
+		}
+		
+		return $listjson;
+	}
+	
 	public function convertContactListToJson($contactlist)
 	{
 		$object = array();

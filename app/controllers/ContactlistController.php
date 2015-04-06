@@ -34,6 +34,16 @@ class ContactlistController extends ControllerBase
 //		
 //		$this->view->setVar("totalFields", $totalFields);
 //		$this->view->setVar("fields", $arrayFields);
+		
+		$phql = "	SELECT c.* 
+					FROM Customfield AS c 
+						JOIN Dbase AS d ON (c.idDbase = d.idDbase) 
+						JOIN Account AS a ON (d.idAccount = a.idAccount) 
+					WHERE a.idAccount = {$this->user->idAccount}";
+		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
+		$fields = $modelsManager->executeQuery($phql);
+		
+		$this->view->setVar("fields", $fields);
 	}
 	
 	public function showAction($id)
