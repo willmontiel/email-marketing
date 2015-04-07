@@ -8,7 +8,7 @@
 	{{ '{{#link-to "forms.updating" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-plus"></span> Crear nuevo formulario de actualización{{ '{{/link-to}}' }}
 	</div>
 	<div class="space"></div>
-	<table class="table table-striped">
+	<table class="table table-striped table-contacts">
 		<thead>
 		<tr>
 			<td> Nombre </td>
@@ -31,15 +31,15 @@
 				<td>
 					<div class="text-right">
 						{{ '{{#if framecode}}' }}
-							<a class="btn btn-default btn-sm extra-padding" onClick="preview({{'{{ unbound id }}'}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
-								<span class="glyphicon glyphicon-eye-open"></span> Previsualizar
-							</a>
 							{{ '{{#if isInscription}}' }}
-								{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-th"></span> Codigo{{ '{{/link-to}}' }}
+								{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-th"></span> Iframe{{ '{{/link-to}}' }}
 								{{ '{{#link-to "forms.html" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-th"></span> HTML{{ '{{/link-to}}' }}
 							{{ '{{else}}' }}
 								{{ '{{#link-to "forms.link" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-link"></span> Enlace{{ '{{/link-to}}' }}
 							{{ '{{/if}}' }}
+							<a class="btn btn-default btn-sm extra-padding" onClick="preview({{'{{ unbound id }}'}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
+								<span class="glyphicon glyphicon-eye-open"></span> Previsualizar
+							</a>
 						{{ '{{/if}}' }}
 							
 						{{ '{{#if isInscription}}' }}
@@ -75,38 +75,54 @@
 
 <script type="text/x-handlebars" data-template-name="forms/setup">
 	<h4 class="sectiontitle">Crear nuevo formulario</h4>
-	{{ partial("dbase/partials/form_information_view_partial") }}
+	{{ partial("contactlist/partials/form_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/updating">
 	<h4 class="sectiontitle">Crear nuevo formulario de actualización</h4>
-	{{ partial("dbase/partials/form_update_information_view_partial") }}
+	{{ partial("contactlist/partials/form_update_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/new">
 	<div class="row">
 		<div class="col-md-11 col-sm-12 col-xs-12 top-editor-form"></div>
 		<div class="col-md-11 col-sm-12 col-xs-12 outline-editor-form">
-			<div class="col-md-8 col-sm-12 col-xs-12 col-md-offset-1 border edit-form-out-zone">
+			<div class="col-md-9 col-sm-12 col-xs-12 border edit-form-out-zone">
 				<div id="header-zone"></div>
 				<div class="form-horizontal form-full-content"></div>
 
 				<div class="form-horizontal form-full-button"></div>
 			</div>
-			<div class="col-md-3 col-sm-12 col-xs-12" id="accordion" role="tablist">
-				<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-					<h6 class="sectiontitle title-fields-options">Campos para agregar al formulario</h6>
-				</a>
-				<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-					<div class="form-menu">
+			<div class="col-md-3 col-sm-12 col-xs-12 form-opt-out-zone" id="accordion" role="tablist" aria-multiselectable="true">
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="headingOne">
+						 <h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+								Campos para agregar al formulario
+							</a>
+						</h4>
+					</div>
+					<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+						<div class="panel-body">
+							<div class="form-menu">
+							</div>
+						</div>
 					</div>
 				</div>
-				
-				<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-					<h6 class="sectiontitle title-fields-options">Herramientas del formulario</h6>
-				</a>
-				<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-					<div class="form-adv-tools">
+		
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="headingTwo">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+								Herramientas del formulario
+							</a>
+						</h4>
+					</div>
+					<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+						<div class="panel-body">
+							<div class="form-adv-tools">
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -126,12 +142,12 @@
 
 <script type="text/x-handlebars" data-template-name="forms/edit">
 		<h4 class="sectiontitle">Editar formulario</h4>
-	{{ partial("dbase/partials/form_information_view_partial") }}
+	{{ partial("contactlist/partials/form_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/editupdate">
 	<h4 class="sectiontitle">Editar formulario</h4>
-	{{ partial("dbase/partials/form_update_information_view_partial") }}
+	{{ partial("contactlist/partials/form_update_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/remove">

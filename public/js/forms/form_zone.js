@@ -247,17 +247,19 @@ FormEditor.prototype.unpersist = function(obj) {
 	
 	if(jsonobj.header_zone !== undefined){
 		this.header.unpersist(jsonobj.header_zone);
-		this.header.designHeaderZone();
 	}
+	this.header.designHeaderZone();
+	
 	if(jsonobj.button_zone !== undefined){
 		this.button.unpersist(jsonobj.button_zone);
-		this.button.designButtonField();
 	}
+	this.button.designButtonField();
+	
 	if(jsonobj.properties_zone !== undefined){
 		this.adv_tools.unpersist(jsonobj.properties_zone);
-		this.adv_tools.designZone();
-		this.adv_tools.applyChanges();
 	}
+	this.adv_tools.designZone();
+	this.adv_tools.applyChanges();
 			
 	var content = jsonobj.content;
 	for(var i = 0; i < content.length; i++) {

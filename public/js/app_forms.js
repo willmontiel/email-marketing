@@ -20,6 +20,7 @@ App.Form = DS.Model.extend({
 	updatenotify: DS.attr( 'boolean' ),
 	updatenotifymail: DS.attr( 'string' ),
 	listselected: DS.attr( 'string' ),
+	dbaseselected: DS.attr( 'string' ),
 	content: DS.attr( 'string' ),
 	framecode: DS.attr( 'string' ),
 	html: DS.attr( 'string' ),
@@ -166,7 +167,7 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 									mail: notify_mail }) );
 		}
 		
-		if( form.get('listselected') === undefined ) {
+		if( form.get('listselected') === undefined  || form.get('listselected') === 'none' || form.get('listselected') === null ) {
 			return {acceptance: false, msg: 'Recuerde seleccionar una "LISTA"'};
 		}
 		
@@ -262,7 +263,9 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 	loadData: function() {
 		var t = this;
 		this.set('listselectedvalue', this.content.get('listselected'));
-		this.store.find('list').then(function(list) {
+		
+		var idDbase = this.get('dbaseselected');
+		this.store.find('list', { dbase: idDbase }).then(function(list) {
 			var lists = list.get('content');
 			var values = [];
 			for(var i = 0; i < lists.length; i++) {
@@ -361,8 +364,8 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 									reply: form.get('notifyreplyto'),
 									mail: notify_mail }) );
 		}
-		
-		if( form.get('listselected') === undefined ) {
+
+		if( form.get('listselected') === undefined  || form.get('listselected') === 'none' || form.get('listselected') === null ) {
 			return {acceptance: false, msg: 'Recuerde seleccionar una "LISTA"'};
 		}
 		
@@ -500,6 +503,19 @@ App.FormsUpdatingRoute = Ember.Route.extend({
 });
 
 App.FormsUpdatingController = Ember.ObjectController.extend( Ember.SaveFormHandlerMixin, {
+	selectofdbases: [],
+	setSelectOfDbases: function() {
+		var t = this;
+		this.store.find('dbase').then(function(dbase) {
+			var dbases = dbase.get('content');
+			var values = [];
+			for(var i = 0; i < dbases.length; i++) {
+				var obj = {id: dbases[i].get('id'), name: dbases[i].get('name')};
+				values.push(obj);
+			}
+			t.set('selectofdbases', values);
+		});
+	}.observes('content'),
 	cleanEditor: function() {
 		$('.title-advanced-editor').empty();
 		$('.here-comes-frame').empty();
@@ -542,6 +558,10 @@ App.FormsUpdatingController = Ember.ObjectController.extend( Ember.SaveFormHandl
 									fromname: form.get('notifyfromname'),
 									reply: form.get('notifyreplyto'),
 									mail: notify_mail }) );
+		}
+		
+		if( form.get('dbaseselected') === undefined  || form.get('dbaseselected') === 'none' || form.get('dbaseselected') === null ) {
+			return {acceptance: false, msg: 'Recuerde seleccionar una "BASE DE DATOS"'};
 		}
 		
 		return {acceptance: true, msg: ''};
@@ -616,9 +636,35 @@ App.FormsEditupdateRoute = Ember.Route.extend({
 });
 
 App.FormsEditupdateController = Ember.ObjectController.extend( Ember.SaveFormHandlerMixin, {
+	selectofdbases: [],
+	setSelectOfDbases: function() {
+		if(this.content.get('dbaseselected') === undefined) {
+			this.content.set('dbaseselected', this.get('dbaseselectedvalue'));
+		}
+	}.observes('content.dbaseselected'),
+			
+	somefunc: function() {
+		console.log($('#email-notify'))
+	}.property('notify'),
+	
 	loadData: function() {
+		var t = this;
+		this.set('dbaseselectedvalue', this.content.get('dbaseselected'));
+		this.store.find('dbase').then(function(dbase) {
+			var dbases = dbase.get('content');
+			var values = [];
+			for(var i = 0; i < dbases.length; i++) {
+				var obj = {id: dbases[i].get('id'), name: dbases[i].get('name')};
+				values.push(obj);
+				if(dbases[i].get('id') == t.content.get('dbaseselected')) {
+					t.set('dbaseselectedfield', obj);
+				}
+			}
+			t.set('selectofdbases', values);
+		});
+		
 		var form = this.content;
-
+		
 		var updatenotifyinfo = JSON.parse(form.get('updatenotifymail'));
 		if( updatenotifyinfo ) {
 			form.set('mailforupdatenotify', updatenotifyinfo.mail);
@@ -627,7 +673,7 @@ App.FormsEditupdateController = Ember.ObjectController.extend( Ember.SaveFormHan
 			form.set('updatenotifyfromname', updatenotifyinfo.fromname);
 			form.set('updatenotifyreplyto', updatenotifyinfo.reply);
 		}
-		
+
 		var notifyinfo = JSON.parse(form.get('notifymail'));
 		if( notifyinfo ) {
 			form.set('mailfornotify', notifyinfo.mail);
@@ -679,6 +725,10 @@ App.FormsEditupdateController = Ember.ObjectController.extend( Ember.SaveFormHan
 									fromname: form.get('notifyfromname'),
 									reply: form.get('notifyreplyto'),
 									mail: notify_mail }) );
+		}
+
+		if( form.get('dbaseselected') === undefined  || form.get('dbaseselected') === 'none' || form.get('dbaseselected') === null ) {
+			return {acceptance: false, msg: 'Recuerde seleccionar una "BASE DE DATOS"'};
 		}
 		
 		return {acceptance: true, msg: ''};

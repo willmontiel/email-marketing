@@ -16,7 +16,7 @@ class FormCreator
 		$jsoncontent = json_decode($form->content);
 		$content = $jsoncontent->content;
 		
-		$html_content = $this->getHtmlStyles() . '<form method="post" action="' . $this->getLinkAction($form) . '" class="sm-big-container" style="width:600px; background-color: ' . $jsoncontent->properties_zone->background_color . ';">';
+		$html_content = $this->getHtmlStyles() . '<form method="post" action="' . $this->getLinkAction($form) . '" class="sm-big-container" style="width:' . $jsoncontent->properties_zone->size . 'px; background-color: ' . $jsoncontent->properties_zone->background_color . ';">';
 		
 		if($jsoncontent->header_zone->active) {
 			$html_content.= $this->getHeader($jsoncontent->header_zone);

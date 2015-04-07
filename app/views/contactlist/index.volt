@@ -10,6 +10,8 @@
 	{{ stylesheet_link('css/jquery-ui.css') }}
 	{{ javascript_include('vendors/bootstrap_v2/spectrum/js/spectrum.js') }}
 	{{ stylesheet_link('vendors/bootstrap_v2/spectrum/css/spectrum.css') }}
+	{{ stylesheet_link('vendors/bootstrap-tagsinput/bootstrap-tagsinput.css')}}
+	{{ javascript_include('vendors/bootstrap-tagsinput/bootstrap-tagsinput.js')}}
 	{{ javascript_include('js/mixin_pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/mixin_save_form.js') }}
@@ -18,6 +20,9 @@
 	{{ javascript_include('js/app_list.js') }}
 	{{ javascript_include('js/app_blockedemail.js') }}
 	<script type="text/javascript">
+		Ember.TextField.reopen({
+			attributeBindings: ['data-role']
+		});
 		// ACL de blocked emails:
 		App.blockedemailACL = {
 			canCreate: {{ acl_Ember('api::addemailtoblockedlist')}},

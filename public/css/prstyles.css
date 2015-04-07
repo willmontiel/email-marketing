@@ -367,6 +367,13 @@ body {
 	background-color: #FCFCFC;
 	padding: 25px 0;
 }
+.form-opt-out-zone .panel{
+	margin-bottom: 5px !important;
+}
+.form-opt-out-zone{
+	margin-top: 10px;
+}
+.panel-default
 .top-editor-form {
 	height: 30px;
 	background-color: #00BEDE;
@@ -498,7 +505,7 @@ body {
 .field-content-zone.field-content-zone-header{
 /*	border: 5px solid transparent;
 	border-radius: 6px;*/
-	height: 90px;
+	/*height: 90px;*/
 }
 /*.field-content-zone.field-content-zone-header:hover{
 	border: 5px solid #46B352;
@@ -536,17 +543,22 @@ body {
 ul.adv_tools_list{
 	padding: 5px;
 }
-.form-toolbar-spinner{
-	width: 16px;
+.form-toolbar-spinner, .form-adv-toolbar-spinner{
 	font-size: 13px !important;
 	text-align: end;
 }
-.field-edit-zone-row span.ui-icon{
+.form-toolbar-spinner {
+	width: 16px;
+}
+.form-adv-toolbar-spinner{
+	width: 35px;
+}
+.field-edit-zone-row span.ui-icon, .adv_tools_list span.ui-icon{
 	text-indent: 0;
 	top: 60%;
 	font-size: 10px !important;
 }
-.field-edit-zone-row a.ui-spinner-button{
+.field-edit-zone-row a.ui-spinner-button, .adv_tools_list a.ui-spinner-button{
 	cursor: pointer;
 } 
 .field-edit-zone-row .ui-spinner{

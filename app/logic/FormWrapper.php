@@ -105,6 +105,7 @@ class FormWrapper extends BaseWrapper
 		$jsonObject['title'] = $phObject->title;
 		$jsonObject['content'] = $phObject->content;
 		$jsonObject['listselected'] = $phObject->target;
+		$jsonObject['dbaseselected'] = $phObject->idDbase;
 		$jsonObject['urlsuccess'] = $phObject->urlSuccess;
 		$jsonObject['urlerror'] = $phObject->urlError;
 		$jsonObject['welcomeurl'] = $phObject->welcomeUrl;
@@ -211,11 +212,37 @@ class FormWrapper extends BaseWrapper
 		return $listjson;
 	}
 	
+	public function getAccountDbasesInJson(Account $account)
+	{
+		$dbasejson = array();
+		
+		$dbases = Dbase::find(array(
+			'conditions' => 'idAccount = ?1',
+			'bind' => array(1 => $account->idAccount)
+		));
+		
+		foreach ($dbases as $dbase) {
+			$dbasejson[] = $this->convertDbaseToJson($dbase);
+		}
+		
+		return $dbasejson;
+	}
+	
 	public function convertContactListToJson($contactlist)
 	{
 		$object = array();
 		$object['id'] = $contactlist->idContactlist;
 		$object['name'] = $contactlist->name;
+		$object['dbase'] = $contactlist->idDbase;
+		return $object;
+	}
+	
+	public function convertDbaseToJson($dbase)
+	{
+		$object = array();
+		$object['id'] = $dbase->idDbase;
+		$object['name'] = $dbase->name;
+		$object['color'] = $dbase->color;
 		return $object;
 	}
 	

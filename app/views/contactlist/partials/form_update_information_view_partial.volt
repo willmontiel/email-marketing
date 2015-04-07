@@ -138,6 +138,26 @@
 			</div>
 			{{ '{{/if}} '}}	
 			
+			{#Dbase#}
+			<div class="clearfix"></div>
+			<div class="space"></div>
+			<div class="form-group">
+				<label for="list-attachment" class="col-sm-3 control-label">Base de datos: </label>
+				<div class="col-md-6">
+					{{ '{{view Ember.Select
+							contentBinding="selectofdbases"
+							optionValuePath="content.id"
+							optionLabelPath="content.name"
+							valueBinding="dbaseselected"
+							selectionBinding="dbaseselectedfield"
+							prompt="Seleccione una base de datos"
+							class="form-control"
+						}}'
+					}}
+				</div>
+			</div>	
+			
+			
 			{# Botones #}
 			<div class="clearfix"></div>
 			<div class="space"></div>

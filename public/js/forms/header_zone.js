@@ -21,9 +21,13 @@ ZoneHeader.prototype.desingOptionZone = function(adv_tools) {
 	this.option.on('click', function() {
 		if(t.active === false){
 			t.active = true;
+			t.option.find('.opt-adv-header').addClass('field-option-disabled');
 			t.designHeaderZone();
 		}
 	});
+	if(this.active){
+		this.option.find('.opt-adv-header').addClass('field-option-disabled');
+	}
 };
 
 ZoneHeader.prototype.designHeaderZone = function() {
@@ -61,6 +65,7 @@ ZoneHeader.prototype.startZoneEvents = function() {
 	this.content.find('.delete-field').on('click', function(){
 		t.content.remove();
 		t.active = false;
+		t.option.find('.opt-adv-header').removeClass('field-option-disabled');
 	});
 };
 

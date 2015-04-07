@@ -8,6 +8,7 @@ function ToolsZone(content_zone, content_header, button_zone){
 	this.font_size = '14';
 	this.background_color = '#FCFCFC';
 	this.color = '#333333';
+	this.size = '600';
 };
 
 ToolsZone.prototype.designZone = function() {
@@ -18,6 +19,7 @@ ToolsZone.prototype.designZone = function() {
 	this.colorFormBackground();
 	this.fontFamilyFields();
 	this.fontSizeFields();
+	this.formSize();
 };
 
 ToolsZone.prototype.addOptInZone = function(opt) {
@@ -31,6 +33,7 @@ ToolsZone.prototype.applyChanges = function() {
 	this.button_zone.updateStyle('background-color', this.background_color);
 	this.content_zone.updateStyle('font-family', this.family);
 	this.content_zone.updateStyle('font-size', this.font_size + 'px');
+	this.changeSize(this.size);
 };
 
 ToolsZone.prototype.colorFontFields = function() {
@@ -147,12 +150,36 @@ ToolsZone.prototype.fontSizeFields = function() {
 	});	
 };
 
+ToolsZone.prototype.formSize = function() {
+	var id = 'form-opt-size';
+	var sizeSpinner = $('<li class="edit-row-in-zone"><div>Tamaño del formulario: </div><input id="' + id + '" class="form-adv-toolbar-spinner" value=' + this.size + '></li>');
+	this.content.append(sizeSpinner);
+	
+	var t = this;
+	
+	$('#' + id).spinner({min: 380, max: 1000,
+		stop: function() {
+			if($(this).val() > 380 && $(this).val() < 1000) {
+				t.size = $(this).val();
+				t.changeSize(t.size);
+			}
+		}
+	});
+};
+
+ToolsZone.prototype.changeSize = function(size) {
+	this.content_zone.updateStyle('width', size + 'px');
+	this.content_header.updateStyle('width', size + 'px');
+	this.button_zone.updateStyle('width', size + 'px');
+};
+
 ToolsZone.prototype.persist = function() {
 	var obj = {
 		family: this.family,
 		font_size: this.font_size,
 		background_color: this.background_color,
 		color: this.color,
+		size: this.size
 	};
 	
 	return obj;
@@ -162,5 +189,6 @@ ToolsZone.prototype.unpersist = function(obj) {
 	this.family = obj.family;
 	this.font_size =	obj.font_size;
 	this.background_color = obj.background_color; 
-	this.color = obj.color; 
+	this.color = obj.color;
+	this.size = obj.size;
 };

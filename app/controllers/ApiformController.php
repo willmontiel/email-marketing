@@ -29,12 +29,13 @@ class ApiformController extends ControllerBase
 				}
 				
 				$lists = $wrapper->getAccountListsInJson($this->user->account);
+				$dbases = $wrapper->getAccountDbasesInJson($this->user->account);
 			}
 			catch (\Exception $e) {
 				$this->logger->log('Exception: [' . $e . ']');
 				return $this->setJsonResponse(array('status' => 'error'), 400, $e);	
 			}
-			return $this->setJsonResponse(array('forms' => $formlist, 'lists' => $lists,), 201, 'Success');
+			return $this->setJsonResponse(array('forms' => $formlist, 'lists' => $lists, 'dbase' => $dbases), 201, 'Success');
 		}
 		return $this->setJsonResponse(array('status' => 'failed'), 500, 'error');
 	}
@@ -76,18 +77,33 @@ class ApiformController extends ControllerBase
 		$contentsraw = $this->getRequestContent();
 		$contentsT = json_decode($contentsraw);
 		
-		$contactlist = Contactlist::findFirst(array(
-			'conditions' => 'idContactlist = ?1',
-			'bind' => array(1 => $contentsT->form->listselected)
-		));
-		
-		if (!$contactlist) {
-			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró la lista de contactos');
+		if($contentsT->form->type == 'Inscription'){
+			$contactlist = Contactlist::findFirst(array(
+				'conditions' => 'idContactlist = ?1',
+				'bind' => array(1 => $contentsT->form->listselected)
+			));
+
+			if (!$contactlist) {
+				return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró la lista de contactos');
+			}
+			
+			$dbase = $contactlist->dbase;
+		}
+		else if($contentsT->form->type == 'Updating'){
+			$dbase = Dbase::findFirst(array(
+				'conditions' => 'idDbase = ?1 AND idAccount = ?2',
+				'bind' => array(1 => $contentsT->form->dbaseselected,
+								2 => $this->user->account->idAccount)
+			));
+
+			if (!$dbase) {
+				return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró la base de datos');
+			}
 		}
 		
 		try {
 			$wrapper = new FormWrapper();
-			$wrapper->setDbase($contactlist->dbase);
+			$wrapper->setDbase($dbase);
 			$form = $wrapper->saveInformation($contentsT->form);
 		}
 		catch (\Exception $e) {
