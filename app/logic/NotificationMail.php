@@ -27,6 +27,11 @@ class NotificationMail extends TestMail
 	{
 		$this->receiver[$this->contact->email->email] = $this->contact->name;
 	}
+	
+	public function setSubject($subject)
+	{
+		$this->subject = $subject;
+	}
 
 	public function setNotifyReceiver($email_array, $name_array)
 	{
@@ -59,7 +64,7 @@ class NotificationMail extends TestMail
 		$transport = Swift_SendmailTransport::newInstance();
 		$swift = Swift_Mailer::newInstance($transport);
 		
-		$this->subject = $sender->subject;
+//		$this->subject = $sender->subject;
 		
 		$from_email = trim($sender->fromemail);
 		if( !\filter_var($from_email, FILTER_VALIDATE_EMAIL) ) {
@@ -71,7 +76,7 @@ class NotificationMail extends TestMail
 		$content = $this->getBody();
 		$text = $this->getPlainText();
 		$replyTo = $sender->reply;
-		
+
 		$message = new Swift_Message($this->subject);
 		$message->setFrom($from);
 		$message->setBody($content, 'text/html');
@@ -158,5 +163,6 @@ class NotificationMail extends TestMail
 		$link = $linkdecoder->encodeLink($action, $parameters);
 		
 		$this->body = str_replace('%%CONFIRMLINK%%', $link, $this->body);
+		$this->plainText = str_replace('%%CONFIRMLINK%%', $link, $this->plainText);
 	}
 }
