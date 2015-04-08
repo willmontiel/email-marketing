@@ -168,6 +168,9 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 			if( form.get('optinsubject') === undefined || form.get('optinsubject').trim().length === 0 || form.get('optinfromemail') === undefined || form.get('optinfromemail').trim().length === 0 ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para OPTIN'};
 			}
+			if( form.get('welcomeurl') === undefined || form.get('welcomeurl').trim().length === 0 ) {
+				return {acceptance: false, msg: 'Recuerde dar la URL de BIENVENIDA'};
+			}
 			var optin_mail = ( form.get('mailforoptin') === undefined ) ?  JSON.stringify(App.defaultmailoptin) : form.get('mailforoptin');
 			
 			form.set('optinmail', JSON.stringify({	
@@ -240,8 +243,8 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 			}
 			objMail = ( mail === undefined ) ? maildefault : mail;
 			
-			$('.title-advanced-editor').html('<h5>Correo de ' + msg + ' </h5>');
-			$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
+			$('.title-advanced-editor').html('<h4>Correo de ' + msg + ' </h4>');
+			$('.here-comes-frame').html('<iframe id="iframeEditor" style="border: 0 !important;" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
 			$('#btn-for-' + option).show();
 		},
 		create_optin_mail: function(form) {
@@ -366,6 +369,11 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 			if( form.get('optinsubject') === undefined || form.get('optinsubject').trim().length === 0 || form.get('optinfromemail') === undefined || form.get('optinfromemail').trim().length === 0 ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para OPTIN'};
 			}
+			
+			if( form.get('welcomeurl') === undefined || form.get('welcomeurl').trim().length === 0 ) {
+				return {acceptance: false, msg: 'Recuerde dar la URL de BIENVENIDA'};
+			}
+			
 			var optin_mail = ( form.get('mailforoptin') === undefined ) ? JSON.stringify(App.defaultmailoptin) : form.get('mailforoptin');
 			
 			form.set('optinmail', JSON.stringify({	
@@ -437,8 +445,8 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 			}
 			objMail = ( mail === undefined ) ? maildefault : mail;
 			
-			$('.title-advanced-editor').html('<h5>Correo de ' + msg + ' </h5>');
-			$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
+			$('.title-advanced-editor').html('<h4>Correo de ' + msg + ' </h4>');
+			$('.here-comes-frame').html('<iframe id="iframeEditor" style="border: 0 !important;" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
 			$('#btn-for-' + option).show();
 		},
 		create_optin_mail: function(form) {
@@ -627,8 +635,8 @@ App.FormsUpdatingController = Ember.ObjectController.extend( Ember.SaveFormHandl
 			}
 			objMail = ( mail === undefined ) ? maildefault : mail;
 			
-			$('.title-advanced-editor').html('<h5>Correo de ' + msg + ' </h5>');
-			$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
+			$('.title-advanced-editor').html('<h4>Correo de ' + msg + ' </h4>');
+			$('.here-comes-frame').html('<iframe id="iframeEditor" style="border: 0 !important;" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
 			$('#btn-for-' + option).show();
 		},
 		create_notify_contact_mail: function(form) {
@@ -689,9 +697,9 @@ App.FormsEditupdateController = Ember.ObjectController.extend( Ember.SaveFormHan
 			var dbases = dbase.get('content');
 			var values = [];
 			for(var i = 0; i < dbases.length; i++) {
-				var obj = {id: dbases[i].get('id'), name: dbases[i].get('name')};
-				values.push(obj);
 				if(dbases[i].get('id') == t.content.get('dbaseselected')) {
+					var obj = {id: dbases[i].get('id'), name: dbases[i].get('name')};
+					values.push(obj);
 					t.set('dbaseselectedfield', obj);
 				}
 			}
@@ -791,8 +799,8 @@ App.FormsEditupdateController = Ember.ObjectController.extend( Ember.SaveFormHan
 			}
 			objMail = ( mail === undefined ) ? maildefault : mail;
 			
-			$('.title-advanced-editor').html('<h5>Correo de ' + msg + ' </h5>');
-			$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
+			$('.title-advanced-editor').html('<h4>Correo de ' + msg + ' </h4>');
+			$('.here-comes-frame').html('<iframe id="iframeEditor" style="border: 0 !important;" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
 			$('#btn-for-' + option).show();
 		},
 		create_notify_contact_mail: function(form) {

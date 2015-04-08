@@ -174,7 +174,7 @@
 	<form class="form-inline" role="form">
 		<div class="title-advanced-editor form-group">
 		</div>
-		<div class="form-group">
+		<div class="btn-mail-form">
 			<a class="btn btn-default extra-padding" data-toggle="modal" href="#preview-modal" onClick="verHTML()"><span class="glyphicon glyphicon-search"></span> Previsualizar</a>
 		</div>
 	</form>

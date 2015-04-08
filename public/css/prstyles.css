@@ -293,6 +293,17 @@ body {
 #myModalFormPreview .modal-dialog {
 	width: 600px !important;
 }
+.btn-mail-form{
+	float: right;
+	margin-right: 15px;
+}
+.create-email-spot form {
+	text-align: center;
+}
+.title-advanced-editor h4 {
+	font-weight: bold;
+	color: #6998D7;
+}
 #myModalFormPreview .modal-body {
 	height: 450px !important;
 }
