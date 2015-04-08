@@ -14,9 +14,9 @@ class ApiformController extends ControllerBase
 	{
 		
 		$phql = "	SELECT f.* 
-					FROM form AS f 
-						JOIN dbase AS d ON (f.idDbase = d.idDbase) 
-						JOIN account AS a ON (d.idAccount = a.idAccount) 
+					FROM Form AS f 
+						JOIN Dbase AS d ON (f.idDbase = d.idDbase) 
+						JOIN Account AS a ON (d.idAccount = a.idAccount) 
 					WHERE a.idAccount = {$this->user->idAccount}";
 		$modelsManager = Phalcon\DI::getDefault()->get('modelsManager');
 		$forms = $modelsManager->executeQuery($phql);
