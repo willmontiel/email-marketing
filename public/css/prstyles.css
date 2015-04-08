@@ -290,15 +290,21 @@ body {
 /* Fin cuentas de RRSS */
 
 /*-----------------//-----------------// FORMULARIOS //-----------------//-----------------*/
-
+#myModalFormPreview .modal-dialog {
+	width: 600px !important;
+}
+#myModalFormPreview .modal-body {
+	height: 450px !important;
+}
 .form-options {
-	background-color: rgb(228, 228, 228);
-	line-height: 2.4;
+	background-color: #6998D7;
+	line-height: 1.4;
 	text-align: center;
 	padding: 10px;
 	border: 1px dashed lightgray;
 	cursor: pointer;
 	display: block;
+	color: white;
 }
 .form-full-button {
 	margin-top: -15px;
@@ -373,12 +379,24 @@ body {
 .form-opt-out-zone{
 	margin-top: 10px;
 }
-.panel-default
+.edit-form-adv-tools{
+	border: 0px dashed #68a6ce;
+	border-bottom-width: 2px;
+	padding: 15px 0;
+}
+.name-form-adv-tools{
+	float: left;
+	margin-right: 10px;
+}
+.edit-form-adv-tools select{
+	width: 50%;
+}
 .top-editor-form {
 	height: 30px;
 	background-color: #00BEDE;
 	border-top-left-radius: 8px;
 	border-top-right-radius: 8px;
+	margin-top: 1%;
 }
 .outline-editor-form{
 	border: solid 1px #A2C8E8;

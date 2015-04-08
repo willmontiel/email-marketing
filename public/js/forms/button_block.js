@@ -86,7 +86,7 @@ ButtonBlock.prototype.getEditZone = function() {
 	var right = '';
 	var color_id = 'color-btn-toolbar';
 	var bckg_id = 'color-btn-background-toolbar';
-	var width_id = 'btn-width-toolbar';
+//	var width_id = 'btn-width-toolbar';
 //	var height_id = 'btn-height-toolbar';
 	
 	if(this.bold) {
@@ -123,7 +123,7 @@ ButtonBlock.prototype.getEditZone = function() {
 	this.fontSpecialEvent(zone.designFontOptField(size, family, bold));
 	this.alignSpecialEvent(zone.designFontAlignField(left, center, right));
 	this.backgroundSpecialEvent(zone.designColorField(bckg_id), bckg_id);
-	this.spinnerSpecialEvent(zone.designSpinnerField(width_id, this.width), width_id, 'width');
+//	this.spinnerSpecialEvent(zone.designSpinnerField(width_id, this.width), width_id, 'width');
 //	this.spinnerSpecialEvent(zone.designSpinnerField(height_id, this.height), height_id, 'height');
 	var edit = zone.getZone();
 	

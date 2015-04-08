@@ -22,6 +22,7 @@ App.Router.map(function() {
 	  this.route('updating');
 	  this.route('index');
 	  this.route('new', { path: '/editor/:form_id'});
+	  this.route('newupdate', { path: '/editor/update/:form_id'});
 	  this.route('edit', { path: '/edit/:form_id'});
 	  this.route('editupdate', { path: '/edit/update/:form_id'});
 	  this.route('remove', { path: '/remove/:form_id'});

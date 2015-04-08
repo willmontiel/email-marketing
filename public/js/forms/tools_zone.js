@@ -15,15 +15,15 @@ ToolsZone.prototype.designZone = function() {
 	this.content = $('<ul class="adv_tools_list"></ul>');
 	$('.form-adv-tools').append(this.content);
 	
-	this.colorFontFields();
 	this.colorFormBackground();
-	this.fontFamilyFields();
+	this.colorFontFields();
 	this.fontSizeFields();
+	this.fontFamilyFields();
 	this.formSize();
 };
 
 ToolsZone.prototype.addOptInZone = function(opt) {
-	this.content.append(opt);
+	this.content.prepend(opt);
 };
 
 ToolsZone.prototype.applyChanges = function() {
@@ -39,7 +39,7 @@ ToolsZone.prototype.applyChanges = function() {
 ToolsZone.prototype.colorFontFields = function() {
 	var t = this;
 	
-	this.content.append($('<li><div>Color Fuente: </div><div><input type="text" id="color-font-toolbar" name="color-font-toolbar" class="pick-a-color"></div></li>'));
+	this.content.append($('<li class="edit-form-adv-tools"><div class="name-form-adv-tools">Fuente: </div><div><input type="text" id="color-font-toolbar" name="color-font-toolbar" class="pick-a-color"></div></li>'));
 	
 	$('#color-font-toolbar').spectrum({
 			color: t.color,
@@ -76,8 +76,9 @@ ToolsZone.prototype.colorFontFields = function() {
 
 ToolsZone.prototype.colorFormBackground = function() {
 	var t = this;
+	var with_color = (this.background_color === 'transparent') ? '' : 'checked';
 	
-	this.content.append($('<li><div>Color Fondo: </div><div><input type="text" id="color-background-toolbar" name="color-background-toolbar" class="pick-a-color"></div></li>'));
+	this.content.append($('<li class="edit-form-adv-tools"><div class="name-form-adv-tools">Fondo: <input type="checkbox" id="withbgcolor" ' + with_color + '></div><div><input type="text" id="color-background-toolbar" name="color-background-toolbar" class="pick-a-color"></div></li>'));
 	
 	$('#color-background-toolbar').spectrum({
 			color: t.background_color,
@@ -94,6 +95,7 @@ ToolsZone.prototype.colorFormBackground = function() {
 				t.content_header.updateStyle('background-color', color.toHexString());
 				t.button_zone.updateStyle('background-color', color.toHexString());
 				t.background_color = color.toHexString();
+				$("#withbgcolor")[0].checked = true;
 			},
 			palette: [
 				["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
@@ -112,6 +114,18 @@ ToolsZone.prototype.colorFormBackground = function() {
 				"rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
 			]
 		});
+		
+	$("#withbgcolor").on("click", function () {
+		if(!$(this)[0].checked) {
+			t.background_color = 'transparent';
+		}
+		else {
+			t.background_color = $('#color-background-toolbar').val();
+		}
+		t.content_zone.updateStyle('background-color', t.background_color);
+		t.content_header.updateStyle('background-color', t.background_color);
+		t.button_zone.updateStyle('background-color', t.background_color);
+	});
 };
 
 ToolsZone.prototype.fontFamilyFields = function() {
@@ -123,7 +137,7 @@ ToolsZone.prototype.fontFamilyFields = function() {
 		family+= '<option value="' + this.family_font[i] + '" ' + selected_family + '>' + this.family_font[i] + '</option>';
 	}
 
-	var family_content = $('<li><div>Familia: </div><div><select class="form-control form-font-family">' + family + '</select></div></li>');
+	var family_content = $('<li class="edit-form-adv-tools"><div class="name-form-adv-tools">Tipografia: </div><div><select class="form-control form-font-family">' + family + '</select></div></li>');
 	this.content.append(family_content);
 
 	family_content.find('.form-font-family').change(function(){
@@ -141,7 +155,7 @@ ToolsZone.prototype.fontSizeFields = function() {
 		size+= '<option value="' + this.size_opt[i] + '" ' + selected_size + '>' + this.size_opt[i] + '</option>';
 	}
 	
-	var size_content = $('<li><div>Tamaño: </div><div><select class="form-control form-font-size">' + size + '</select></div></li>');
+	var size_content = $('<li class="edit-form-adv-tools"><div class="name-form-adv-tools">Tamaño: </div><div><select class="form-control form-font-size">' + size + '</select></div></li>');
 	this.content.append(size_content);
 	
 	size_content.find('.form-font-size').change(function(){
@@ -152,14 +166,14 @@ ToolsZone.prototype.fontSizeFields = function() {
 
 ToolsZone.prototype.formSize = function() {
 	var id = 'form-opt-size';
-	var sizeSpinner = $('<li class="edit-row-in-zone"><div>Tamaño del formulario: </div><input id="' + id + '" class="form-adv-toolbar-spinner" value=' + this.size + '></li>');
+	var sizeSpinner = $('<li class="edit-form-adv-tools"><div class="name-form-adv-tools">Tamaño Formulario: </div><input id="' + id + '" class="form-adv-toolbar-spinner" value=' + this.size + '></li>');
 	this.content.append(sizeSpinner);
 	
 	var t = this;
 	
-	$('#' + id).spinner({min: 380, max: 1000,
+	$('#' + id).spinner({min: 380, max: 750,
 		stop: function() {
-			if($(this).val() > 380 && $(this).val() < 1000) {
+			if($(this).val() > 380 && $(this).val() < 750) {
 				t.size = $(this).val();
 				t.changeSize(t.size);
 			}

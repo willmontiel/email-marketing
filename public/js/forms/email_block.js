@@ -1,4 +1,4 @@
-function EmailBlock(zone, id, name) {
+function EmailBlock(zone, id, name, deleting) {
 	this.zone = zone;
 	this.id = id;
 	this.name = name;
@@ -6,6 +6,7 @@ function EmailBlock(zone, id, name) {
 	this.required = 'Si';
 	this.defaultvalue = '';
 	this.hide = false;
+	this.deleting = deleting;
 }
 
 EmailBlock.prototype.designOptionField = function() {
@@ -13,11 +14,23 @@ EmailBlock.prototype.designOptionField = function() {
 						' + this.name + '\n\
 					</div>');
 	this.zone.createFieldInOptions(this);
+	
+	var t = this;
+	this.option.on('click', function() {
+		t.designField();
+	});
 };
 
 EmailBlock.prototype.designField = function() {
 	var required = (this.required === 'Si') ? '<span class="required">*</span>' : '';
 	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
+	var delete_tool = '';
+	if(this.deleting){
+		delete_tool = '	<div class="form-tool delete-field">\n\
+							<span class="glyphicon glyphicon-trash"></span>\n\
+						</div>';
+	}
+		
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
 						<div class="form-group field-content-zone ' + hide + '">\n\
 							<label class="pull-left field-zone-name control-label">\n\
@@ -33,6 +46,7 @@ EmailBlock.prototype.designField = function() {
 								<div class="form-tool move-field">\n\
 									<span class="glyphicon glyphicon-move"></span>\n\
 								</div>\n\
+								' + delete_tool + '\n\
 							</div>\n\
 						</div>\n\
 					</div>');

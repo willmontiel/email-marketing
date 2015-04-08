@@ -34,7 +34,12 @@ class ContactFormWrapper extends ContactWrapper
 				$name = 'campo' . $fieldname;
 			}
 			
-			$contactObj->$name = (is_array($value)) ? implode(',', $value) : $value ;
+			if(isset($param[2]) && ($param[2] === 'day' || $param[2] === 'month' || $param[2] === 'year') && isset($contactObj->$name)){
+				$contactObj->$name.= '/'.$value;
+			}
+			else {
+				$contactObj->$name = (is_array($value)) ? implode(',', $value) : $value ;
+			}
 		}
 
 		$this->setAllValuesInContact($contactObj);
@@ -49,6 +54,7 @@ class ContactFormWrapper extends ContactWrapper
 	public function createContactFromForm($fields)
 	{
 		$contactObj = $this->setFieldsToWrapper($fields);
+		$this->logger->log(print_r($fields, true));
 		$this->logger->log('Nuevo contacto por formulario');
 		$this->logger->log(print_r($contactObj, true));
 		$contact = $this->addExistingContactToListFromDbase($contactObj->email, $this->contactlist, true, true);

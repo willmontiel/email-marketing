@@ -1,5 +1,6 @@
 
-function FormEditor() {
+function FormEditor(type) {
+	this.type = type;
 	this.content = [];
 	this.options = [];
 }
@@ -46,7 +47,12 @@ FormEditor.prototype.designDefaultFields = function() {
 };
 
 FormEditor.prototype.designCustomFields = function() {
-	var email = new EmailBlock(this, 'email', 'Email', false);
+	var formtype = false;
+	if(this.type === 'Updating'){
+		formtype = true;
+	}
+	
+	var email = new EmailBlock(this, 'email', 'Email', formtype);
 	email.designOptionField();
 	
 	var name = new TxtBlock(this, 'name', 'Nombre', 'Si', false);

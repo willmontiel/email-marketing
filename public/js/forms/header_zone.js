@@ -15,7 +15,7 @@ function ZoneHeader(zone) {
 
 ZoneHeader.prototype.desingOptionZone = function(adv_tools) {
 	this.adv_tools = adv_tools;
-	this.option = $('<li><div class="btn btn-default btn-sm extra-padding opt-adv-header form-options">Encabezado</div></li>');
+	this.option = $('<li class="edit-form-adv-tools"><div class="btn btn-default btn-sm extra-padding opt-adv-header form-options">Encabezado</div></li>');
 	this.adv_tools.addOptInZone(this.option);
 	var t = this;
 	this.option.on('click', function() {
@@ -51,6 +51,7 @@ ZoneHeader.prototype.designHeaderZone = function() {
 		$('#header-zone').append(this.content);
 		if(this.adv_tools){
 			this.updateStyle('background-color', this.adv_tools.background_color);
+			this.updateStyle('width', this.adv_tools.size + 'px');
 		}
 		this.startZoneEvents();
 	}

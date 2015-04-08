@@ -37,7 +37,7 @@
 							{{ '{{else}}' }}
 								{{ '{{#link-to "forms.link" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-link"></span> Enlace{{ '{{/link-to}}' }}
 							{{ '{{/if}}' }}
-							<a class="btn btn-default btn-sm extra-padding" onClick="preview({{'{{ unbound id }}'}})" title="Previsualizar" data-toggle="modal" data-target="#myModal">
+							<a class="btn btn-default btn-sm extra-padding" onClick="preview({{'{{ unbound id }}'}})" title="Previsualizar" data-toggle="modal" data-target="#myModalFormPreview">
 								<span class="glyphicon glyphicon-eye-open"></span> Previsualizar
 							</a>
 						{{ '{{/if}}' }}
@@ -56,7 +56,7 @@
 		</tbody>
 	</table>
 	
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="myModalFormPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -74,12 +74,12 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/setup">
-	<h4 class="sectiontitle">Crear nuevo formulario</h4>
+	<h1 class="sectiontitle">Crear nuevo formulario de inscripción</h1>
 	{{ partial("contactlist/partials/form_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/updating">
-	<h4 class="sectiontitle">Crear nuevo formulario de actualización</h4>
+	<h1 class="sectiontitle">Crear nuevo formulario de actualización</h1>
 	{{ partial("contactlist/partials/form_update_information_view_partial") }}
 </script>
 
@@ -96,11 +96,11 @@
 			<div class="col-md-3 col-sm-12 col-xs-12 form-opt-out-zone" id="accordion" role="tablist" aria-multiselectable="true">
 				<div class="panel panel-default">
 					<div class="panel-heading" role="tab" id="headingOne">
-						 <h4 class="panel-title">
+						 <h6 class="sectiontitle panel-title">
 							<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-								Campos para agregar al formulario
+								Campos Formulario
 							</a>
-						</h4>
+						</h6>
 					</div>
 					<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 						<div class="panel-body">
@@ -112,11 +112,69 @@
 		
 				<div class="panel panel-default">
 					<div class="panel-heading" role="tab" id="headingTwo">
-						<h4 class="panel-title">
+						<h6 class="sectiontitle panel-title">
 							<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-								Herramientas del formulario
+								Herramientas
 							</a>
-						</h4>
+						</h6>
+					</div>
+					<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+						<div class="panel-body">
+							<div class="form-adv-tools">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="clearfix"></div>
+		<div class="space"></div>
+		<hr>
+		<div class="form-action col-md-offset-1">
+			<button class="btn btn-default btn-sm extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
+			<button class="btn btn-guardar btn-sm extra-padding" {{ '{{action "sendData" this}}' }}>Crear formulario</button>
+		</div>
+		
+	<div class="space"></div>
+	</div>
+</script>
+
+
+<script type="text/x-handlebars" data-template-name="forms/newupdate">
+	<div class="row">
+		<div class="col-md-11 col-sm-12 col-xs-12 top-editor-form"></div>
+		<div class="col-md-11 col-sm-12 col-xs-12 outline-editor-form">
+			<div class="col-md-9 col-sm-12 col-xs-12 border edit-form-out-zone">
+				<div id="header-zone"></div>
+				<div class="form-horizontal form-full-content"></div>
+
+				<div class="form-horizontal form-full-button"></div>
+			</div>
+			<div class="col-md-3 col-sm-12 col-xs-12 form-opt-out-zone" id="accordion" role="tablist" aria-multiselectable="true">
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="headingOne">
+						 <h6 class="sectiontitle panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+								Campos Formulario
+							</a>
+						</h6>
+					</div>
+					<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+						<div class="panel-body">
+							<div class="form-menu">
+							</div>
+						</div>
+					</div>
+				</div>
+		
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="headingTwo">
+						<h6 class="sectiontitle panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+								Herramientas
+							</a>
+						</h6>
 					</div>
 					<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
 						<div class="panel-body">
@@ -141,78 +199,92 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/edit">
-		<h4 class="sectiontitle">Editar formulario</h4>
+	<h1 class="sectiontitle">Editar formulario de inscripción</h1>
 	{{ partial("contactlist/partials/form_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/editupdate">
-	<h4 class="sectiontitle">Editar formulario</h4>
+	<h1 class="sectiontitle">Editar formulario de actualización</h1>
 	{{ partial("contactlist/partials/form_update_information_view_partial") }}
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/remove">
-			<h4 class="sectiontitle">Eliminar un formulario</h4>
-				<div class="box-content padded">			
-					<p>¿Está seguro que desea eliminar el formulario <strong>{{'{{name}}'}}</strong>?</p>
-					{{ '{{#if errors.errormsg}}' }}
-						<div class="alert alert-error">
-							{{ '{{errors.errormsg}}' }}
-						</div>
-					{{ '{{/if}}' }}
-					<button {{'{{action eliminate this}}'}} class="btn btn-delete btn-sm extra-padding">Eliminar</button>
-					<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>	
+		<div class="row">	
+			<h1 class="sectiontitle">Eliminar un formulario</h1>
+			<div class="bs-callout bs-callout-danger">
+				<p>¿Está seguro que desea eliminar el formulario <strong>{{'{{name}}'}}</strong>?</p>
+			</div>
+			{{ '{{#if errors.errormsg}}' }}
+				<div class="alert alert-error">
+					{{ '{{errors.errormsg}}' }}
 				</div>
+			{{ '{{/if}}' }}
+			<div class="form-actions">
+				<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Cancelar</button>	
+				<button {{'{{action eliminate this}}'}} class="btn btn-delete btn-sm extra-padding">Eliminar</button>
 			</div>
 		</div>	
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/code">
 	<div class="row">
-		<h4 class="sectiontitle">Código del formulario</h4>
-		<div class="col-md-6">
-			<div class="bs-callout bs-callout-info">
-				<h4>Código IFrame</h4>
-				<p>Copie y pegue el siguiente código en su página web</p>
-				<div>
-					<textarea rows="4" cols="70">{{ '{{unbound framecode}}' }}</textarea>
+		<h1 class="sectiontitle">Código Iframe del formulario</h1>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="bs-callout bs-callout-info">
+					<h4>Código IFrame</h4>
+					<p>Copie y pegue el siguiente código en su página web</p>
+					<div>
+						<textarea rows="4" cols="70">{{ '{{unbound framecode}}' }}</textarea>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="button-actions">
-			<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Regresar</button>
+		<div class="row">
+			<div class="form-actions">
+				<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Regresar</button>
+			</div>
 		</div>
 	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/html">
 	<div class="row">
-		<h4 class="sectiontitle">Código del formulario</h4>
-		<div class="col-md-6">
-			<div class="bs-callout bs-callout-info">
-				<h4>Código HTML</h4>
-				<p>Copie y pegue el siguiente código en su página web</p>
-				<div>
-					<textarea rows="4" cols="70"><!DOCTYPE html><html><head></head><body>{{ '{{unbound html}}' }}</body></html></textarea>
+		<h1 class="sectiontitle">Código HTML del formulario</h1>
+		<div class="row">
+			<div class="col-md-8">
+				<div class="bs-callout bs-callout-info">
+					<h4>Código HTML</h4>
+					<p>Copie y pegue el siguiente código en su página web</p>
+					<div>
+						<textarea rows="20" cols="90"><!DOCTYPE html><html><head></head><body>{{ '{{unbound html}}' }}</body></html></textarea>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="button-actions">
-			<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Regresar</button>
+		<div class="row">
+			<div class="form-actions">
+				<button class="btn btn-default btn-sm extra-padding" {{ '{{action cancel this}}' }}>Regresar</button>
+			</div>
 		</div>
 	</div>
 </script>
 
 <script type="text/x-handlebars" data-template-name="forms/link">
 	<div class="row">
-		<h4 class="sectiontitle">Enlace Formulario de Actualización</h4>
-		<div class="col-md-6">
-			<div class="bs-callout bs-callout-info">
-				<h4>Recuerde</h4>
-				<p>Seleccione el formulario cuando este creando un correo</p>
+		<h1 class="sectiontitle">Enlace Formulario de Actualización</h1>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="bs-callout bs-callout-info">
+					<h4>Recuerde</h4>
+					<p>Seleccione el formulario cuando este creando un correo</p>
+				</div>
 			</div>
 		</div>
-		<div class="col-md-6 col-md-offset-4">
-			<button class="btn btn-default" {{ '{{action cancel this}}' }}>Regresar</button>
+		<div class="row">
+			<div class="form-actions">
+				<button class="btn btn-default" {{ '{{action cancel this}}' }}>Regresar</button>
+			</div>
 		</div>
 	</div>
 </script>

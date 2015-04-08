@@ -49,16 +49,8 @@ class FormCreator
 			$htmlelements['fields'][] = $block;
 		}
 		
-//		if($jsoncontent->header_zone->active) {
-//			$htmlelements['title'] = $this->getHeader($jsoncontent->header_zone);
-//		}
-//		
-//		$htmlelements['button'] = $this->getButton($jsoncontent->button_zone);
-		
 		$html_content.= $this->getButton($jsoncontent->button_zone) . '</form>';
-		//Phalcon\DI::getDefault()->get('logger')->log('Contenido ' . $html_content);
-		
-		//return $htmlelements;
+
 		return $html_content;
 	}
 	
@@ -142,11 +134,6 @@ class FormCreator
 		$required = array('option' => '', 'class' => '');
 		$value = $this->getDateValue($element);
 		
-//		$field = ($element->required != 'Si') ? '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control date_view_picker" data-name="' . $element->name . '" value="' . $this->getDateValue($element) . '">' : '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control field-element-form-required date_view_picker" data-name="' . $element->name . '" value="' . $this->getDateValue($element) . '" required>';
-//		if($element->hide) {
-//			$field = '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control date_view_picker" value="' . $element->defaultday . '/' . $element->defaultmonth . '/' . $element->defaultyear . '" data-name="' . $element->name . '">';
-//		}
-		
 		if($element->required == 'Si') {
 			$required['option'] = 'sm-required';
 			$required['class'] = 'field-element-form-required';
@@ -157,7 +144,7 @@ class FormCreator
 		
 		$dNm = $this->getDaysAndMonthOpt($value);
 		
-		$field = '<div class="sm-date-each-field-container"><select class="sm-form-control ' . $required['class'] . '" ' . $required['option'] . '>' .$dNm['days'] . '</select></div><div class="sm-date-each-field-container"><select class="sm-form-control ' . $required['class'] . '" ' . $required['option'] . '>' .$dNm['months'] . '</select></div><div class="sm-date-each-field-container"><input class="sm-form-control ' . $required['class'] . '" ' . $required['option'] . ' value="' . $value['year'] . '"></div>';
+		$field = '<div class="sm-date-each-field-container"><select id="c_' . $element->id . '_day" name="c_' . $element->id . '_day" class="sm-form-control ' . $required['class'] . '" ' . $required['option'] . '>' .$dNm['days'] . '</select></div><div class="sm-date-each-field-container"><select id="c_' . $element->id . '_month" name="c_' . $element->id . '_month" class="sm-form-control ' . $required['class'] . '" ' . $required['option'] . '>' .$dNm['months'] . '</select></div><div class="sm-date-each-field-container"><input id="c_' . $element->id . '_year" name="c_' . $element->id . '_year" class="sm-form-control ' . $required['class'] . '" ' . $required['option'] . ' value="' . $value['year'] . '"></div>';
 		
 		return '<div class="sm-half-size sm-pull-left">' . $field . '</div>';
 	}

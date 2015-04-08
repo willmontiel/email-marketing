@@ -175,7 +175,7 @@
 				<div class="form-group welcome-url-field">
 					<label for="email-notify" class="col-sm-3 control-label">* Notificar a:</label>
 					<div class="col-md-6">
-						{{'{{view Ember.TextField valueBinding="notifyemail" id="email-notify" data-role="tagsinput" class="form-control" placeholder="Direccion de correo"}}'}}
+						{{'{{view App.TagsInput valueBinding="notifyemail" id="email-notify" class="form-control" placeholder="Direccion de correo"}}'}}
 					</div>
 				</div>
 			</div>
