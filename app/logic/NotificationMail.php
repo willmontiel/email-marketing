@@ -88,6 +88,7 @@ class NotificationMail extends TestMail
 		
 		foreach ($this->receiver as $email => $name){
 			$to = array($email => $name);
+			$this->logger->log('Mail send to: ' . print_r($to, true));
 			$message->setTo($to);
 			$sendMail = $swift->send($message, $failures);
 			if (!$sendMail){
