@@ -144,7 +144,7 @@ class FormWrapper extends BaseWrapper
 		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
 		
 		if($form->type === 'Inscription') {
-			$action = 'form/frame';
+			$action = 'form/framev2';
 			$parameters = array(1, $form->idForm, $form->idDbase);
 			$link = $linkdecoder->encodeLink($action, $parameters);
 

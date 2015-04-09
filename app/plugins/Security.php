@@ -119,6 +119,7 @@ class Security extends Plugin
 				'unsubscribe::contact' => array(),
 				'unsubscribe::success' => array(),
 				'form::frame' => array(),
+				'form::framev2' => array(),
 				'form::update' => array(),
 				'contacts::form' => array(),
 				'contacts::activate' => array(),
@@ -231,11 +232,11 @@ class Security extends Plugin
 				'dbaseapi::searchcontacts' => array('contact' => array('read')),
 				
 				//Dbaseapi -- Formularios
-				'dbaseapi::getforms' => array('form' => array('read')),
-				'dbaseapi::getforminformation' => array('form' => array('read')),
-				'dbaseapi::createforminformation' => array('form' => array('create')),
-				'dbaseapi::createformcontent' => array('form' => array('update')),
-				'dbaseapi::deleteform' => array('form' => array('delete')),
+//				'dbaseapi::getforms' => array('form' => array('read')),
+//				'dbaseapi::getforminformation' => array('form' => array('read')),
+//				'dbaseapi::createforminformation' => array('form' => array('create')),
+//				'dbaseapi::createformcontent' => array('form' => array('update')),
+//				'dbaseapi::deleteform' => array('form' => array('delete')),
 				'dbaseapi::getcontactlists' => array('form' => array('read')),
 				
                 //Contactlistapi
@@ -636,6 +637,7 @@ class Security extends Plugin
 			'unsubscribe:contact',
 			'unsubscribe:success',
 			'form:frame',
+			'form:framev2',
 			'form:update',
 			'contacts:form',
 			'contacts:activate',

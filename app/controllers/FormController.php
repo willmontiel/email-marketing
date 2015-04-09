@@ -15,7 +15,7 @@ class FormController extends ControllerBase
 								2 => $idDbase)
 			));
 
-			$creator = new FormCreator();
+			$creator = new FormOldCreator();
 			$html = $creator->getHtmlForm($form);
 			$link = $creator->getLinkAction($form);
 		}
@@ -29,6 +29,34 @@ class FormController extends ControllerBase
 		}
 		$this->view->setVar('html', $html);
 		$this->view->setVar('link', $link);
+	}
+	
+	public function framev2Action($parameters)
+	{
+		try {
+			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
+			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
+			$idenfifiers = $linkEncoder->decodeLink('form/framev2', $parameters);
+			list($idLink, $idForm, $idDbase) = $idenfifiers;
+
+			$form = Form::findFirst(array(
+				'conditions' => 'idForm = ?1 AND idDbase = ?2',
+				'bind' => array(1 => $idForm,
+								2 => $idDbase)
+			));
+
+			$creator = new FormCreator();
+			$html = $creator->getHtmlForm($form);
+		}
+		catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			return $this->response->redirect('error');
+		}
+		catch (InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			return $this->response->redirect('error');
+		}
+		$this->view->setVar('html', $html);
 	}
 	
 	
