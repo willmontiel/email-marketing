@@ -36,6 +36,9 @@ class ContactFormWrapper extends ContactWrapper
 			
 			if(isset($param[2]) && ($param[2] === 'day' || $param[2] === 'month' || $param[2] === 'year') && isset($contactObj->$name)){
 				$contactObj->$name.= '/'.$value;
+				if($param[2] === 'year' && (empty($value) || $value == null)){
+					$contactObj->$name = null;
+				}
 			}
 			else {
 				$contactObj->$name = (is_array($value)) ? implode(',', $value) : $value ;
