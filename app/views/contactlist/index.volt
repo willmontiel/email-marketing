@@ -138,7 +138,7 @@
 
 				<div class="col-xs-6 col-md-3">
 					<div class="big-btn-nav sm-btn-blue">
-						{{'{{#link-to "forms" class="shortcuts"}} <span class="sm-button-large-bloq-list"></span>{{/link-to}}'}}
+						{{'{{#link-to "forms" class="shortcuts"}} <span class="sm-button-large-plantillas"></span>{{/link-to}}'}}
 					</div>
 					<div class="w-190 center">
 						{{'{{#link-to "forms" class="btn-actn"}}Formularios{{/link-to}}'}}

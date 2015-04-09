@@ -1,60 +1,68 @@
 <script type="text/x-handlebars" data-template-name="forms/index">
-	<div class="bs-callout bs-callout-info">
-		Aquí esta toda la información necesaria para gestionar sus formularios
-	</div>
+	
+	{{ partial('contactlist/small_buttons_menu_partial', ['activelnk': 'forms']) }}
+	
+	<div class="row">
+		<h1 class="sectiontitle">Formularios</h1>
+		<div class="bs-callout bs-callout-info">
+			Aquí esta toda la información necesaria para gestionar sus formularios
+		</div>
 
-	<div class="pull-right">
-	{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-plus"></span> Crear nuevo formulario de inscripción{{ '{{/link-to}}' }}
-	{{ '{{#link-to "forms.updating" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-plus"></span> Crear nuevo formulario de actualización{{ '{{/link-to}}' }}
+		<div class="pull-right">
+		{{ '{{#link-to "forms.setup" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-plus"></span> Crear nuevo formulario de inscripción{{ '{{/link-to}}' }}
+		{{ '{{#link-to "forms.updating" disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-plus"></span> Crear nuevo formulario de actualización{{ '{{/link-to}}' }}
+		</div>
 	</div>
-	<div class="space"></div>
-	<table class="table table-striped table-contacts">
-		<thead>
-		<tr>
-			<td> Nombre </td>
-			<td> Tipo </td>
-		<tr>
-		</thead>
-		<tbody>
-			{{'{{#each model}}'}}
+	
+	<div class="row">
+		<table class="table table-striped table-contacts">
+			<thead>
 			<tr>
-				<td>
-					<div>
-						{{'{{name}}'}}
-					</div>
-				</td>
-				<td>
-					<div>
-						{{'{{type}}'}}
-					</div>
-				</td>
-				<td>
-					<div class="text-right">
-						{{ '{{#if framecode}}' }}
-							{{ '{{#if isInscription}}' }}
-								{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-th"></span> Iframe{{ '{{/link-to}}' }}
-								{{ '{{#link-to "forms.html" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-th"></span> HTML{{ '{{/link-to}}' }}
-							{{ '{{else}}' }}
-								{{ '{{#link-to "forms.link" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-link"></span> Enlace{{ '{{/link-to}}' }}
+				<td> Nombre </td>
+				<td> Tipo </td>
+			<tr>
+			</thead>
+			<tbody>
+				{{'{{#each model}}'}}
+				<tr>
+					<td>
+						<div>
+							{{'{{name}}'}}
+						</div>
+					</td>
+					<td>
+						<div>
+							{{'{{type}}'}}
+						</div>
+					</td>
+					<td>
+						<div class="text-right">
+							{{ '{{#if framecode}}' }}
+								{{ '{{#if isInscription}}' }}
+									{{ '{{#link-to "forms.code" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-th"></span> Iframe{{ '{{/link-to}}' }}
+									{{ '{{#link-to "forms.html" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-th"></span> HTML{{ '{{/link-to}}' }}
+								{{ '{{else}}' }}
+									{{ '{{#link-to "forms.link" this disabledWhen="controller.deleteDisabled" class="btn btn-guardar btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-link"></span> Enlace{{ '{{/link-to}}' }}
+								{{ '{{/if}}' }}
+								<a class="btn btn-default btn-sm extra-padding" onClick="preview({{'{{ unbound id }}'}})" title="Previsualizar" data-toggle="modal" data-target="#myModalFormPreview">
+									<span class="glyphicon glyphicon-eye-open"></span> Previsualizar
+								</a>
 							{{ '{{/if}}' }}
-							<a class="btn btn-default btn-sm extra-padding" onClick="preview({{'{{ unbound id }}'}})" title="Previsualizar" data-toggle="modal" data-target="#myModalFormPreview">
-								<span class="glyphicon glyphicon-eye-open"></span> Previsualizar
-							</a>
-						{{ '{{/if}}' }}
-							
-						{{ '{{#if isInscription}}' }}
-							{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-pencil"></span> Editar{{ '{{/link-to}}' }}
-						{{ '{{else}}' }}
-							{{ '{{#link-to "forms.editupdate" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-pencil"></span> Editar{{ '{{/link-to}}' }}
-						{{ '{{/if}}' }}
 
-						{{ '{{#link-to "forms.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete extra-padding"}}' }}<span class="glyphicon glyphicon-trash"></span> Eliminar{{ '{{/link-to}}' }}
-					</div>
-				</td>
-			</tr>
-			{{'{{/each}}'}}
-		</tbody>
-	</table>
+							{{ '{{#if isInscription}}' }}
+								{{ '{{#link-to "forms.edit" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-pencil"></span> Editar{{ '{{/link-to}}' }}
+							{{ '{{else}}' }}
+								{{ '{{#link-to "forms.editupdate" this disabledWhen="controller.updateDisabled" class="btn btn-default btn-sm extra-padding"}}' }}<span class="glyphicon glyphicon-pencil"></span> Editar{{ '{{/link-to}}' }}
+							{{ '{{/if}}' }}
+
+							{{ '{{#link-to "forms.remove" this disabledWhen="controller.deleteDisabled" class="btn btn-default btn-sm btn-delete extra-padding"}}' }}<span class="glyphicon glyphicon-trash"></span> Eliminar{{ '{{/link-to}}' }}
+						</div>
+					</td>
+				</tr>
+				{{'{{/each}}'}}
+			</tbody>
+		</table>
+	</div>
 	
 	<div class="modal fade" id="myModalFormPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">

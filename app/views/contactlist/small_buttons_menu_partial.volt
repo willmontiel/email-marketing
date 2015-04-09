@@ -29,6 +29,11 @@
 				<span class="sm-button-small-database"></span>
 				</a>
 			</li>
+			<li class="small-btn-nav sm-btn-blue {{ activelnk=='forms'?'active':'' }}">
+				<a href="{{ url('contactlist') }}#/forms/index" data-toggle="tooltip" data-placement="bottom" title="Formularios">
+				<span class="sm-button-small-template"></span>
+				</a>
+			</li>
 			<li class="small-btn-nav sm-btn-blue {{ activelnk=='import'?'active':'' }}">
 				<a href="{{ url('process/import') }}" data-toggle="tooltip" data-placement="bottom" title="Lista de importación">
 				<span class="sm-button-small-import-list"></span>
