@@ -12,7 +12,7 @@ class ApiformController extends ControllerBase
 	
 	public function getformsAction()
 	{
-		
+		$formlist = array();
 		$phql = "	SELECT f.* 
 					FROM Form AS f 
 						JOIN Dbase AS d ON (f.idDbase = d.idDbase) 
@@ -153,7 +153,7 @@ class ApiformController extends ControllerBase
 	public function deleteformAction($idForm)
 	{
 		$form = Form::findFirst(array(
-			'conditions' => 'idForm = ?1 AND idDbase = ?2',
+			'conditions' => 'idForm = ?1',
 			'bind' => array(1 => $idForm)
 		));
 		
