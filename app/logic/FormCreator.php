@@ -298,16 +298,18 @@ class FormCreator
 						.sm-big-container{padding: 10px 0;}
 						.sm-field-element-form-hide{display:none;}
 					</style>';
-		$scripts = '$(function() {
-						$("form").on("submit", function(e) {
-							var required = $(".field-element-form-required");
-							for (var i = 0 ; i < required.length; i++) {
-								if($(required[i]).val().length === 0) {
-									e.preventDefault();
+		$scripts = '<script type="text/javascript">
+						$(function() {
+							$("form").on("submit", function(e) {
+								var required = $(".field-element-form-required");
+								for (var i = 0 ; i < required.length; i++) {
+									if($(required[i]).val().length === 0) {
+										e.preventDefault();
+									}
 								}
-							}
+							});
 						});
-					});';
+					<script>';
 		
 		return $styles . $scripts;
 	}
