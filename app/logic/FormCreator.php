@@ -298,7 +298,8 @@ class FormCreator
 						.sm-big-container{padding: 10px 0;}
 						.sm-field-element-form-hide{display:none;}
 					</style>';
-		$scripts = '<script type="text/javascript">
+		$scripts = '<script type="text/javascript" src="/vendors/bootstrap_v3/js/jquery-1.9.1.js"></script>
+					<script type="text/javascript">
 						$(function() {
 							$("form").on("submit", function(e) {
 								var required = $(".field-element-form-required");
