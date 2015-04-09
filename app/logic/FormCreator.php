@@ -309,7 +309,7 @@ class FormCreator
 								}
 							});
 						});
-					<script>';
+					</script>';
 		
 		return $styles . $scripts;
 	}
