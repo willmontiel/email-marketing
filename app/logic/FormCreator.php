@@ -74,7 +74,7 @@ class FormCreator
 	
 	protected function getTextElement($element)
 	{
-		$field = ($element->required != 'Si') ? '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" value="' . $this->getValue($element) . '">' : '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control field-element-form-required" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" value="' . $this->getValue($element) . '" sm-required>';
+		$field = ($element->required != 'Si') ? '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" value="' . $this->getValue($element) . '">' : '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control field-element-form-required" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" value="' . $this->getValue($element) . '" required>';
 		if($element->hide) {
 			$field = '<input type="text" id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control" data-name="' . $element->name . '" value="' . $element->defaultvalue . '">';
 		}
@@ -84,7 +84,7 @@ class FormCreator
 	
 	protected function getTextAreaElement($element)
 	{
-		$field = ($element->required != 'Si') ? '<textarea id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" >' . $this->getValue($element) . '</textarea>' : '<textarea id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control field-element-form-required" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" sm-required>' . $this->getValue($element) . '</textarea>';
+		$field = ($element->required != 'Si') ? '<textarea id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" >' . $this->getValue($element) . '</textarea>' : '<textarea id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control field-element-form-required" placeholder="' . $element->placeholder . '" data-name="' . $element->name . '" required>' . $this->getValue($element) . '</textarea>';
 		if($element->hide) {
 			$field = '<textarea id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control" value="' . $element->defaultvalue . '" data-name="' . $element->name . '"></textarea>';
 		}
@@ -94,7 +94,7 @@ class FormCreator
 	
 	protected function getSelectElement($element)
 	{
-		$field = ($element->required != 'Si') ? '<select id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control" data-name="' . $element->name . '" >' : '<select id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control field-element-form-required" data-name="' . $element->name . '" sm-required>';
+		$field = ($element->required != 'Si') ? '<select id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control" data-name="' . $element->name . '" >' : '<select id="c_' . $element->id . '" name="c_' . $element->id . '" class="sm-form-control field-element-form-required" data-name="' . $element->name . '" required>';
 		
 		$values = explode(',', $element->values);
 		$options = '';
@@ -112,7 +112,7 @@ class FormCreator
 	
 	protected function getMultiSelectElement($element)
 	{
-		$field = ($element->required != 'Si') ? '<select id="c_' . $element->id . '[]" name="c_' . $element->id . '[]" class="sm-form-control" multiple="true" data-name="' . $element->name . '" >' : '<select id="c_' . $element->id . '[]" name="c_' . $element->id . '[]" class="sm-form-control field-element-form-required" multiple="true" data-name="' . $element->name . '" sm-required>';
+		$field = ($element->required != 'Si') ? '<select id="c_' . $element->id . '[]" name="c_' . $element->id . '[]" class="sm-form-control" multiple="true" data-name="' . $element->name . '" >' : '<select id="c_' . $element->id . '[]" name="c_' . $element->id . '[]" class="sm-form-control field-element-form-required" multiple="true" data-name="' . $element->name . '" required>';
 		
 		$values = explode(',', $element->values);
 		$defaultvalues = explode(',', $element->defaultvalue);
@@ -135,7 +135,7 @@ class FormCreator
 		$value = $this->getDateValue($element);
 		
 		if($element->required == 'Si') {
-			$required['option'] = 'sm-required';
+			$required['option'] = 'required';
 			$required['class'] = 'field-element-form-required';
 		}
 		if($element->hide) {
@@ -298,6 +298,17 @@ class FormCreator
 						.sm-big-container{padding: 10px 0;}
 						.sm-field-element-form-hide{display:none;}
 					</style>';
-		return $styles;
+		$scripts = '$(function() {
+						$("form").on("submit", function(e) {
+							var required = $(".field-element-form-required");
+							for (var i = 0 ; i < required.length; i++) {
+								if($(required[i]).val().length === 0) {
+									e.preventDefault();
+								}
+							}
+						});
+					});';
+		
+		return $styles . $scripts;
 	}
 }
