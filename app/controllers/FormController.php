@@ -27,7 +27,8 @@ class FormController extends ControllerBase
 			$this->logger->log('Exception: [' . $e->getMessage() . ']');
 			return $this->response->redirect('error');
 		}
-		$this->view->setVar('html', $html);
+//		$this->response->setHeader("X-Frame-Options", "GOFORIT");
+		$this->view->setVar('elements', $html);
 		$this->view->setVar('link', $link);
 	}
 	
