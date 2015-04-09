@@ -14,6 +14,10 @@ class FormController extends ControllerBase
 				'bind' => array(1 => $idForm,
 								2 => $idDbase)
 			));
+			
+			if(!$form) {
+				return $this->response->redirect('error');
+			}
 
 			$creator = new FormOldCreator();
 			$html = $creator->getHtmlForm($form);
@@ -45,6 +49,10 @@ class FormController extends ControllerBase
 				'bind' => array(1 => $idForm,
 								2 => $idDbase)
 			));
+			
+			if(!$form) {
+				return $this->response->redirect('error');
+			}
 
 			$creator = new FormCreator();
 			$html = $creator->getHtmlForm($form);
@@ -87,7 +95,6 @@ class FormController extends ControllerBase
 			$creator = new FormCreator();
 			$creator->setContact($contact);
 			$html = $creator->getHtmlForm($form);
-			$link = $creator->getLinkUpdateAction($form);
 		}
 		catch (\Exception $e) {
 			$this->logger->log('Exception: [' . $e . ']');
@@ -98,8 +105,7 @@ class FormController extends ControllerBase
 			return $this->response->redirect('error');
 		}
 
-		$this->view->setVar('elements', $html);
-		$this->view->setVar('link', $link);
+		$this->view->setVar('html', $html);
 	}
 	
 	public function previewAction($idForm)

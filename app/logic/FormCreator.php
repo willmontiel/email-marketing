@@ -291,14 +291,14 @@ class FormCreator
 						.sm-header-properties{height: 75px; line-height: 75px; display: table; width: 100%;}
 						.sm-container-table{display: table; margin-top: 12px;}
 						.sm-required{color: #d9534f !important; padding-right: 4px !important;}
-						.sm-form-control{display: block;width: 100%;height: 20px;padding: 6px 12px;font-size: 14px;line-height: 1.42857143;color: #555;background-color: #fff;background-image: none;border: 1px solid #ccc;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);-webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; }
+						.sm-form-control{display: block;width: 100%;line-height: 20px;padding: 6px 12px;font-size: 14px;color: #555;background-color: #fff;background-image: none;border: 1px solid #ccc;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);-webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; }
 						select.sm-form-control{height: 34px !important;}
 						.sm-form-btn{margin-bottom: 10px;display: inline-block;padding: 6px 12px;margin-bottom: 0;font-size: 14px;font-weight: normal;line-height: 1.42857143;text-align: center;white-space: nowrap;vertical-align: middle;cursor: pointer;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;background-image: none;border: 1px solid transparent;border-radius: 4px;padding-right: 25px;padding-left: 25px;}
 						.sm-form-btn-container{padding: 20px 40px 10px 45px;}
 						.sm-big-container{padding: 10px 0;}
 						.sm-field-element-form-hide{display:none;}
 					</style>';
-		$scripts = '<script type="text/javascript" src="/vendors/bootstrap_v3/js/jquery-1.9.1.js"></script>
+		$scripts = '<script type="text/javascript" src="' . $this->urlObj->getBaseUri(true) . 'vendors/bootstrap_v3/js/jquery-1.9.1.js"></script>
 					<script type="text/javascript">
 						$(function() {
 							$("form").on("submit", function(e) {

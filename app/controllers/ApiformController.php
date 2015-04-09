@@ -56,6 +56,10 @@ class ApiformController extends ControllerBase
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró el formulario');
 		}
 		
+		if($form->dbase->account->idAccount != $this->user->idAccount){
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'No se encontró el formulario');
+		}
+		
 		try {
 			$wrapper = new FormWrapper();
 			$formjson = $wrapper->fromPObjectToJObject($form);
@@ -127,6 +131,10 @@ class ApiformController extends ControllerBase
 		
 		if (!$form) {
 			return $this->setJsonResponse(array('status' => 'failed'), 404, 'No se encontró el formulario');
+		}
+		
+		if($form->dbase->account->idAccount != $this->user->idAccount){
+			return $this->setJsonResponse(array('status' => 'error'), 400, 'No se encontró el formulario');
 		}
 		
 		$contentsraw = $this->getRequestContent();
