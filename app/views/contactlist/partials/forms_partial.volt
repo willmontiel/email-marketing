@@ -93,7 +93,10 @@
 
 <script type="text/x-handlebars" data-template-name="forms/new">
 	<div class="row">
-		<div class="col-md-11 col-sm-12 col-xs-12 top-editor-form"></div>
+		<div class="col-md-11 col-sm-12 col-xs-12 top-editor-form">
+			<button class="btn btn-delete btn-default btn-sm" {{ '{{action "cancel" this}}' }}><span class="glyphicon glyphicon-remove"></span></button>
+			<button class="btn btn-guardar btn-sm" {{ '{{action "sendData" this}}' }}><span class="glyphicon glyphicon-floppy-saved"></span></button>
+		</div>
 		<div class="col-md-11 col-sm-12 col-xs-12 outline-editor-form">
 			<div class="col-md-9 col-sm-12 col-xs-12 border edit-form-out-zone">
 				<div id="header-zone"></div>
@@ -104,9 +107,9 @@
 			<div class="col-md-3 col-sm-12 col-xs-12 form-opt-out-zone" id="accordion" role="tablist" aria-multiselectable="true">
 				<div class="panel panel-default">
 					<div class="panel-heading" role="tab" id="headingOne">
-						 <h6 class="sectiontitle panel-title">
+						 <h6 class="sectiontitle-form panel-title">
 							<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-								Campos Formulario
+								<b>Campos Formulario</b>
 							</a>
 						</h6>
 					</div>
@@ -120,9 +123,9 @@
 		
 				<div class="panel panel-default">
 					<div class="panel-heading" role="tab" id="headingTwo">
-						<h6 class="sectiontitle panel-title">
+						<h6 class="sectiontitle-form panel-title">
 							<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-								Herramientas
+								<b>Herramientas</b>
 							</a>
 						</h6>
 					</div>
@@ -138,20 +141,16 @@
 		</div>
 		<div class="clearfix"></div>
 		<div class="space"></div>
-		<hr>
-		<div class="form-action col-md-offset-1">
-			<button class="btn btn-default btn-sm extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
-			<button class="btn btn-guardar btn-sm extra-padding" {{ '{{action "sendData" this}}' }}>Crear formulario</button>
-		</div>
-		
-	<div class="space"></div>
 	</div>
 </script>
 
 
 <script type="text/x-handlebars" data-template-name="forms/newupdate">
 	<div class="row">
-		<div class="col-md-11 col-sm-12 col-xs-12 top-editor-form"></div>
+		<div class="col-md-11 col-sm-12 col-xs-12 top-editor-form">
+			<button class="btn btn-delete btn-default btn-sm" {{ '{{action "cancel" this}}' }}><span class="glyphicon glyphicon-remove"></span></button>
+			<button class="btn btn-guardar btn-sm" {{ '{{action "sendData" this}}' }}><span class="glyphicon glyphicon-floppy-saved"></span></button>
+		</div>
 		<div class="col-md-11 col-sm-12 col-xs-12 outline-editor-form">
 			<div class="col-md-9 col-sm-12 col-xs-12 border edit-form-out-zone">
 				<div id="header-zone"></div>
@@ -162,9 +161,9 @@
 			<div class="col-md-3 col-sm-12 col-xs-12 form-opt-out-zone" id="accordion" role="tablist" aria-multiselectable="true">
 				<div class="panel panel-default">
 					<div class="panel-heading" role="tab" id="headingOne">
-						 <h6 class="sectiontitle panel-title">
+						 <h6 class="sectiontitle-form panel-title">
 							<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-								Campos Formulario
+								<b>Campos Formulario</b>
 							</a>
 						</h6>
 					</div>
@@ -178,9 +177,9 @@
 		
 				<div class="panel panel-default">
 					<div class="panel-heading" role="tab" id="headingTwo">
-						<h6 class="sectiontitle panel-title">
+						<h6 class="sectiontitle-form panel-title">
 							<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-								Herramientas
+								<b>Herramientas</b>
 							</a>
 						</h6>
 					</div>
@@ -196,13 +195,6 @@
 		</div>
 		<div class="clearfix"></div>
 		<div class="space"></div>
-		<hr>
-		<div class="form-action col-md-offset-1">
-			<button class="btn btn-default btn-sm extra-padding" {{ '{{action "cancel" this}}' }}>Cancelar</button>
-			<button class="btn btn-guardar btn-sm extra-padding" {{ '{{action "sendData" this}}' }}>Crear formulario</button>
-		</div>
-		
-	<div class="space"></div>
 	</div>
 </script>
 

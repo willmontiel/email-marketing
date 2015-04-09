@@ -402,12 +402,22 @@ body {
 .edit-form-adv-tools select{
 	width: 50%;
 }
+.sectiontitle-form{
+	color: #ff6e00;
+}
 .top-editor-form {
-	height: 30px;
+	padding-top: 8px;
 	background-color: #00BEDE;
 	border-top-left-radius: 8px;
 	border-top-right-radius: 8px;
 	margin-top: 1%;
+	text-align: right;
+}
+.top-editor-form > button {
+	margin-right: 2px;
+}
+.top-editor-form span {
+	font-size: 14px;
 }
 .outline-editor-form{
 	border: solid 1px #A2C8E8;
