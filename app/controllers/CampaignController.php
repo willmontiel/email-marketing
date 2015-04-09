@@ -101,6 +101,7 @@ class CampaignController extends ControllerBase
 			if (!$autosend->delete()) {
 				foreach ($autosend->getMessages() as $msg) {
 					$this->logger->log('Error: ' . $msg);
+					$this->traceFail("Fail Deleting Campaign");
 					$this->flashSession->error('No se pudo eliminar el envío automático');
 				}
 			}
@@ -112,6 +113,7 @@ class CampaignController extends ControllerBase
 			$this->flashSession->error('No se pudo eliminar el envío automático');
 		}
 		
+		$this->traceSuccess('Campaign deleted');
 		return $this->response->redirect("campaign/list");
 	}
 	
@@ -135,13 +137,16 @@ class CampaignController extends ControllerBase
 						));
 					$wrapper->setAutoresponder($autoresponder);
 					$wrapper->updateAutomaticSend($content);
+					$this->traceSuccess('Campaign Updated: ' . $idAutoresponder);
 				}
 				else {
 					$wrapper->createAutoresponder($content, 'automatic', 'url');
+					$this->traceSuccess('Campaign Created');
 				}
 				return $this->response->redirect("campaign/list");
 			}
 			catch (Exception $e) {
+				$this->traceFail("Fail Campaign Created Or Updated");
 				$this->logger->log("Exception: {$e}");
 				$this->flashSession->error($e->getMessage());
 			}
@@ -180,9 +185,11 @@ class CampaignController extends ControllerBase
 			$wrapper->setAutoresponder($autosend);
 			$wrapper->updateAutomaticSendStatus($status);
 			
+			$this->traceSuccess('Campaign Status Changed: ' . $id);
 			return $this->setJsonResponse(array('status' => 'El estado de la autorespuesta se ha actualizado'), 201, 'Success');
 		}
 		
+		$this->traceFail("Fail Campaign Status Change");
 		return $this->setJsonResponse(array('status' => 'Error, el estado de la autorespuesta no se ha podido actualizar'),400, 'Error');
 	}
 
@@ -375,10 +382,12 @@ class CampaignController extends ControllerBase
 					if ($autoresponder) {
 						$wrapper->setAutoresponder($autoresponder);
 						$wrapper->updateAutomaticSend($content);
+						$this->traceSuccess('Campaign Birthday Updated: ' . $idAutoresponder);
 					}
 				}
 				else {
 					$idAutoresponder = $wrapper->createAutoresponder($content, 'birthday', null);
+					$this->traceSuccess('Campaign Birthday Created: ' . $idAutoresponder);
 				}
 				if($option == 'onlyId') {
 					return $this->setJsonResponse(array('status' => $idAutoresponder), 201, 'Success');
@@ -387,6 +396,7 @@ class CampaignController extends ControllerBase
 			}
 			catch (Exception $e) {
 				$this->logger->log("Exception: {$e}");
+				$this->traceFail("Fail Birthday Campaign");
 				if($option == 'onlyId') {
 					return $this->setJsonResponse(array('status' => $e->getMessage()), 500, 'Error');
 				}
@@ -429,7 +439,9 @@ class CampaignController extends ControllerBase
 					
 					$wrapper->setAutoresponder($autoresponder);
 					$wrapper->createCampaignContent($content['editor'], 'editor');
-
+					
+					$this->traceSuccess('Campaign Editor Content Changed: ' . $idAutoresponder);
+					
 					switch ($autoresponder->type) {
 						case 'birthday' :
 							return $this->setJsonResponse(array('status' => "birthday"), 201, 'Success');
@@ -438,6 +450,7 @@ class CampaignController extends ControllerBase
 				}
 			}
 			catch (Exception $e) {
+				$this->traceFail("Fail Campaign Editor Content");
 				$this->logger->log("Exception: {$e}");
 				$this->flashSession->error($e->getMessage());
 			}
@@ -477,6 +490,8 @@ class CampaignController extends ControllerBase
 						));
 					$wrapper->setAutoresponder($autoresponder);
 					$wrapper->createCampaignContent($content['content'], 'html');
+					
+					$this->traceSuccess('Campaign HTML Content Changed: ' . $idAutoresponder);
 
 					switch ($autoresponder->type) {
 						case 'birthday' :
@@ -486,6 +501,7 @@ class CampaignController extends ControllerBase
 				}
 			}
 			catch (Exception $e) {
+				$this->traceFail("Fail Campaign HTML Content");
 				$this->logger->log("Exception: {$e}");
 				$this->flashSession->error($e->getMessage());
 			}
