@@ -132,6 +132,9 @@
 							<div class="col-md-6">
 								{{'{{view App.TagsInput valueBinding="notifyemail" id="email-notify" class="form-control" placeholder="Direccion de correo"}}'}}
 							</div>
+							<div class="col-md-3">
+								<div class="bs-callout bs-callout-info notify-msg-recorder">Recuerde presionar la tecla Enter cada vez que agregue un correo a notificar</div>
+							</div>
 						</div>
 					</div>
 				</div>

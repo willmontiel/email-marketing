@@ -207,6 +207,10 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 									fromname: form.get('notifyfromname'),
 									reply: form.get('notifyreplyto'),
 									mail: notify_mail }) );
+			
+			if( form.get('notifyemail') === undefined || form.get('notifyemail').trim().length === 0 ) {
+				return {acceptance: false, msg: 'Recuerde asignar a quien desea Notificar'};
+			}
 		}
 		
 		if( form.get('listselected') === undefined  || form.get('listselected') === 'none' || form.get('listselected') === null ) {
@@ -410,6 +414,10 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 									fromname: form.get('notifyfromname'),
 									reply: form.get('notifyreplyto'),
 									mail: notify_mail }) );
+								
+			if( form.get('notifyemail') === undefined || form.get('notifyemail').trim().length === 0 ) {
+				return {acceptance: false, msg: 'Recuerde asignar a quien desea Notificar'};
+			}
 		}
 
 		if( form.get('listselected') === undefined  || form.get('listselected') === 'none' || form.get('listselected') === null ) {
@@ -605,6 +613,10 @@ App.FormsUpdatingController = Ember.ObjectController.extend( Ember.SaveFormHandl
 									fromname: form.get('notifyfromname'),
 									reply: form.get('notifyreplyto'),
 									mail: notify_mail }) );
+								
+			if( form.get('notifyemail') === undefined || form.get('notifyemail').trim().length === 0 ) {
+				return {acceptance: false, msg: 'Recuerde asignar a quien desea Notificar'};
+			}
 		}
 		
 		if( form.get('dbaseselected') === undefined  || form.get('dbaseselected') === 'none' || form.get('dbaseselected') === null ) {
@@ -769,6 +781,10 @@ App.FormsEditupdateController = Ember.ObjectController.extend( Ember.SaveFormHan
 									fromname: form.get('notifyfromname'),
 									reply: form.get('notifyreplyto'),
 									mail: notify_mail }) );
+								
+			if( form.get('notifyemail') === undefined || form.get('notifyemail').trim().length === 0 ) {
+				return {acceptance: false, msg: 'Recuerde asignar a quien desea Notificar'};
+			}
 		}
 
 		if( form.get('dbaseselected') === undefined  || form.get('dbaseselected') === 'none' || form.get('dbaseselected') === null ) {

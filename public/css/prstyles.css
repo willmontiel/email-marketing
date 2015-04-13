@@ -307,6 +307,10 @@ body {
 #myModalFormPreview .modal-body {
 	height: 450px !important;
 }
+.notify-msg-recorder{
+	margin-top: -30px;
+	text-align: center;
+}
 .form-options {
 	background-color: #6998D7;
 	line-height: 1.4;
