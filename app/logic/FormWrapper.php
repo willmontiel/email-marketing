@@ -148,7 +148,7 @@ class FormWrapper extends BaseWrapper
 			$parameters = array(1, $form->idForm, $form->idDbase);
 			$link = $linkdecoder->encodeLink($action, $parameters);
 
-			return '<iframe src="' . $link . '" style="height: ' . $this->getHeightForFrame(json_decode($form->content)) . 'px"></iframe>';
+			return '<iframe src="' . $link . '" style="width: 100%; height: 100%; border:none"></iframe>';
 		}
 		
 		return 'Finalizado';
