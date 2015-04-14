@@ -14,8 +14,12 @@ class FormController extends ControllerBase
 				'bind' => array(1 => $idForm,
 								2 => $idDbase)
 			));
+			
+			if(!$form) {
+				return $this->response->redirect('error');
+			}
 
-			$creator = new FormCreator();
+			$creator = new FormOldCreator();
 			$html = $creator->getHtmlForm($form);
 			$link = $creator->getLinkAction($form);
 		}
@@ -30,6 +34,38 @@ class FormController extends ControllerBase
 //		$this->response->setHeader("X-Frame-Options", "GOFORIT");
 		$this->view->setVar('elements', $html);
 		$this->view->setVar('link', $link);
+	}
+	
+	public function framev2Action($parameters)
+	{
+		try {
+			$linkEncoder = new \EmailMarketing\General\Links\ParametersEncoder();
+			$linkEncoder->setBaseUri(Phalcon\DI::getDefault()->get('urlManager')->getBaseUri(true));
+			$idenfifiers = $linkEncoder->decodeLink('form/framev2', $parameters);
+			list($idLink, $idForm, $idDbase) = $idenfifiers;
+
+			$form = Form::findFirst(array(
+				'conditions' => 'idForm = ?1 AND idDbase = ?2',
+				'bind' => array(1 => $idForm,
+								2 => $idDbase)
+			));
+			
+			if(!$form) {
+				return $this->response->redirect('error');
+			}
+
+			$creator = new FormCreator();
+			$html = $creator->getHtmlForm($form);
+		}
+		catch (\Exception $e) {
+			$this->logger->log('Exception: [' . $e . ']');
+			return $this->response->redirect('error');
+		}
+		catch (InvalidArgumentException $e) {
+			$this->logger->log('Exception: [' . $e->getMessage() . ']');
+			return $this->response->redirect('error');
+		}
+		$this->view->setVar('html', $html);
 	}
 	
 	
@@ -59,7 +95,6 @@ class FormController extends ControllerBase
 			$creator = new FormCreator();
 			$creator->setContact($contact);
 			$html = $creator->getHtmlForm($form);
-			$link = $creator->getLinkUpdateAction($form);
 		}
 		catch (\Exception $e) {
 			$this->logger->log('Exception: [' . $e . ']');
@@ -70,8 +105,7 @@ class FormController extends ControllerBase
 			return $this->response->redirect('error');
 		}
 
-		$this->view->setVar('elements', $html);
-		$this->view->setVar('link', $link);
+		$this->view->setVar('html', $html);
 	}
 	
 	public function previewAction($idForm)

@@ -3,16 +3,21 @@
 {% block header_javascript %}
 	{{ super() }}
 	{{ partial("partials/ember_partial") }}
-	{{ partial("partials/date_view_partial") }}
 	{{ partial("partials/xeditable_view_partial") }}
 	{{ partial("partials/xeditable_select_view_partial") }}
 	{{ partial("statistic/partials/partial_graph") }}
+	{{ javascript_include('vendors/bootstrap_v2/spectrum/js/spectrum.js') }}
 	{{ javascript_include('js/search-reference-pagination.js') }}
 	{{ javascript_include('js/mixin_config.js') }}
 	{{ javascript_include('js/mixin_save_form.js') }}
 	{{ javascript_include('js/jquery_ui_1.10.3.js') }}
-	{{ javascript_include('vendors/datetime_picker_jquery/jquery.datetimepicker.js')}}
-	{{ stylesheet_link('vendors/datetime_picker_jquery/jquery.datetimepicker.css') }}
+	{{ stylesheet_link('css/jquery-ui.css') }}
+	{{ stylesheet_link('vendors/bootstrap-tagsinput/bootstrap-tagsinput.css')}}
+	{{ javascript_include('vendors/bootstrap-tagsinput/bootstrap-tagsinput.js')}}
+	{# stylesheet_link('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.min.css') }}
+	{{ javascript_include('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.js')}}
+	{{ javascript_include('vendors/bootstrap_v3/datetimepickerb3/bootstrap-datetimepicker.es.js')#}
+	{{ stylesheet_link('vendors/bootstrap_v2/spectrum/css/spectrum.css') }}
 	{{ partial("statistic/partials/partial_pie_highcharts") }}
 
 	<script type="text/javascript">
@@ -62,13 +67,6 @@
 	
 	{{ javascript_include('js/app_dbase.js') }}
 	{{ javascript_include('js/app_contact.js') }}
-	{{ javascript_include('js/app_forms.js') }}
-	{{ javascript_include('js/forms/email_block.js') }}
-	{{ javascript_include('js/forms/text_block.js') }}
-	{{ javascript_include('js/forms/select_block.js') }}
-	{{ javascript_include('js/forms/multiple_select_block.js') }}
-	{{ javascript_include('js/forms/date_block.js') }}
-	{{ javascript_include('js/forms/form_zone.js') }}
 	
 	<script type="text/javascript">
 		//Contactos por dominios
@@ -97,25 +95,6 @@
 		}
 	</script>
 	
-	<script type="text/javascript">
-		App.formfields = new Array();
-		{%for field in fields %}
-			{{ ember_customfield_options(field) }}
-			{{ ember_customfield_options_xeditable(field) }}
-			App.formfields.push({id: {{field.idCustomField}}, 
-								name: '{{field.name}}', 
-								type: '{{field.type}}',
-								required: '{{field.required}}',
-								values: '{{field.values}}'});
-		{%endfor%}
-		
-		var config = {baseUrl: "{{url('')}}"};
-		
-		function iframeResize() {
-			var iFrame = document.getElementById('iframeEditor');
-			iFrame.height = iFrame.contentWindow.document.body.scrollHeight + "px";
-		};
-	</script>
 	{{ javascript_include('js/editable-ember-view.js')}}
 {% endblock %}
 {% block content %}
@@ -150,7 +129,6 @@
 					{{'{{#link-to "index" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>General</a>{{/link-to}}'}}
 					{{'{{#link-to "fields" tagName="li" href=false}}<a {{bind-attr href="view.href"}}>Campos</a>{{/link-to}}'}}
 					{{'{{#link-to "contacts" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>Contactos</a>{{/link-to}}'}}
-					{{'{{#link-to "forms" tagName="li" href=false disabledWhen="readDisabled"}}<a {{bind-attr href="view.href"}}>Formularios</a>{{/link-to}}'}}
 				</ul>
 			</div>
 			<div class="space"></div>
@@ -493,10 +471,6 @@
 	<!---------------------- Contacts Template -------------------------->
 		{{ partial("dbase/partials/contacts_partial") }}
 	
-	<!---------------------- Forms Template -------------------------->
-		{{ partial("dbase/partials/forms_partial") }}
-
-
 {#  Este es el modal (lightbox) que se activa al hacer clic en el boton eliminar   #}
 <div id="modal-simple" class="modal fade">
 	<div class="modal-dialog">

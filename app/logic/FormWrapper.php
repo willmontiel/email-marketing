@@ -105,6 +105,7 @@ class FormWrapper extends BaseWrapper
 		$jsonObject['title'] = $phObject->title;
 		$jsonObject['content'] = $phObject->content;
 		$jsonObject['listselected'] = $phObject->target;
+		$jsonObject['dbaseselected'] = $phObject->idDbase;
 		$jsonObject['urlsuccess'] = $phObject->urlSuccess;
 		$jsonObject['urlerror'] = $phObject->urlError;
 		$jsonObject['welcomeurl'] = $phObject->welcomeUrl;
@@ -128,6 +129,7 @@ class FormWrapper extends BaseWrapper
 		}
 		
 		$jsonObject['framecode'] = $this->getFrameCode($phObject);
+		$jsonObject['html'] = $this->getHtmlCode($phObject);
 		
 		return $jsonObject;
 	}
@@ -142,16 +144,22 @@ class FormWrapper extends BaseWrapper
 		$linkdecoder->setBaseUri($this->urlObj->getBaseUri(true));
 		
 		if($form->type === 'Inscription') {
-			$action = 'form/frame';
+			$action = 'form/framev2';
 			$parameters = array(1, $form->idForm, $form->idDbase);
 			$link = $linkdecoder->encodeLink($action, $parameters);
 
-			return '<iframe src="' . $link . '" style="height: ' . $this->getHeightForFrame(json_decode($form->content)) . 'px"></iframe>';
+			return '<iframe src="' . $link . '" style="width: 100%; height: 100%; border:none"></iframe>';
 		}
 		
 		return 'Finalizado';
 	}
 	
+	public function getHtmlCode($form)
+	{
+		$creator = new FormCreator();
+		return $creator->getHtmlForm($form);
+	}
+
 	public function getHeightForFrame($fullcontent)
 	{
 		$content = $fullcontent->content;
@@ -186,11 +194,55 @@ class FormWrapper extends BaseWrapper
 		return $listjson;
 	}
 	
+	public function getAccountListsInJson(Account $account)
+	{
+		$listjson = array();
+		
+		$dbases = Dbase::find(array(
+			'conditions' => 'idAccount = ?1',
+			'bind' => array(1 => $account->idAccount)
+		));
+		
+		foreach ($dbases as $dbase) {
+			foreach ($dbase->contactlist as $contactlist) {
+				$listjson[] = $this->convertContactListToJson($contactlist);
+			}
+		}
+		
+		return $listjson;
+	}
+	
+	public function getAccountDbasesInJson(Account $account)
+	{
+		$dbasejson = array();
+		
+		$dbases = Dbase::find(array(
+			'conditions' => 'idAccount = ?1',
+			'bind' => array(1 => $account->idAccount)
+		));
+		
+		foreach ($dbases as $dbase) {
+			$dbasejson[] = $this->convertDbaseToJson($dbase);
+		}
+		
+		return $dbasejson;
+	}
+	
 	public function convertContactListToJson($contactlist)
 	{
 		$object = array();
 		$object['id'] = $contactlist->idContactlist;
 		$object['name'] = $contactlist->name;
+		$object['dbase'] = $contactlist->idDbase;
+		return $object;
+	}
+	
+	public function convertDbaseToJson($dbase)
+	{
+		$object = array();
+		$object['id'] = $dbase->idDbase;
+		$object['name'] = $dbase->name;
+		$object['color'] = $dbase->color;
 		return $object;
 	}
 	

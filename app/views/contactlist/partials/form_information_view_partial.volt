@@ -175,7 +175,10 @@
 				<div class="form-group welcome-url-field">
 					<label for="email-notify" class="col-sm-3 control-label">* Notificar a:</label>
 					<div class="col-md-6">
-						{{'{{view Ember.TextField valueBinding="notifyemail" id="email-notify" class="form-control" placeholder="Direccion de correo"}}'}}
+						{{'{{view App.TagsInput valueBinding="notifyemail" id="email-notify" class="form-control" placeholder="Direccion de correo"}}'}}
+					</div>
+					<div class="col-md-3">
+						<div class="bs-callout bs-callout-info notify-msg-recorder">Recuerde presionar la tecla Enter cada vez que agregue un correo a notificar</div>
 					</div>
 				</div>
 			</div>
@@ -213,7 +216,7 @@
 	<form class="form-inline" role="form">
 		<div class="title-advanced-editor form-group">
 		</div>
-		<div class="form-group">
+		<div class="btn-mail-form">
 			<a class="btn btn-default extra-padding" data-toggle="modal" href="#preview-modal" onClick="verHTML()"><span class="glyphicon glyphicon-search"></span> Previsualizar</a>
 		</div>
 	</form>

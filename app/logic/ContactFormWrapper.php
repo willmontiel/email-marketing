@@ -34,7 +34,16 @@ class ContactFormWrapper extends ContactWrapper
 				$name = 'campo' . $fieldname;
 			}
 			
-			$contactObj->$name = (is_array($value)) ? implode(',', $value) : $value ;
+			if(isset($param[2]) && ($param[2] === 'day' || $param[2] === 'month' || $param[2] === 'year') && isset($contactObj->$name)){
+				$value = trim($value);
+				$contactObj->$name.= '/'.$value;
+				if($param[2] === 'year' && (empty($value) || $value == null)){
+					$contactObj->$name = null;
+				}
+			}
+			else {
+				$contactObj->$name = (is_array($value)) ? implode(',', $value) : $value ;
+			}
 		}
 
 		$this->setAllValuesInContact($contactObj);
@@ -49,6 +58,7 @@ class ContactFormWrapper extends ContactWrapper
 	public function createContactFromForm($fields)
 	{
 		$contactObj = $this->setFieldsToWrapper($fields);
+		$this->logger->log(print_r($fields, true));
 		$this->logger->log('Nuevo contacto por formulario');
 		$this->logger->log(print_r($contactObj, true));
 		$contact = $this->addExistingContactToListFromDbase($contactObj->email, $this->contactlist, true, true);
@@ -63,6 +73,7 @@ class ContactFormWrapper extends ContactWrapper
 			
 			if($this->form->optin === 'Si') {
 				try {
+					$this->logger->log('Inicio Envio de Mensaje de Optin');
 					$content = json_decode($this->form->optinMail);
 
 					$optin = new NotificationMail();
@@ -71,10 +82,12 @@ class ContactFormWrapper extends ContactWrapper
 					$optin->setDomain($domain);
 					$optin->setContact($contact);
 					$optin->setMail(new Mail());
+					$optin->setSubject($content->subject);
 					$optin->prepareContent($content->mail);
 					$optin->setNotificationLink();
 					$optin->setContactReceiver();
 					$optin->sendMail($content);
+					$this->logger->log('Finalizo Envio de Mensaje de Optin');
 				} catch (\Exception $e) {
 					$this->logger->log('Exception: [' . $e->getMessage() . ']');
 				}
@@ -88,7 +101,9 @@ class ContactFormWrapper extends ContactWrapper
 						$notify->setForm($this->form);
 						$notify->setAccount($this->account);
 						$notify->setDomain($domain);
+						$notify->setContact($contact);
 						$notify->setMail(new Mail());
+						$notify->setSubject($content->subject);
 						$notify->prepareContent($content->mail);
 						$notify->setNotifyReceiver($this->form->notifyEmail, $this->form->notifyEmail);
 						$notify->sendMail($content);
@@ -107,6 +122,7 @@ class ContactFormWrapper extends ContactWrapper
 						$welcome->setAccount($this->account);
 						$welcome->setDomain($domain);
 						$welcome->setMail(new Mail());
+						$welcome->setSubject($content->subject);
 						$welcome->prepareContent($content->mail);
 						$welcome->setContactReceiver();
 						$welcome->sendMail($content);
@@ -181,9 +197,11 @@ class ContactFormWrapper extends ContactWrapper
 				
 				$notify = new NotificationMail();
 				$notify->setForm($this->form);
+				$notify->setContact($contact);
 				$notify->setAccount($this->account);
 				$notify->setDomain($domain);
 				$notify->setMail(new Mail());
+				$notify->setSubject($content->subject);
 				$notify->prepareContent($content->mail);
 				$notify->setNotifyReceiver($this->form->notifyEmail, $this->form->notifyEmail);
 				$notify->sendMail($content);
@@ -202,6 +220,7 @@ class ContactFormWrapper extends ContactWrapper
 				$welcome->setAccount($this->account);
 				$welcome->setDomain($domain);
 				$welcome->setMail(new Mail());
+				$welcome->setSubject($content->subject);
 				$welcome->prepareContent($content->mail);
 				$welcome->setContactReceiver();
 				$welcome->sendMail($content);
@@ -226,9 +245,11 @@ class ContactFormWrapper extends ContactWrapper
 				
 				$updatenotify = new NotificationMail();
 				$updatenotify->setForm($this->form);
+				$updatenotify->setContact($contact);
 				$updatenotify->setAccount($this->account);
 				$updatenotify->setDomain($domain);
 				$updatenotify->setMail(new Mail());
+				$updatenotify->setSubject($content->subject);
 				$updatenotify->prepareContent($content->mail);
 				$updatenotify->setNotifyReceiver($this->form->notifyEmail, $this->form->notifyEmail);
 				$updatenotify->sendMail($content);
@@ -247,6 +268,7 @@ class ContactFormWrapper extends ContactWrapper
 				$welcome->setAccount($this->account);
 				$welcome->setDomain($domain);
 				$welcome->setMail(new Mail());
+				$welcome->setSubject($content->subject);
 				$welcome->prepareContent($content->mail);
 				$welcome->setContactReceiver();
 				$welcome->sendMail($content);

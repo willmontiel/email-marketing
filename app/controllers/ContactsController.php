@@ -531,7 +531,7 @@ class ContactsController extends ControllerBase
 			return $this->response->redirect($form->urlError, true);
 		}
 		
-		return $this->response->redirect($form->urlSuccess, true);
+		return $this->response->redirect($form->welcomeUrl, true);
 	}
 	
 	public function updateAction($parameters)

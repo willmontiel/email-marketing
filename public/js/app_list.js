@@ -17,6 +17,20 @@ App.Router.map(function() {
 	  this.resource('segments.delete', { path: '/delete/:segment_id'});
   });
   
+  this.resource('forms', function(){
+	  this.route('setup');
+	  this.route('updating');
+	  this.route('index');
+	  this.route('new', { path: '/editor/:form_id'});
+	  this.route('newupdate', { path: '/editor/update/:form_id'});
+	  this.route('edit', { path: '/edit/:form_id'});
+	  this.route('editupdate', { path: '/edit/update/:form_id'});
+	  this.route('remove', { path: '/remove/:form_id'});
+	  this.route('code', { path: '/code/:form_id'});
+	  this.route('html', { path: '/html/:form_id'});
+	  this.route('link', { path: '/link/:form_id'});
+  });
+  
    this.route('dbase');
 });
 
