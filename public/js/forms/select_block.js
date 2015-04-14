@@ -9,7 +9,7 @@ function SlctBlock(zone, id, name, required, values) {
 }
 
 SlctBlock.prototype.designOptionField = function() {
-	this.option = $('<div class="form-options ' + this.id + '-option">\n\
+	this.option = $('<div class="btn btn-default btn-sm extra-padding form-options ' + this.id + '-option">\n\
 						' + this.name + '\n\
 					</div>');
 	this.zone.createFieldInOptions(this);
@@ -33,21 +33,24 @@ SlctBlock.prototype.designField = function() {
 	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
 						<div class="form-group field-content-zone ' + hide + '">\n\
-							<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name control-label">\n\
+							<label class="pull-left field-zone-name control-label">\n\
 								' + required + this.name + ':\n\
 							</label>\n\
-							<div class="col-md-7 col-sm-8 col-xs-7">\n\
+							<div class="pull-left input-form-zone">\n\
 								<select class="form-control field-label-select-options">\n\
 									' + slctoptions + '\n\
 								</select>\n\
 							</div>\n\
-							<div class="btn-group">\n\
-								<a class="btn btn-default btn-sm edit-field">\n\
+							<div class="form-btns-opt">\n\
+								<div class="form-tool edit-field">\n\
 									<span class="glyphicon glyphicon-pencil"></span>\n\
-								</a>\n\
-								<a class="btn btn-default btn-sm delete-field">\n\
+								</div>\n\
+								<div class="form-tool move-field">\n\
+									<span class="glyphicon glyphicon-move"></span>\n\
+								</div>\n\
+								<div class="form-tool delete-field">\n\
 									<span class="glyphicon glyphicon-trash"></span>\n\
-								</a>\n\
+								</div>\n\
 							</div>\n\
 						</div>\n\
 					</div>');
@@ -99,26 +102,18 @@ SlctBlock.prototype.getEditZone = function() {
 	var required = (this.required === 'Si') ? 'checked' : '';
 	var hide = (this.hide) ? 'checked' : '';
 	var defaultvalue = (!this.hide) ? 'hide-form-field' : '';
-	var edit = $('<div class="field-edit-zone-row">\n\
-					<div class="col-md-10 col-md-offset-1 field-edit-zone">\n\
-						<div class="form-group edit-row-in-zone">\n\
-							<label class="col-md-4">Label</label><div class="col-md-8"><input type="text" class="form-control field-label-name" value="' + this.name + '"></div>\n\
-						</div>\n\
-						<div class="form-group edit-row-in-zone">\n\
-							<label class="col-md-4">Requerido</label><div class="col-md-8"><input type="checkbox" class="field-required-option" ' + required + '></div>\n\
-						</div>\n\
-						<div class="form-group edit-row-in-zone">\n\
-							<label class="col-md-4">Oculto</label><div class="col-md-8"><input type="checkbox" class="field-hide-option" ' + hide + '></div>\n\
-						</div>\n\
-						<div class="form-group edit-row-in-zone ' + defaultvalue + '">\n\
-							<label class="col-md-4">Valor de campo</label><div class="col-md-8"><select class="form-control field-default-value">' + slctoptions + '</select></div>\n\
-						</div>\n\
-						<div class="pull-right edit-button-row-in-zone">\n\
-							<a class="accept-form-field-changes btn btn-default btn-guardar extra-padding btn-sm">Aceptar</a>\n\
-						</div>\n\
-					</div>\n\
-				</div>\n\
-				<div class="clearfix"></div>');
+	var extendedzone = (this.hide) ? 'form-edit-zone-extended' : '';
+
+	var zone = new ZoneCreator();
+	zone.designFieldEditZone(extendedzone);
+	zone.designSaveBtn();
+	zone.designNameField(this.name);
+	zone.designRequiredField(required);
+	zone.designHideOptField(hide);
+	zone.designHideSelectValueField(defaultvalue, slctoptions, '');
+	
+	var edit = zone.getZone();
+	
 	return edit;
 };
 

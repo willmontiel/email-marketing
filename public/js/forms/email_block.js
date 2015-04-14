@@ -1,4 +1,4 @@
-function EmailBlock(zone, id, name) {
+function EmailBlock(zone, id, name, deleting) {
 	this.zone = zone;
 	this.id = id;
 	this.name = name;
@@ -6,30 +6,47 @@ function EmailBlock(zone, id, name) {
 	this.required = 'Si';
 	this.defaultvalue = '';
 	this.hide = false;
+	this.deleting = deleting;
 }
 
 EmailBlock.prototype.designOptionField = function() {
-	this.option = $('<div class="form-options ' + this.id + '-option">\n\
+	this.option = $('<div class="btn btn-default btn-sm extra-padding form-options ' + this.id + '-option">\n\
 						' + this.name + '\n\
 					</div>');
 	this.zone.createFieldInOptions(this);
+	
+	var t = this;
+	this.option.on('click', function() {
+		t.designField();
+	});
 };
 
 EmailBlock.prototype.designField = function() {
 	var required = (this.required === 'Si') ? '<span class="required">*</span>' : '';
 	var hide = ( this.hide ) ? 'form-field-hide-selected' : '';
+	var delete_tool = '';
+	if(this.deleting){
+		delete_tool = '	<div class="form-tool delete-field">\n\
+							<span class="glyphicon glyphicon-trash"></span>\n\
+						</div>';
+	}
+		
 	this.content= $('<div class="form-field form-field-' + this.id + '">\n\
 						<div class="form-group field-content-zone ' + hide + '">\n\
-							<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name control-label">\n\
+							<label class="pull-left field-zone-name control-label">\n\
 								' + required + this.name + ':\n\
 							</label>\n\
-							<div class="col-md-7 col-sm-8 col-xs-7">\n\
+							<div class="pull-left input-form-zone">\n\
 								<input type="text" class="form-control field-label-placeholder" placeholder="' + this.placeholder + '">\n\
 							</div>\n\
-							<div class="btn-group">\n\
-								<div class="btn btn-default btn-sm edit-field">\n\
+							<div class="form-btns-opt">\n\
+								<div class="form-tool edit-field">\n\
 									<span class="glyphicon glyphicon-pencil"></span>\n\
 								</div>\n\
+								<div class="form-tool move-field">\n\
+									<span class="glyphicon glyphicon-move"></span>\n\
+								</div>\n\
+								' + delete_tool + '\n\
 							</div>\n\
 						</div>\n\
 					</div>');
@@ -61,20 +78,17 @@ EmailBlock.prototype.changeValues = function(editzone) {
 };
 
 EmailBlock.prototype.getEditZone = function() {
-	var edit = $('<div class="field-edit-zone-row">\n\
-					<div class="col-md-10 col-md-offset-1 field-edit-zone">\n\
-						<div class="form-group edit-row-in-zone">\n\
-							<label class="col-md-4">Label</label><div class="col-md-8"><input type="text" class="form-control field-label-name" value="' + this.name + '"></div>\n\
-						</div>\n\
-						<div class="form-group edit-row-in-zone">\n\
-							<label class="col-md-4">Placeholder</label><div class="col-md-8"><input type="text" class="form-control field-placeholder" value="' + this.placeholder + '"></div>\n\
-						</div>\n\
-						<div class="pull-right edit-button-row-in-zone">\n\
-							<a class="accept-form-field-changes btn btn-default btn-guardar extra-padding btn-sm">Aceptar</a>\n\
-						</div>\n\
-					</div>\n\
-				</div>\n\
-				<div class="clearfix"></div>');
+	
+	var extendedzone = (this.hide) ? 'form-edit-zone-extended' : '';
+		
+	var zone = new ZoneCreator();
+	zone.designFieldEditZone(extendedzone);
+	zone.designSaveBtn();
+	zone.designNameField(this.name);
+	zone.designPlaceholderField(this.placeholder);
+	
+	var edit = zone.getZone();
+	
 	return edit;
 };
 

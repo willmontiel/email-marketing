@@ -1,37 +1,38 @@
 
-function FormEditor() {
+function FormEditor(type) {
+	this.type = type;
 	this.content = [];
 	this.options = [];
-	this.title = 'Nombre del formulario';
-	this.button = 'Aceptar';
 }
 
 FormEditor.prototype.startEvents = function(obj) {
 	this.createZones();
 	this.designCustomFields();
 	this.sortableEvent();
-	this.title_xeditable();
-	this.button_xeditable();
+	
+	this.header_zone();
+	this.button_zone();
+	this.adv_tools_zone();
+	
 	if(obj === null) {
 		this.designDefaultFields();
 	}
 	else {
 		this.unpersist(obj);
 	}
+	this.addFieldsBetweenZones();
+};
+
+FormEditor.prototype.addFieldsBetweenZones = function() {
+	this.header.desingOptionZone(this.adv_tools);
 };
 
 FormEditor.prototype.createZones = function() {
-	this.titlezone = $('<div class="container-form-title-name"><h4 class="sectiontitle"><a href="#" class="editable editable-click" id="form-title-name" data-type="text" data-pk="1" data-original-title="Título del formulario">' + this.title + '</a></h4></div>');
-	$('.form-full-content').append(this.titlezone);
-	
-	this.editorzone = $('<div class="form-content-zone"></div>');
+	this.editorzone = $('<div class="form-content-zone form-size-one"></div>');
 	$('.form-full-content').append(this.editorzone);
 	
 	this.optionzone = $('<div class="form-fields-menu"></div>');
 	$('.form-menu').append(this.optionzone);
-	
-	this.buttonzone = $('<label class="col-md-3 col-sm-2 col-xs-3 field-zone-name control-label">Botón:</label><div class="col-md-7 col-sm-8 col-xs-7"><div class="container-form-button-name btn btn-guardar extra-padding btn-sm"><a href="#" class="editable editable-click" id="form-button-name" data-type="text" data-pk="1" data-original-title="Nombre del Boton">' + this.button + '</a></div></div>');
-	$('.form-full-button').append(this.buttonzone);
 };
 
 FormEditor.prototype.designDefaultFields = function() {	
@@ -40,10 +41,18 @@ FormEditor.prototype.designDefaultFields = function() {
 			this.options[i].designField();
 		}
 	}
+	this.header.designHeaderZone();
+	this.button.designButtonField();
+	this.adv_tools.designZone();
 };
 
 FormEditor.prototype.designCustomFields = function() {
-	var email = new EmailBlock(this, 'email', 'Email', false);
+	var formtype = false;
+	if(this.type === 'Updating'){
+		formtype = true;
+	}
+	
+	var email = new EmailBlock(this, 'email', 'Email', formtype);
 	email.designOptionField();
 	
 	var name = new TxtBlock(this, 'name', 'Nombre', 'Si', false);
@@ -108,9 +117,20 @@ FormEditor.prototype.editField = function(field) {
 		editzone.find('.field-hide-option').on('click', function() {
 			if($(this)[0].checked) {
 				editzone.find('.field-default-value').closest('.edit-row-in-zone').removeClass('hide-form-field');
+				editzone.addClass('form-edit-zone-extended');
 			}
 			else {
 				editzone.find('.field-default-value').closest('.edit-row-in-zone').addClass('hide-form-field');
+				editzone.removeClass('form-edit-zone-extended');
+			}
+		});
+		
+		editzone.find('.field-required-option').on('click', function() {
+			if($(this)[0].checked) {
+				editzone.find('.form-opt-field-container .required-form-btn').addClass('checked');
+			}
+			else {
+				editzone.find('.form-opt-field-container .required-form-btn').removeClass('checked');
 			}
 		});
 		
@@ -130,6 +150,36 @@ FormEditor.prototype.editField = function(field) {
 			else {
 				$.gritter.add({title: 'Error', text: 'El valor del campo no puede estar vacio', sticky: false, time: 2000});
 			}
+		});
+	}
+};
+
+FormEditor.prototype.editZone = function(zone) {	
+	$('.field-edit-zone-row').remove();
+	$('.accept-form-field-changes').off('click');
+	
+	if(zone.content.find('.form-field-editing').length > 0) {
+		zone.content.find('.field-edit-zone-row').remove();
+		$('.form-field-editing').removeClass('form-field-editing');
+		this.editorzone.sortable({ disabled: false });
+	}
+	else {
+		$('.form-field-editing').removeClass('form-field-editing');
+		zone.content.find('.edit-field').addClass('form-field-editing');		
+	
+		this.editorzone.sortable({ disabled: true });
+
+		var editzone = zone.getEditZone();
+		zone.content.append(editzone);
+
+		var t = this;
+		
+		editzone.find('.accept-form-field-changes').on('click', function() {
+			zone.changeValues(editzone);
+			$(this).parents('.field-edit-zone-row').remove();
+			$(this).off('click');
+			$('.form-field-editing').removeClass('form-field-editing');
+			t.editorzone.sortable({ disabled: false });
 		});
 	}
 };
@@ -167,46 +217,57 @@ FormEditor.prototype.sortableEvent = function() {
 	});
 };
 
-FormEditor.prototype.title_xeditable = function() {
-	var t = this;
-	this.titlezone.find('#form-title-name').editable({ 
-		type: 'text', 
-		success: function (resp, newValue) { 
-			t.title = newValue;
-		} 
-	});
+FormEditor.prototype.header_zone = function() {
+	this.header = new ZoneHeader(this);
 };
 
-FormEditor.prototype.button_xeditable = function() {
-	var t = this;
-	this.buttonzone.find('#form-button-name').editable({ 
-		type: 'text', 
-		success: function (resp, newValue) { 
-			t.button = newValue;
-		} 
-	});
+FormEditor.prototype.adv_tools_zone = function() {
+	this.adv_tools = new ToolsZone(this, this.header, this.button);
 };
 
-FormEditor.prototype.modifyTitleAndButton = function() {
-	$('#form-title-name').text(this.title);
-	$('#form-button-name').text(this.button);
+FormEditor.prototype.button_zone = function() {
+	this.button = new ButtonBlock(this);
+};
+
+FormEditor.prototype.updateStyle = function(property, value) {
+	this.editorzone.css(property, value);
 };
 
 FormEditor.prototype.persist = function() {
-	var obj = {title: this.title, button: this.button, content : []};
+	var obj = {
+		content : [],
+		header_zone : this.header.persist(),
+		button_zone : this.button.persist(),
+		properties_zone : this.adv_tools.persist()
+	};
 	
 	for(var i = 0; i < this.content.length; i++) {
 		obj.content.push(this.content[i].persist());
 	}
+	
 	return obj;
 };
 
 FormEditor.prototype.unpersist = function(obj) {
 	var jsonobj = JSON.parse(obj);
+	
+	if(jsonobj.header_zone !== undefined){
+		this.header.unpersist(jsonobj.header_zone);
+	}
+	this.header.designHeaderZone();
+	
+	if(jsonobj.button_zone !== undefined){
+		this.button.unpersist(jsonobj.button_zone);
+	}
+	this.button.designButtonField();
+	
+	if(jsonobj.properties_zone !== undefined){
+		this.adv_tools.unpersist(jsonobj.properties_zone);
+	}
+	this.adv_tools.designZone();
+	this.adv_tools.applyChanges();
+			
 	var content = jsonobj.content;
-	this.title = jsonobj.title;
-	this.button = jsonobj.button;
-	this.modifyTitleAndButton();
 	for(var i = 0; i < content.length; i++) {
 		for(var j = 0; j < this.options.length; j++) {
 			if(content[i].id === this.options[j].id) {

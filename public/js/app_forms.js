@@ -20,8 +20,10 @@ App.Form = DS.Model.extend({
 	updatenotify: DS.attr( 'boolean' ),
 	updatenotifymail: DS.attr( 'string' ),
 	listselected: DS.attr( 'string' ),
+	dbaseselected: DS.attr( 'string' ),
 	content: DS.attr( 'string' ),
 	framecode: DS.attr( 'string' ),
+	html: DS.attr( 'string' ),
 	isInscription: function() {
 		var value = (this.get('type') === 'Inscription') ? true : false;
 		return value;
@@ -69,7 +71,46 @@ App.FormsNewController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
 
 App.FormsNewView = Ember.View.extend({
 	didInsertElement: function() {
-		formeditor = new FormEditor();
+		formeditor = new FormEditor('Inscription');
+		formeditor.startEvents(this.controller.content.get('content'));
+    }
+});
+
+
+App.FormsNewupdateRoute = Ember.Route.extend({
+	deactivate: function () {
+		this.doRollBack();
+	},
+	contextDidChange: function() {
+		this.doRollBack();
+		this._super();
+    },
+	doRollBack: function () {
+		var model = this.get('currentModel');
+		if (model && model.get('isDirty') && model.get('isSaving') == false) {
+			model.rollback();
+		}
+	}
+});
+
+App.FormsNewupdateController = Ember.ObjectController.extend(Ember.SaveHandlerMixin, {
+	actions: {
+		sendData: function() {
+			var obj = JSON.stringify(formeditor.persist());
+			this.content.set('content', obj);
+			this.content.set('title', $('#form-title-name').text());
+			this.handleSavePromise(this.content.save(), 'forms.index', 'El Formulario se ha modificado exitosamente');
+		},
+		cancel: function() {
+			this.get("model").rollback();
+			this.transitionToRoute('forms.index');
+		}
+	}
+});
+
+App.FormsNewupdateView = Ember.View.extend({
+	didInsertElement: function() {
+		formeditor = new FormEditor('Updating');
 		formeditor.startEvents(this.controller.content.get('content'));
     }
 });
@@ -124,8 +165,11 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 		}
 
 		if( form.get('optin') ) {
-			if( form.get('optinsubject') === undefined && form.get('optinfromemail') === undefined ) {
+			if( form.get('optinsubject') === undefined || form.get('optinsubject').trim().length === 0 || form.get('optinfromemail') === undefined || form.get('optinfromemail').trim().length === 0 ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para OPTIN'};
+			}
+			if( form.get('welcomeurl') === undefined || form.get('welcomeurl').trim().length === 0 ) {
+				return {acceptance: false, msg: 'Recuerde dar la URL de BIENVENIDA'};
 			}
 			var optin_mail = ( form.get('mailforoptin') === undefined ) ?  JSON.stringify(App.defaultmailoptin) : form.get('mailforoptin');
 			
@@ -138,7 +182,7 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 		}
 		
 		if( form.get('welcome') ) {
-			if( form.get('welcomesubject') === undefined && form.get('welcomefromemail') === undefined ) {
+			if( form.get('welcomesubject') === undefined || form.get('welcomesubject').trim().length === 0 || form.get('welcomefromemail') === undefined || form.get('welcomefromemail').trim().length === 0 ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para BIENVENIDA'};
 			}
 			var welcome_mail = ( form.get('mailforwelcome') === undefined ) ?  JSON.stringify(App.defaultmailwelcome) : form.get('mailforwelcome');
@@ -152,7 +196,7 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 		}
 		
 		if( form.get('notify') ) {
-			if( form.get('notifysubject') === undefined && form.get('notifyfromemail') === undefined ) {
+			if( form.get('notifysubject') === undefined || form.get('notifysubject').trim().length === 0 || form.get('notifyfromemail') === undefined || form.get('notifyfromemail').trim().length === 0) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para NOTIFICACIÓN'};
 			}
 			var notify_mail = ( form.get('mailfornotify') === undefined ) ?  JSON.stringify(App.defaultmailnotify) : form.get('mailfornotify');
@@ -163,9 +207,13 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 									fromname: form.get('notifyfromname'),
 									reply: form.get('notifyreplyto'),
 									mail: notify_mail }) );
+			
+			if( form.get('notifyemail') === undefined || form.get('notifyemail').trim().length === 0 ) {
+				return {acceptance: false, msg: 'Recuerde asignar a quien desea Notificar'};
+			}
 		}
 		
-		if( form.get('listselected') === undefined ) {
+		if( form.get('listselected') === undefined  || form.get('listselected') === 'none' || form.get('listselected') === null ) {
 			return {acceptance: false, msg: 'Recuerde seleccionar una "LISTA"'};
 		}
 		
@@ -199,8 +247,8 @@ App.FormsSetupController = Ember.ObjectController.extend( Ember.SaveFormHandlerM
 			}
 			objMail = ( mail === undefined ) ? maildefault : mail;
 			
-			$('.title-advanced-editor').html('<h5>Correo de ' + msg + ' </h5>');
-			$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
+			$('.title-advanced-editor').html('<h4>Correo de ' + msg + ' </h4>');
+			$('.here-comes-frame').html('<iframe id="iframeEditor" style="border: 0 !important;" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
 			$('#btn-for-' + option).show();
 		},
 		create_optin_mail: function(form) {
@@ -261,7 +309,9 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 	loadData: function() {
 		var t = this;
 		this.set('listselectedvalue', this.content.get('listselected'));
-		this.store.find('list').then(function(list) {
+		
+		var idDbase = this.get('dbaseselected');
+		this.store.find('list', { dbase: idDbase }).then(function(list) {
 			var lists = list.get('content');
 			var values = [];
 			for(var i = 0; i < lists.length; i++) {
@@ -320,9 +370,14 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 		}
 		
 		if( form.get('optin') ) {
-			if( form.get('optinsubject') === undefined && form.get('optinfromemail') === undefined ) {
+			if( form.get('optinsubject') === undefined || form.get('optinsubject').trim().length === 0 || form.get('optinfromemail') === undefined || form.get('optinfromemail').trim().length === 0 ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para OPTIN'};
 			}
+			
+			if( form.get('welcomeurl') === undefined || form.get('welcomeurl').trim().length === 0 ) {
+				return {acceptance: false, msg: 'Recuerde dar la URL de BIENVENIDA'};
+			}
+			
 			var optin_mail = ( form.get('mailforoptin') === undefined ) ? JSON.stringify(App.defaultmailoptin) : form.get('mailforoptin');
 			
 			form.set('optinmail', JSON.stringify({	
@@ -334,7 +389,7 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 		}
 		
 		if( form.get('welcome') ) {
-			if( form.get('welcomesubject') === undefined && form.get('welcomefromemail') === undefined ) {
+			if( form.get('welcomesubject') === undefined || form.get('welcomesubject').trim().length === 0 || form.get('welcomefromemail') === undefined || form.get('welcomefromemail').trim().length === 0 ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para BIENVENIDA'};
 			}
 			var welcome_mail = ( form.get('mailforwelcome') === undefined ) ? JSON.stringify(App.defaultmailwelcome) : form.get('mailforwelcome');
@@ -348,7 +403,7 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 		}
 		
 		if( form.get('notify') ) {
-			if( form.get('notifysubject') === undefined && form.get('notifyfromemail') === undefined ) {
+			if( form.get('notifysubject') === undefined || form.get('notifysubject').trim().length === 0 || form.get('notifyfromemail') === undefined || form.get('notifyfromemail').trim().length === 0 ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para NOTIFICACIÓN'};
 			}
 			var notify_mail = ( form.get('mailfornotify') === undefined ) ? JSON.stringify(App.defaultmailnotify) : form.get('mailfornotify');
@@ -359,9 +414,13 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 									fromname: form.get('notifyfromname'),
 									reply: form.get('notifyreplyto'),
 									mail: notify_mail }) );
+								
+			if( form.get('notifyemail') === undefined || form.get('notifyemail').trim().length === 0 ) {
+				return {acceptance: false, msg: 'Recuerde asignar a quien desea Notificar'};
+			}
 		}
-		
-		if( form.get('listselected') === undefined ) {
+
+		if( form.get('listselected') === undefined  || form.get('listselected') === 'none' || form.get('listselected') === null ) {
 			return {acceptance: false, msg: 'Recuerde seleccionar una "LISTA"'};
 		}
 		
@@ -394,8 +453,8 @@ App.FormsEditController = Ember.ObjectController.extend( Ember.SaveFormHandlerMi
 			}
 			objMail = ( mail === undefined ) ? maildefault : mail;
 			
-			$('.title-advanced-editor').html('<h5>Correo de ' + msg + ' </h5>');
-			$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
+			$('.title-advanced-editor').html('<h4>Correo de ' + msg + ' </h4>');
+			$('.here-comes-frame').html('<iframe id="iframeEditor" style="border: 0 !important;" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
 			$('#btn-for-' + option).show();
 		},
 		create_optin_mail: function(form) {
@@ -466,6 +525,19 @@ App.FormsCodeController = Ember.ObjectController.extend({
 	}
 });
 
+App.FormsHtmlRoute = Ember.Route.extend({
+	
+});
+
+App.FormsHtmlController = Ember.ObjectController.extend({
+	actions: {
+		cancel: function() {
+			this.get("model").rollback();
+			this.transitionToRoute('forms.index');
+		}
+	}
+});
+
 App.FormsUpdatingRoute = Ember.Route.extend({
 	model: function(){
 		return this.store.createRecord('form');
@@ -486,6 +558,19 @@ App.FormsUpdatingRoute = Ember.Route.extend({
 });
 
 App.FormsUpdatingController = Ember.ObjectController.extend( Ember.SaveFormHandlerMixin, {
+	selectofdbases: [],
+	setSelectOfDbases: function() {
+		var t = this;
+		this.store.find('dbase').then(function(dbase) {
+			var dbases = dbase.get('content');
+			var values = [];
+			for(var i = 0; i < dbases.length; i++) {
+				var obj = {id: dbases[i].get('id'), name: dbases[i].get('name')};
+				values.push(obj);
+			}
+			t.set('selectofdbases', values);
+		});
+	}.observes('content'),
 	cleanEditor: function() {
 		$('.title-advanced-editor').empty();
 		$('.here-comes-frame').empty();
@@ -503,7 +588,7 @@ App.FormsUpdatingController = Ember.ObjectController.extend( Ember.SaveFormHandl
 		}
 		
 		if( form.get('updatenotify') ) {
-			if( form.get('updatenotifysubject') === undefined && form.get('updatenotifyfromemail') === undefined ) {
+			if( form.get('updatenotifysubject') === undefined || form.get('updatenotifysubject').trim().length === 0 || form.get('updatenotifyfromemail') === undefined || form.get('updatenotifyfromemail').trim().length === 0 ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para AVISO DE ACTUALIZACIÓN'};
 			}
 			var notify_update_mail = ( form.get('mailforupdatenotify') === undefined ) ? JSON.stringify(App.defaultmailcontactnotify) : form.get('mailforupdatenotify');
@@ -517,7 +602,7 @@ App.FormsUpdatingController = Ember.ObjectController.extend( Ember.SaveFormHandl
 		}
 		
 		if( form.get('notify') ) {
-			if( form.get('notifysubject') === undefined && form.get('notifyfromemail') === undefined ) {
+			if( form.get('notifysubject') === undefined || form.get('notifysubject').trim().length === 0 || form.get('notifyfromemail') === undefined || form.get('notifyfromemail').trim().length === 0 ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para NOTIFICACIÓN'};
 			}
 			var notify_mail = ( form.get('mailfornotify') === undefined ) ? JSON.stringify(App.defaultmailnotify) : form.get('mailfornotify');
@@ -528,6 +613,14 @@ App.FormsUpdatingController = Ember.ObjectController.extend( Ember.SaveFormHandl
 									fromname: form.get('notifyfromname'),
 									reply: form.get('notifyreplyto'),
 									mail: notify_mail }) );
+								
+			if( form.get('notifyemail') === undefined || form.get('notifyemail').trim().length === 0 ) {
+				return {acceptance: false, msg: 'Recuerde asignar a quien desea Notificar'};
+			}
+		}
+		
+		if( form.get('dbaseselected') === undefined  || form.get('dbaseselected') === 'none' || form.get('dbaseselected') === null ) {
+			return {acceptance: false, msg: 'Recuerde seleccionar una "BASE DE DATOS"'};
 		}
 		
 		return {acceptance: true, msg: ''};
@@ -554,8 +647,8 @@ App.FormsUpdatingController = Ember.ObjectController.extend( Ember.SaveFormHandl
 			}
 			objMail = ( mail === undefined ) ? maildefault : mail;
 			
-			$('.title-advanced-editor').html('<h5>Correo de ' + msg + ' </h5>');
-			$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
+			$('.title-advanced-editor').html('<h4>Correo de ' + msg + ' </h4>');
+			$('.here-comes-frame').html('<iframe id="iframeEditor" style="border: 0 !important;" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
 			$('#btn-for-' + option).show();
 		},
 		create_notify_contact_mail: function(form) {
@@ -572,7 +665,7 @@ App.FormsUpdatingController = Ember.ObjectController.extend( Ember.SaveFormHandl
 			this.content.set('type', 'Updating');
 			var result = this.checkValues(form);
 			if(result.acceptance) {
-				this.handleSavePromise(this.content.save(), 'forms.new', 'Se han aplicado los cambios');
+				this.handleSavePromise(this.content.save(), 'forms.newupdate', 'Se han aplicado los cambios');
 			}
 			else {
 				$.gritter.add({title: 'Cuidado', text: result.msg, sticky: false, time: 5000});
@@ -602,9 +695,31 @@ App.FormsEditupdateRoute = Ember.Route.extend({
 });
 
 App.FormsEditupdateController = Ember.ObjectController.extend( Ember.SaveFormHandlerMixin, {
+	selectofdbases: [],
+	setSelectOfDbases: function() {
+		if(this.content.get('dbaseselected') === undefined) {
+			this.content.set('dbaseselected', this.get('dbaseselectedvalue'));
+		}
+	}.observes('content.dbaseselected'),
+	
 	loadData: function() {
+		var t = this;
+		this.set('dbaseselectedvalue', this.content.get('dbaseselected'));
+		this.store.find('dbase').then(function(dbase) {
+			var dbases = dbase.get('content');
+			var values = [];
+			for(var i = 0; i < dbases.length; i++) {
+				if(dbases[i].get('id') == t.content.get('dbaseselected')) {
+					var obj = {id: dbases[i].get('id'), name: dbases[i].get('name')};
+					values.push(obj);
+					t.set('dbaseselectedfield', obj);
+				}
+			}
+			t.set('selectofdbases', values);
+		});
+		
 		var form = this.content;
-
+		
 		var updatenotifyinfo = JSON.parse(form.get('updatenotifymail'));
 		if( updatenotifyinfo ) {
 			form.set('mailforupdatenotify', updatenotifyinfo.mail);
@@ -613,7 +728,7 @@ App.FormsEditupdateController = Ember.ObjectController.extend( Ember.SaveFormHan
 			form.set('updatenotifyfromname', updatenotifyinfo.fromname);
 			form.set('updatenotifyreplyto', updatenotifyinfo.reply);
 		}
-		
+
 		var notifyinfo = JSON.parse(form.get('notifymail'));
 		if( notifyinfo ) {
 			form.set('mailfornotify', notifyinfo.mail);
@@ -640,7 +755,7 @@ App.FormsEditupdateController = Ember.ObjectController.extend( Ember.SaveFormHan
 		}
 		
 		if( form.get('updatenotify') ) {
-			if( form.get('updatenotifysubject') === undefined && form.get('updatenotifyfromemail') === undefined ) {
+			if( form.get('updatenotifysubject') === undefined || form.get('updatenotifyfromemail') === undefined ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para AVISO DE ACTUALIZACIÓN'};
 			}
 			var notify_update_mail = ( form.get('mailforupdatenotify') === undefined ) ? JSON.stringify(App.defaultmailoptin) : form.get('mailforupdatenotify');
@@ -654,6 +769,7 @@ App.FormsEditupdateController = Ember.ObjectController.extend( Ember.SaveFormHan
 		}
 		
 		if( form.get('notify') ) {
+		
 			if( form.get('notifysubject') === undefined && form.get('notifyfromemail') === undefined ) {
 				return {acceptance: false, msg: 'Recuerde completar los campos de "ASUNTO" y "DE" en la edición de correo para NOTIFICACIÓN'};
 			}
@@ -665,6 +781,14 @@ App.FormsEditupdateController = Ember.ObjectController.extend( Ember.SaveFormHan
 									fromname: form.get('notifyfromname'),
 									reply: form.get('notifyreplyto'),
 									mail: notify_mail }) );
+								
+			if( form.get('notifyemail') === undefined || form.get('notifyemail').trim().length === 0 ) {
+				return {acceptance: false, msg: 'Recuerde asignar a quien desea Notificar'};
+			}
+		}
+
+		if( form.get('dbaseselected') === undefined  || form.get('dbaseselected') === 'none' || form.get('dbaseselected') === null ) {
+			return {acceptance: false, msg: 'Recuerde seleccionar una "BASE DE DATOS"'};
 		}
 		
 		return {acceptance: true, msg: ''};
@@ -691,8 +815,8 @@ App.FormsEditupdateController = Ember.ObjectController.extend( Ember.SaveFormHan
 			}
 			objMail = ( mail === undefined ) ? maildefault : mail;
 			
-			$('.title-advanced-editor').html('<h5>Correo de ' + msg + ' </h5>');
-			$('.here-comes-frame').html('<iframe id="iframeEditor" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
+			$('.title-advanced-editor').html('<h4>Correo de ' + msg + ' </h4>');
+			$('.here-comes-frame').html('<iframe id="iframeEditor" style="border: 0 !important;" src="' + config.baseUrl + 'mail/editor_frame" width="100%" onload="iframeResize()" seamless></iframe>');
 			$('#btn-for-' + option).show();
 		},
 		create_notify_contact_mail: function(form) {
@@ -708,7 +832,7 @@ App.FormsEditupdateController = Ember.ObjectController.extend( Ember.SaveFormHan
 		next: function(form) {
 			var result = this.checkValues(form);
 			if(result.acceptance) {
-				this.handleSavePromise(this.content.save(), 'forms.new', 'Se han aplicado los cambios');
+				this.handleSavePromise(this.content.save(), 'forms.newupdate', 'Se han aplicado los cambios');
 			}
 			else {
 				$.gritter.add({title: 'Cuidado', text: result.msg, sticky: false, time: 5000});
@@ -731,5 +855,11 @@ App.FormsLinkController = Ember.ObjectController.extend({
 			this.get("model").rollback();
 			this.transitionToRoute('forms.index');
 		}
+	}
+});
+
+App.TagsInput = Ember.TextField.extend({
+	didInsertElement: function() {
+		$('#email-notify').tagsinput();
 	}
 });
