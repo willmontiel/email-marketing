@@ -206,14 +206,14 @@ class Reportingcreator
                     if (!empty($mfields1)) {
                         $fieldsheader .= ", '{$mfields1}'";
                         if ($c1) {
-                            $values .= "{$model->fields} VARCHAR(200)";
-                            $fields .= $model->fields;
+                            $values .= "{$mfields1} VARCHAR(200)";
+                            $fields .= $mfields1;
 
                             $c1 = false;
                         }
                         else {
-                            $values .= ", {$model->fields} VARCHAR(200)";
-                            $fields .= ", {$model->fields}";
+                            $values .= ", {$mfields1} VARCHAR(200)";
+                            $fields .= ", {$mfields1}";
                         }
                     }
                 }
