@@ -203,6 +203,7 @@ class Reportingcreator
             
             if (count($model->fields) > 0) {
                 foreach ($model->fields as $mfields1) {
+                    $mfields1 = trim($mfields1);
                     if (!empty($mfields1)) {
                         $fieldsheader .= ", '{$mfields1}'";
                         if ($c1) {
