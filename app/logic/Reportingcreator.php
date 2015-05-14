@@ -203,9 +203,9 @@ class Reportingcreator
             
             if (count($model->fields) > 0) {
                 foreach ($model->fields as $mfields1) {
-                    $mfields1 = trim($mfields1);
-                    $this->logger->log($mfields1);	
+                    $mfields1 = trim($mfields1);	
                     if (!empty($mfields1)) {
+                        $comma = ",";
                         $fieldsheader .= ", '{$mfields1}'";
                         if ($c1) {
                             $values .= "{$mfields1} VARCHAR(200)";
