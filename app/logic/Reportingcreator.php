@@ -154,9 +154,11 @@ class Reportingcreator
 				
 				$addFields = "ALTER TABLE {$this->tablename} ADD ({$values} VARCHAR(200))";
 
+                                $this->logger->log($addFields);	
+                                
 				$db = Phalcon\DI::getDefault()->get('db');
 				$add = $db->execute($addFields);
-
+                                
 				if (!$add) {
 					throw new \Exception('Error while adding customfields in tmp db');
 				}
@@ -190,7 +192,7 @@ class Reportingcreator
 					os, link, bouncedType, category, date {$comma}{$fields})
 					VALUES {$values}";
 			
-//			$this->logger->log($sql);		
+			$this->logger->log($sql);		
 					
 			$report =  "SELECT 'Fecha', 'Email', 'Nombre', 'Apellido', 'Fecha de cumpleanos', 'Link' {$fieldsheader} 
 						UNION ALL				
