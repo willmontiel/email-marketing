@@ -173,7 +173,7 @@ class Reportingcreator
 					os, link, bouncedType, category, date {$object->comma}{$object->fields})
 					VALUES {$values}";
 			
-			$this->logger->log($sql);		
+//			$this->logger->log($sql);		
 					
 			$report =  "SELECT 'Fecha', 'Email', 'Nombre', 'Apellido', 'Fecha de cumpleanos', 'Link' {$object->fieldsheader} 
 						UNION ALL				
@@ -223,7 +223,7 @@ class Reportingcreator
                 if ($values !== "") {
                     $addFields = "ALTER TABLE {$this->tablename} ADD ({$values})";
 
-                    $this->logger->log($addFields);	
+//                    $this->logger->log($addFields);	
 
                     $db = Phalcon\DI::getDefault()->get('db');
                     $add = $db->execute($addFields);
