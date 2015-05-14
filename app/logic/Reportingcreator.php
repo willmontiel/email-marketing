@@ -146,10 +146,12 @@ class Reportingcreator
 			$first = true;
 			$values = "";
 			foreach ($model->model as $contact) {
+                                $fi = "";
 				if (count($model->fields) > 0) {
-					$fi = "";
 					foreach ($model->fields as $field) {
-						$fi .= ", '{$contact[$field]}'";
+                                                if (!empty($field)) {
+                                                        $fi .= ", '{$contact[$field]}'";
+                                                }
 					}
 				}
 				
@@ -215,7 +217,7 @@ class Reportingcreator
                         }
                     }
                 }
-
+                
                 if ($values !== "") {
                     $addFields = "ALTER TABLE {$this->tablename} ADD ({$values} VARCHAR(200))";
 
