@@ -141,34 +141,17 @@ class Reportingcreator
 		
 		if (count($contacts) > 0) {
 			$model = $this->modelContacts($contacts);
-			$fields = "";
-			$comma = "";
-			if (count($model->fields) > 0) {
-				$values = implode(' VARCHAR(200), ', $model->fields);
-				$fields = implode(', ', $model->fields);
-				$comma = ",";
-				$fieldsheader = "";
-				foreach ($model->fields as $value) {
-					$fieldsheader .= ", '{$value}'";
-				}
-				
-				$addFields = "ALTER TABLE {$this->tablename} ADD ({$values} VARCHAR(200))";
-
-				$db = Phalcon\DI::getDefault()->get('db');
-				$add = $db->execute($addFields);
-
-				if (!$add) {
-					throw new \Exception('Error while adding customfields in tmp db');
-				}
-			}
-			
+                        $object = $this->setCustomFields($model);
+                        
 			$first = true;
 			$values = "";
 			foreach ($model->model as $contact) {
+                                $fi = "";
 				if (count($model->fields) > 0) {
-					$fi = "";
 					foreach ($model->fields as $field) {
-						$fi .= ", '{$contact[$field]}'";
+                                                if (!empty($field)) {
+                                                        $fi .= ", '{$contact[$field]}'";
+                                                }
 					}
 				}
 				
@@ -187,14 +170,14 @@ class Reportingcreator
 			}
 			
 			$sql = "INSERT INTO $this->tablename (idTmpReport, idMail, reportType, email, name, lastName, birthdate,
-					os, link, bouncedType, category, date {$comma}{$fields})
+					os, link, bouncedType, category, date {$object->comma}{$object->fields})
 					VALUES {$values}";
 			
 //			$this->logger->log($sql);		
 					
-			$report =  "SELECT 'Fecha', 'Email', 'Nombre', 'Apellido', 'Fecha de cumpleanos', 'Link' {$fieldsheader} 
+			$report =  "SELECT 'Fecha', 'Email', 'Nombre', 'Apellido', 'Fecha de cumpleanos', 'Link' {$object->fieldsheader} 
 						UNION ALL				
-						SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, name, lastName, birthDate, link {$comma}{$fields} 
+						SELECT FROM_UNIXTIME(date, '%d-%m-%Y %H:%i:%s'), email, name, lastName, birthDate, link {$object->comma}{$object->fields} 
 							FROM {$this->tablename}
 							INTO OUTFILE  '{$dir}{$name}'
 							FIELDS TERMINATED BY ','
@@ -210,6 +193,55 @@ class Reportingcreator
 		return $data;
 	}
 	
+        protected function setCustomFields($model)
+        {
+            $c1 = true;
+            $values = "";
+            $fields = "";
+            $comma = "";
+            $fieldsheader = "";
+            
+            if (count($model->fields) > 0) {
+                foreach ($model->fields as $mfields1) {
+                    $mfields1 = trim($mfields1);	
+                    if (!empty($mfields1)) {
+                        $comma = ",";
+                        $fieldsheader .= ", '{$mfields1}'";
+                        if ($c1) {
+                            $values .= "{$mfields1} VARCHAR(200)";
+                            $fields .= $mfields1;
+
+                            $c1 = false;
+                        }
+                        else {
+                            $values .= ", {$mfields1} VARCHAR(200)";
+                            $fields .= ", {$mfields1}";
+                        }
+                    }
+                }
+                
+                if ($values !== "") {
+                    $addFields = "ALTER TABLE {$this->tablename} ADD ({$values})";
+
+//                    $this->logger->log($addFields);	
+
+                    $db = Phalcon\DI::getDefault()->get('db');
+                    $add = $db->execute($addFields);
+
+                    if (!$add) {
+                            throw new \Exception('Error while adding customfields in tmp db');
+                    }
+                }
+            }
+            
+            $object = new stdClass();
+            $object->fields = $fields;
+            $object->fieldsheader = $fieldsheader;
+            $object->comma = $comma;
+            
+            return $object;
+        }
+        
 	protected function modelContacts($contacts)
 	{
 		$modelc = array();

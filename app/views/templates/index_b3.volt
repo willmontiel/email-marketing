@@ -3,56 +3,50 @@
 <html>
     <head>
         <meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=1">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800">
-		<link rel="shortcut icon" type="image/x-icon" href="{{url('')}}images/favicon48x48.ico">
-		<!-- Always force latest IE rendering engine or request Chrome Frame -->
-		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+        <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=1">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800">
+        <link rel="shortcut icon" type="image/x-icon" href="{{url('')}}images/favicon48x48.ico">
+        <!-- Always force latest IE rendering engine or request Chrome Frame -->
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
         {{ get_title() }}
 
         {{ stylesheet_link('vendors/bootstrap_v3/css/bootstrap.css') }}
         {{ stylesheet_link('vendors/bootstrap_v3/css/font-awesome.css') }}
         
-
         {# Para cambiar el tema modificar la ruta en el siguiente enlace#}
         {{ stylesheet_link('themes/' ~ theme.name ~ '/css/styles.css') }}
-        {##}
-
         {{ stylesheet_link('vendors/bootstrap_v3/vendors/css/bootstrap-editable.css') }}
         {{ stylesheet_link('vendors/bootstrap_v3/vendors/css/jquery.gritter.css') }}
 
-		<!--[if lt IE 9]>
-		{{ javascript_include('javascripts/vendor/html5shiv.js') }}
-		{{ javascript_include('javascripts/vendor/excanvas.js') }}
-		<![endif]-->
+        <!--[if lt IE 9]>
+        {{ javascript_include('javascripts/vendor/html5shiv.js') }}
+        {{ javascript_include('javascripts/vendor/excanvas.js') }}
+        <![endif]-->
 		
-		{% block header_javascript %}
-		<script type="text/javascript">
-			var MyBaseURL = '{{url('')}}';
-		</script>
-		{{ javascript_include('vendors/bootstrap_v3/js/jquery-1.9.1.js') }}
-		{{ javascript_include('vendors/bootstrap_v3/js/bootstrap.js') }}
-		{{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.sparkline.js') }}
-{#		
-		{{ javascript_include('b3/vendors/js/spark_auto.js') }}
-#}
-		{{ javascript_include('vendors/bootstrap_v3/vendors/js/bootstrap-editable.js') }}
-		{{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.gritter.js') }}
-		{% endblock %}
-		{{ javascript_include('js/indicator_account_loader.js') }}
-		{{ javascript_include('js/score-loader.js') }}
-		{{ stylesheet_link('css/prstyles.css') }}
-		{{ stylesheet_link('css/sidebar-media-queries.css') }}
-		<script type="text/javascript">
-			loadIndicator("indicator");
-			loadScore("score");
-		</script>
+        <script type="text/javascript">
+            var MyBaseURL = '{{url('')}}';
+        </script>
+        {{ javascript_include('vendors/bootstrap_v3/js/jquery-1.9.1.js') }}
+        {{ javascript_include('vendors/bootstrap_v3/js/bootstrap.js') }}
+        {{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.sparkline.js') }}
+        {{ javascript_include('vendors/bootstrap_v3/vendors/js/bootstrap-editable.js') }}
+        {{ javascript_include('vendors/bootstrap_v3/vendors/js/jquery.gritter.js') }}
+
+        {{ javascript_include('js/indicator_account_loader.js') }}
+        {{ javascript_include('js/score-loader.js') }}
+        {{ stylesheet_link('css/prstyles.css') }}
+        {{ stylesheet_link('css/sidebar-media-queries.css') }}
+        <script type="text/javascript">
+            loadIndicator("indicator");
+            loadScore("score");
+        </script>
         <style>
-			select {
-				width: 88%;
-			}
+            select {
+                    width: 88%;
+            }
         </style>
+        {% block header_javascript %}{% endblock %}
     </head>
     <body>
 		<!-- nav bar -->
