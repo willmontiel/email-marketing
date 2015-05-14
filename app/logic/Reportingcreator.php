@@ -221,7 +221,7 @@ class Reportingcreator
                 }
                 
                 if ($values !== "") {
-                    $addFields = "ALTER TABLE {$this->tablename} ADD ({$values} VARCHAR(200))";
+                    $addFields = "ALTER TABLE {$this->tablename} ADD ({$values})";
 
                     $this->logger->log($addFields);	
 
