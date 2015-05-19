@@ -98,9 +98,10 @@ class StatisticsWrapper extends BaseWrapper
 		if ($compare) {
 			$mailCompare = array();
 			foreach ($allMails as $m) {
+                                $name = str_replace(array('"', "'"), array("", ""), $m->name);
 				$objfc = new stdClass();
 				$objfc->id = $m->idMail;
-				$objfc->name = $m->name;
+				$objfc->name = $name;
 				$mailCompare[] = $objfc;				
 			}
 				$response['compareMail'] = $mailCompare;

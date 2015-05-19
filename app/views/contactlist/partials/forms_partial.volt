@@ -255,7 +255,7 @@
 			<div class="col-md-8">
 				<div class="bs-callout bs-callout-info">
 					<h4>Código HTML</h4>
-					<p>Copie y pegue el siguiente código en su página web</p>
+					<p>Copie y pegue el siguiente código HTML en su página web</p>
 					<div>
 						<textarea rows="20" cols="90"><!DOCTYPE html><html><head></head><body>{{ '{{unbound html}}' }}</body></html></textarea>
 					</div>
