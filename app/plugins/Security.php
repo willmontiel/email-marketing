@@ -29,9 +29,9 @@ class Security extends Plugin
 		/*
 		 * Buscar ACL en cache
 		 */
-		$acl = $this->cache->get('acl-cache');
+//		$acl = $this->cache->get('acl-cache');
 		
-		if (!$acl) {
+//		if (!$acl) {
 			// No existe, crear objeto ACL
 	
 //			$acl = new Phalcon\Acl\Adapter\Memory();
@@ -78,8 +78,8 @@ class Security extends Plugin
 				$acl->allow($role->rolename, $role->resname, $role->actname);
 			}
 			
-			$this->cache->save('acl-cache', $acl);
-		}
+			//$this->cache->save('acl-cache', $acl);
+//		}
 
 		// Retornar ACL
 		$this->_dependencyInjector->set('acl', $acl);
@@ -89,8 +89,8 @@ class Security extends Plugin
 	
 	protected function getControllerMap()
 	{
-		$map = $this->cache->get('controllermap-cache');
-		if (!$map) {
+//		$map = $this->cache->get('controllermap-cache');
+//		if (!$map) {
 			$map = array(
 		//* RELEASE 0.1.0 *//
 				//Tests
@@ -493,8 +493,8 @@ class Security extends Plugin
 				'smartmanagment::behavior' => array('smartmanagment' => array('read')),
 				
 			);
-		}
-		$this->cache->save('controllermap-cache', $map);
+//		}
+//		$this->cache->save('controllermap-cache', $map);
 		return $map;
 	}
 	
