@@ -24,10 +24,9 @@ class StatisticsSender
         $dates = array();
         
         foreach ($mails as $mail) {
-            $dates[] = $mail->finishedon;
-            echo $dates;
+            $dates[] = $mail->finishedon;            
         }
         
-        
+        echo $dates;
     }    
 }
