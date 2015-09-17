@@ -27,6 +27,6 @@ class StatisticsSender
             $dates[] = $mail->finishedon;            
         }
         
-        echo $dates;
+        echo $dates[0];
     }    
 }
