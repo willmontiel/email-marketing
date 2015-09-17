@@ -27,7 +27,18 @@ class StatisticsSender
         $account = array_unique($accounts);
         
         foreach ($account as $a) {
-            echo 'Cuenta: ' . $a;
+            $users = User::find(array(
+                'conditions' => 'idAccount = ?1',
+                'bind' => array(1 => $a)
+            ));                        
+            
+            $emails = array();
+            
+            foreach ($users as $user) {
+                $emails[] = $user->email;
+            }
+            
+            print_r($emails);
         }
     }    
 }
