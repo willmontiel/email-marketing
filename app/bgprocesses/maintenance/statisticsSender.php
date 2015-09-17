@@ -24,6 +24,9 @@ class StatisticsSender
             $accounts[] = $mail->idAccount;
         }
         
+        $account = array_unique($accounts);
+        
         print_r($accounts);
+        print_r($account);
     }    
 }
