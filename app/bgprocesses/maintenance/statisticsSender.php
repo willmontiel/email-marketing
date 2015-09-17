@@ -26,7 +26,8 @@ class StatisticsSender
         
         $account = array_unique($accounts);
         
-        print_r($accounts);
-        print_r($account);
+        foreach ($account as $a) {
+            echo 'Cuenta: ' . $a;
+        }
     }    
 }
