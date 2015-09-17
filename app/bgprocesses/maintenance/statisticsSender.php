@@ -11,9 +11,6 @@ class StatisticsSender
         $d = strtotime(date("d-m-Y h:m:s"));
         $towdays = strtotime("-2 days", $d);
         
-        echo 'Dia de hoy: ' . $d;
-        echo 'Hace dos dias: ' . $towdays;
-        
         $mails = Mail::find(array(
             'conditions' => 'status = ?1 AND statisticsStatus = ?2 AND finishedon <= ?3',
             'bind' => array(1 => 'Sent',
@@ -21,12 +18,12 @@ class StatisticsSender
                             3 => $towdays,)
         ));        
         
-        $dates = array();
+        $accounts = array();
         
         foreach ($mails as $mail) {
-            $dates[] = $mail->finishedon;
-            echo 'Fecha1: ' . $dates[0];
-            echo 'Fecha2: ' . $dates[1];
-        }                        
+            $accounts[] = $mail->idAccount;
+        }
+        
+        print_r($accounts);
     }    
 }
