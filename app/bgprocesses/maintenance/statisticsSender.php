@@ -14,6 +14,11 @@ class StatisticsSender
                             2 => 0)
         ));
         
+        $d = strtotime(date("Y-m-d"));        
+        $towdays = strtotime("+2 days", $d);
         
+        foreach ($mails as $mail) {
+            echo $mail->fineshdon;
+        }
     }    
 }
