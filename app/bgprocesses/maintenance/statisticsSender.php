@@ -20,7 +20,7 @@ class StatisticsSender
         $towdays = strtotime("+2 days", $d);
         
         foreach ($mails as $mail) {
-            echo $mail->fineshdon;
+            echo $mail->finishedon;
         }
     }    
 }
