@@ -20,13 +20,13 @@ class StatisticsSender
         
         foreach ($this->findMails() as $mail) {
             $links = $this->getStatisticsLinks($mail);
-            echo $links;
+            print_r($links);
             
             foreach ($this->findUsers($mail->idAccount) as $user) {
                 $replace = array($user->firstName, $user->lastName);
                 //$message = $this->replaceContentStatictsMail($msg, $marks, $replace);
                 
-                echo $message;
+                //echo $message;
                 
                 //$sender = new AdministrativeMessages();
                 //$sender->sendMessage()
