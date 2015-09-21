@@ -16,17 +16,17 @@ class StatisticsSender
     public function init()
     {        
         $msg = $this->getStatisticsContentMail();
-        $marks = array("%%NAME%%", "%%LASTNAME%%");
+        $marks = array("%%NAME%%", "%%LASTNAME%%", "%%MAILNAME%%", "%%MAILDATE%%");
         
         foreach ($this->findMails() as $mail) {
             $links = $this->getStatisticsLinks($mail);
             print_r($links);
             
             foreach ($this->findUsers($mail->idAccount) as $user) {
-                $replace = array($user->firstName, $user->lastName);
-                //$message = $this->replaceContentStatictsMail($msg, $marks, $replace);
+                $replace = array($user->firstName, $user->lastName, $mail->name, $mail->finishedon);
+                $message = $this->replaceContentStatictsMail($msg, $marks, $replace);
                 
-                //echo $message;
+                echo $message;
                 
                 //$sender = new AdministrativeMessages();
                 //$sender->sendMessage()
