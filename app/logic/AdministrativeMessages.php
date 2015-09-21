@@ -17,6 +17,8 @@ class AdministrativeMessages
 		$this->mta = $di['mtadata'];
 		$this->logger = $di['logger'];
 	}
+        
+        
 	
 	public function createRecoverpassMessage($to, $url = null)
 	{
@@ -101,8 +103,8 @@ class AdministrativeMessages
 		$this->msg = $msg;
 		$this->to = $to;
 	}
-	
-	public function sendMessage()
+
+        public function sendMessage()
 	{
 		$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
 		$swift = Swift_Mailer::newInstance($transport);
