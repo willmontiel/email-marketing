@@ -26,7 +26,7 @@ class StatisticsSender
                 $replace = array($user->firstName, $user->lastName, $mail->name, $mail->finishedon);
                 $message = $this->replaceContentStatictsMail($msg, $marks, $replace);
                 
-                print_r($message);
+                echo $message;
                 
                 //$sender = new AdministrativeMessages();
                 //$sender->sendMessage()
