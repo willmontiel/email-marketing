@@ -22,7 +22,7 @@ class StatisticsSender
             $links = $this->getStatisticsLinks($mail);
             print_r($links);
             
-            echo "prueba";
+            echo "prueba" . $mail->idAccount;
             
             foreach ($this->findUsers($mail->idAccount) as $user) {
                 $replace = array($user->firstName, $user->lastName, $mail->name, $mail->finishedon);
