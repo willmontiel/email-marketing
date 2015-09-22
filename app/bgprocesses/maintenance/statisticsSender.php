@@ -22,11 +22,12 @@ class StatisticsSender
             $links = $this->getStatisticsLinks($mail);
             print_r($links);
             
+            echo "prueba";
+            
             foreach ($this->findUsers($mail->idAccount) as $user) {
                 $replace = array($user->firstName, $user->lastName, $mail->name, $mail->finishedon);
                 $message = $this->replaceContentStatictsMail($msg, $marks, $replace);
                 
-                print_r($replace);
                 echo 'Mensaje: ' . $message;
                 
                 //$sender = new AdministrativeMessages();
