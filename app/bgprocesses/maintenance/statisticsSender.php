@@ -16,7 +16,7 @@ class StatisticsSender
     public function init()
     {        
         $msg = $this->getStatisticsContentMail();
-        $marks = array("%%NAME%%", "%%LASTNAME%%", "%%MAILNAME%%", "%%MAILDATE%%");
+        $marks = array("%%NAME%%", "%%LASTNAME%%", "%%MAILNAME%%", "%%MAILDATE%%", "%%URL_COMPLETE", "%%URL_BASIC%%");
         
         foreach ($this->findMails() as $mail) {
             $links = $this->getStatisticsLinks($mail);
@@ -25,7 +25,7 @@ class StatisticsSender
             echo "Cuenta: " . $mail->idAccount;
             
             foreach ($this->findUsers($mail->idAccount) as $user) {
-                $replace = array($user->firstName, $user->lastName, $mail->name, $mail->finishedon);
+                $replace = array($user->firstName, $user->lastName, $mail->name, date('Y-m-d H:i' , $mail->finishedon), $links[1], $links[0]);
                 $message = $this->replaceContentStatictsMail($msg->msg, $marks, $replace);
                 
                 echo 'Mensaje: ' . $message;
