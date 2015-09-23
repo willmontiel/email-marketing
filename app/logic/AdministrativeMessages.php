@@ -133,9 +133,7 @@ class AdministrativeMessages
 	}
         
         public function sendBasicMessage($subject, $from, $msg, $user, $text)
-	{                                    
-            print_r($user);
-            echo 'Texto plano: ' . $text;
+	{                                                            
                         
             $transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
             $swift = Swift_Mailer::newInstance($transport);
@@ -149,9 +147,13 @@ class AdministrativeMessages
             $headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
 
             $message->setFrom($from);
+            echo "From";
             $message->setBody($msg, 'text/html');
+            echo "Mensaje";
             $message->setTo($user);
+            echo "User";
             $message->addPart($text, 'text/plain');
+            echo "Texto plano";
             
             echo "Correo creado";
 
