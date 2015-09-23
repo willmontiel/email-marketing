@@ -131,4 +131,32 @@ class AdministrativeMessages
 			throw new Exception('Error while sending message: ' . $failures);
 		}
 	}
+        
+        public function sendBasicMessage($subject, $from, $msg, $user, $text)
+	{
+            $transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
+            $swift = Swift_Mailer::newInstance($transport);
+
+            $message = new Swift_Message($subject);
+
+            /*Cabeceras de configuración para evitar que Green Arrow agregue enlaces de tracking*/
+            $headers = $message->getHeaders();
+            $headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
+
+            $message->setFrom($from);
+            $message->setBody($msg, 'text/html');
+            $message->setTo($user);
+            $message->addPart($text, 'text/plain');
+
+            $this->logger->log("Preparandose para enviar mensaje a: {$this->to}");
+
+            $recipients = $swift->send($message, $failures);
+
+            if ($recipients){
+                Phalcon\DI::getDefault()->get('logger')->log('Message successfully sent!');
+            }
+            else {
+                throw new Exception('Error while sending message: ' . $failures);
+            }
+	}
 }

@@ -28,10 +28,14 @@ class StatisticsSender
                 $replace = array($user->firstName, $user->lastName, $mail->name, date('Y-m-d H:i' , $mail->finishedon), $links[1], $links[0]);
                 $message = $this->replaceContentStatictsMail($msg->msg, $marks, $replace);
                 
-                echo 'Mensaje: ' . $message;
+                $subject = "Estadísticas de la camapaña de Email Marketing";
+                $from = array('contenidos@sigmamovil.com' => 'Equipo de Contenidos');
+                $userEmail = array($user->email => $user->firstName . " " . $user->lastName);
                 
-                //$sender = new AdministrativeMessages();
-                //$sender->sendMessage()
+                print_r($userEmail);
+                
+//                $sender = new AdministrativeMessages();
+//                $sender->sendMessage($subject, $from, $message);
             }
         } 
     }    
