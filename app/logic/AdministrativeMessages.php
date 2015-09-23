@@ -134,9 +134,18 @@ class AdministrativeMessages
         
         public function sendBasicMessage($subject, $from, $msg, $user, $text)
 	{
+            echo 'Asunto: ' . $subject;
+            print_r('Remitente: ' . $from);
+            echo 'Mensaje: ' . $msg;
+            print_r('Destinatario: ' . $user);
+            echo 'Texto plano: ' . $text;
+            
+            
             $transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
             $swift = Swift_Mailer::newInstance($transport);
 
+            echo "Instancia de SwiftMailer";
+            
             $message = new Swift_Message($subject);
 
             /*Cabeceras de configuración para evitar que Green Arrow agregue enlaces de tracking*/
@@ -147,13 +156,18 @@ class AdministrativeMessages
             $message->setBody($msg, 'text/html');
             $message->setTo($user);
             $message->addPart($text, 'text/plain');
+            
+            echo "Correo creado";
 
             $this->logger->log("Preparandose para enviar mensaje a: {$this->to}");
 
             $recipients = $swift->send($message, $failures);
+            
+            echo "Correo listo para envíar";
 
             if ($recipients){
                 Phalcon\DI::getDefault()->get('logger')->log('Message successfully sent!');
+                echo "Correo enviado";
             }
             else {
                 throw new Exception('Error while sending message: ' . $failures);
