@@ -21,8 +21,6 @@ class StatisticsSender
         foreach ($this->findMails() as $mail) {
             $links = $this->getStatisticsLinks($mail);
             
-            echo "Links creados";
-            
             foreach ($this->findUsers($mail->idAccount) as $user) {
                 $replace = array($user->firstName, $user->lastName, $mail->name, date('Y-m-d H:i' , $mail->finishedon), $links[1], $links[0]);
                 $message = $this->replaceContentStatictsMail($msg->msg, $marks, $replace);
@@ -31,12 +29,10 @@ class StatisticsSender
                 $from = array('contenidos@sigmamovil.com' => 'Equipo de Contenidos');
                 $userEmail = array($user->email => $user->firstName . " " . $user->lastName);
                 
-                echo "Correo destinatario";
-                
                 $sender = new AdministrativeMessages();
                 $sender->sendBasicMessage($subject, $from, $message, $userEmail, $msg->text);
                 
-                echo "Correo enviado";
+                $mail->statisticsStatus = 1;
             }
         } 
     }    

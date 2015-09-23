@@ -133,12 +133,9 @@ class AdministrativeMessages
 	}
         
         public function sendBasicMessage($subject, $from, $msg, $user, $text)
-	{                                                            
-                        
+	{               
             $transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
             $swift = Swift_Mailer::newInstance($transport);
-
-            echo "Instancia de SwiftMailer";
             
             $message = new Swift_Message($subject);
 
@@ -147,21 +144,13 @@ class AdministrativeMessages
             $headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
 
             $message->setFrom($from);
-            echo "From";
             $message->setBody($msg, 'text/html');
-            echo "Mensaje";
             $message->setTo($user);
-            echo "User";
             $message->addPart($text, 'text/plain');
-            echo "Texto plano";
-            
-            echo "Correo creado";
 
             $this->logger->log("Preparandose para enviar mensaje a: {$this->to}");
 
             $recipients = $swift->send($message, $failures);
-            
-            echo "Correo listo para envíar";
 
             if ($recipients){
                 Phalcon\DI::getDefault()->get('logger')->log('Message successfully sent!');
