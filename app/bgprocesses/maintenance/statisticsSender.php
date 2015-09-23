@@ -34,7 +34,7 @@ class StatisticsSender
                 echo "Correo destinatario";
                 
                 $sender = new AdministrativeMessages();
-                $sender->sendBasicMessage($subject, $from, $message, $user, $msg->text);
+                $sender->sendBasicMessage($subject, $from, $message, $userEmail, $msg->text);
                 
                 echo "Correo enviado";
             }
