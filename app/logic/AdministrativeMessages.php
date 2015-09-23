@@ -133,14 +133,10 @@ class AdministrativeMessages
 	}
         
         public function sendBasicMessage($subject, $from, $msg, $user, $text)
-	{
-            echo 'Asunto: ' . $subject;
-            print_r('Remitente: ' . $from);
-            echo 'Mensaje: ' . $msg;
-            print_r('Destinatario: ' . $user);
+	{                                    
+            print_r($user);
             echo 'Texto plano: ' . $text;
-            
-            
+                        
             $transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
             $swift = Swift_Mailer::newInstance($transport);
 

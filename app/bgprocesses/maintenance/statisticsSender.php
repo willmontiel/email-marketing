@@ -31,7 +31,7 @@ class StatisticsSender
                 $from = array('contenidos@sigmamovil.com' => 'Equipo de Contenidos');
                 $userEmail = array($user->email => $user->firstName . " " . $user->lastName);
                 
-                print_r($userEmail);
+                echo "Correo destinatario";
                 
                 $sender = new AdministrativeMessages();
                 $sender->sendBasicMessage($subject, $from, $message, $user, $msg->text);
