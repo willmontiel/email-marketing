@@ -20,7 +20,8 @@ class StatisticsSender
         
         foreach ($this->findMails() as $mail) {
             $links = $this->getStatisticsLinks($mail);
-            print_r($links);
+            
+            echo "Links creados";
             
             foreach ($this->findUsers($mail->idAccount) as $user) {
                 $replace = array($user->firstName, $user->lastName, $mail->name, date('Y-m-d H:i' , $mail->finishedon), $links[1], $links[0]);
@@ -34,6 +35,8 @@ class StatisticsSender
                 
                 $sender = new AdministrativeMessages();
                 $sender->sendBasicMessage($subject, $from, $message, $user, $msg->text);
+                
+                echo "Correo enviado";
             }
         } 
     }    
