@@ -25,7 +25,7 @@ class StatisticsSender
                 $replace = array($user->firstName, $user->lastName, $mail->subject, date('Y-m-d H:i' , $mail->finishedon), $links[1], $links[0], $mail->messagesSent);
                 $message = $this->replaceContentStatictsMail($msg->msg, $marks, $replace);
                 
-                $subject = "Estadísticas de la campaña de Email Marketing";
+                $subject = "Envío automático de estadísticas";
                 $from = array('contenidos@sigmamovil.com' => 'Equipo de Contenidos');
                 $userEmail = array($user->email => $user->firstName . " " . $user->lastName);
                 
@@ -35,10 +35,10 @@ class StatisticsSender
                 $mail->statisticsStatus = 1;
                 
                 if($mail->save()){
-                    $this->trace("success","Se edito el mail con ID: {$mail->idMail}");
+                    $this->traceSuccess("Edit mail: {$mail->idMail}");
                 }
                 else{
-                    $this->trace("fail","No se edito el el mail con ID: {$mail->idMail}");
+                    $this->traceSuccess("Fail Edit mail: {$mail->idMail}");
                 }
                 
                 echo "Correo envíado y tabla actualizada -";

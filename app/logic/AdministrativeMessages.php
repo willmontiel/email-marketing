@@ -154,7 +154,6 @@ class AdministrativeMessages
 
             if ($recipients){
                 Phalcon\DI::getDefault()->get('logger')->log('Message successfully sent!');
-                echo "Correo enviado";
             }
             else {
                 throw new Exception('Error while sending message: ' . $failures);
