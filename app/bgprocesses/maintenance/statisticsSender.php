@@ -16,7 +16,7 @@ class StatisticsSender
     public function init()
     {        
         $msg = $this->getStatisticsContentMail();
-        $marks = array("%%NAME%%", "%%LASTNAME%%", "%%MAILNAME%%", "%%MAILDATE%%", "%%URL_COMPLETE", "%%URL_BASIC%%", "%TOTALEMAILS%");
+        $marks = array("%%NAME%%", "%%LASTNAME%%", "%%MAILNAME%%", "%%MAILDATE%%", "%%URL_COMPLETE", "%%URL_BASIC%%", "%%TOTALEMAILS%%");
         
         foreach ($this->findMails() as $mail) {
             $links = $this->getStatisticsLinks($mail);
@@ -30,9 +30,7 @@ class StatisticsSender
                 $userEmail = array($user->email => $user->firstName . " " . $user->lastName);
                 
                 $sender = new AdministrativeMessages();
-                $sender->sendBasicMessage($subject, $from, $message, $userEmail, $msg->text);   
-                
-                echo "Correo enviado";
+                $sender->sendBasicMessage($subject, $from, $message, $userEmail, $msg->text);
             }
             
             $mail->statisticsStatus = 1;
@@ -43,8 +41,6 @@ class StatisticsSender
             else{
                 $this->traceSuccess("Fail Edit mail: {$mail->idMail}");
             }
-
-            echo "Tabla actualizada";
         } 
     }    
     
