@@ -103,8 +103,20 @@ class AdministrativeMessages
 		$this->msg = $msg;
 		$this->to = $to;
 	}
+	
+        public function createDatabaseConnectionFailMessage($to, $message)
+        {
+            $msg = new stdClass();
+            $msg->subject = "Se ha caído la conexión con la base de datos";
+            $msg->from = "noreply@sigmamovil.com";
+            $msg->msg = '<html><head><title></title></head><body><h2><span style="font-family: Helvetica;"><strong>Sigma Movil:<br /></strong></span></h2><table><tbody><tr><td></td></tr><tr><td><span style="font-family: Helvetica;">' . $message . ' <br /><br /></span></td></tr></tbody></table></body></html>';
+            $msg->text = 'Sigma Movil:=========================================================================' . $message;
 
-        public function sendMessage()
+            $this->msg = $msg;
+            $this->to = $to;
+        }
+        
+	public function sendMessage()
 	{
 		$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
 		$swift = Swift_Mailer::newInstance($transport);
@@ -129,6 +141,34 @@ class AdministrativeMessages
 		}
 		else {
 			throw new Exception('Error while sending message: ' . $failures);
+		}
+	}
+        
+        public function sendBackgroundMessage()
+	{
+		$transport = Swift_SmtpTransport::newInstance($this->mta->address, $this->mta->port);
+		$swift = Swift_Mailer::newInstance($transport);
+		
+		$message = new Swift_Message($this->msg->subject);
+		
+		/*Cabeceras de configuración para evitar que Green Arrow agregue enlaces de tracking*/
+		$headers = $message->getHeaders();
+		$headers->addTextHeader('X-GreenArrow-MailClass', 'SIGMA_NEWEMKTG_DEVEL');
+		
+		$message->setFrom($this->msg->from);
+		$message->setBody($this->msg->msg, 'text/html');
+		$message->setTo($this->to);
+		$message->addPart($this->msg->text, 'text/plain');
+		
+		$this->logger->log("Preparandose para enviar mensaje a: {$this->to}");
+		
+		$recipients = $swift->send($message, $failures);
+		
+		if ($recipients){
+			Phalcon\DI::getDefault()->get('logger')->log('Message successfully sent!');
+		}
+		else {
+                        Phalcon\DI::getDefault()->get('logger')->log('Error while sending message: ' . $failures);
 		}
 	}
         
