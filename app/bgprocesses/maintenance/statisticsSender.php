@@ -16,16 +16,16 @@ class StatisticsSender
     public function init()
     {        
         $msg = $this->getStatisticsContentMail();
-        $marks = array("%%NAME%%", "%%LASTNAME%%", "%%MAILNAME%%", "%%MAILDATE%%", "%%URL_COMPLETE", "%%URL_BASIC%%");
+        $marks = array("%%NAME%%", "%%LASTNAME%%", "%%MAILNAME%%", "%%MAILDATE%%", "%%URL_COMPLETE", "%%URL_BASIC%%", "%TOTALEMAILS%");
         
         foreach ($this->findMails() as $mail) {
             $links = $this->getStatisticsLinks($mail);
             
             foreach ($this->findUsers($mail->idAccount) as $user) {
-                $replace = array($user->firstName, $user->lastName, $mail->name, date('Y-m-d H:i' , $mail->finishedon), $links[1], $links[0]);
+                $replace = array($user->firstName, $user->lastName, $mail->subject, date('Y-m-d H:i' , $mail->finishedon), $links[1], $links[0], $mail->messagesSent);
                 $message = $this->replaceContentStatictsMail($msg->msg, $marks, $replace);
                 
-                $subject = "Estadísticas de la camapaña de Email Marketing";
+                $subject = "Estadísticas de la campaña de Email Marketing";
                 $from = array('contenidos@sigmamovil.com' => 'Equipo de Contenidos');
                 $userEmail = array($user->email => $user->firstName . " " . $user->lastName);
                 
@@ -33,6 +33,15 @@ class StatisticsSender
                 $sender->sendBasicMessage($subject, $from, $message, $userEmail, $msg->text);
                 
                 $mail->statisticsStatus = 1;
+                
+                if($mail->save()){
+                    $this->trace("success","Se edito el mail con ID: {$mail->idMail}");
+                }
+                else{
+                    $this->trace("fail","No se edito el el mail con ID: {$mail->idMail}");
+                }
+                
+                echo "Correo envíado y tabla actualizada -";
             }
         } 
     }    
