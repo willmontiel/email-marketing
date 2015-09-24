@@ -6,7 +6,7 @@ class FlashMessages
 	private function searchMessages()
 	{
 		$messages = Flashmessage::find(array(
-			'conditions' => 'start <= ?1 AND end >= ?2',
+			'conditions' => "'start' <= ?1 AND 'end' >= ?2",
 			'bind' => array(1 => time(),
 							2 => time())
 		));
