@@ -30,19 +30,21 @@ class StatisticsSender
                 $userEmail = array($user->email => $user->firstName . " " . $user->lastName);
                 
                 $sender = new AdministrativeMessages();
-                $sender->sendBasicMessage($subject, $from, $message, $userEmail, $msg->text);
+                $sender->sendBasicMessage($subject, $from, $message, $userEmail, $msg->text);   
                 
-                $mail->statisticsStatus = 1;
-                
-                if($mail->save()){
-                    $this->traceSuccess("Edit mail: {$mail->idMail}");
-                }
-                else{
-                    $this->traceSuccess("Fail Edit mail: {$mail->idMail}");
-                }
-                
-                echo "Correo envíado y tabla actualizada -";
+                echo "Correo enviado";
             }
+            
+            $mail->statisticsStatus = 1;
+                
+            if($mail->save()){
+                $this->traceSuccess("Edit mail: {$mail->idMail}");
+            }
+            else{
+                $this->traceSuccess("Fail Edit mail: {$mail->idMail}");
+            }
+
+            echo "Tabla actualizada";
         } 
     }    
     
