@@ -16,7 +16,7 @@ class StatisticsSender
     public function init()
     {        
         $msg = $this->getStatisticsContentMail();
-        $marks = array("%%NAME%%", "%%LASTNAME%%", "%%MAILNAME%%", "%%MAILDATE%%", "%%URL_COMPLETE", "%%URL_BASIC%%", "%%TOTALEMAILS%%");
+        $marks = array("%%NAME%%", "%%LASTNAME%%", "%%MAILNAME%%", "%%MAILDATE%%", "%%URL_COMPLETE%%", "%%URL_BASIC%%", "%%TOTALEMAILS%%");
         
         foreach ($this->findMails() as $mail) {
             $links = $this->getStatisticsLinks($mail);
