@@ -6,24 +6,24 @@ try {
 	$app->setConfigPath("../app/config/configuration.ini");
 	
 	// Create timer object
-//	$timer = new TimerObject();
+	$timer = new TimerObject();
 	// Start counting
-//	$timer->startTimer('app', 'The whole app');
+	$timer->startTimer('app', 'The whole app');
 	
 	$app->configure();
 	
 	$di = $app->getDi();
 	
-//	$di->set('timerObject', $timer);
+	$di->set('timerObject', $timer);
 	//Handle the request
 	$application = new \Phalcon\Mvc\Application($di);
 	echo $application->handle()->getContent();
 	
 	// Finalizar timer
-//	$timer->endTimer('app');
+	$timer->endTimer('app');
 
 	// Grabar en el log
-//	$di->get('logger')->log($timer);
+	$di->get('logger')->log($timer);
 
 	// Grabar en LOG toda la ejecucion de SQL del profiler
 	// Solamente si esta configurado asi
